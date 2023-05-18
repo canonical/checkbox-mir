@@ -1,0 +1,119 @@
+# Copyright 2023 Canonical Ltd.
+# All rights reserved.
+#
+# Test plans and (optionally) jobs unique to the Ubuntu Classic mir devices.
+#
+
+id: mir-classic
+unit: test plan
+_name: mir - Full manual + automated tests for Ubuntu Classic
+_description:
+ Combined manual and automated test plans for Ubuntu Classic mir devices.
+include:
+nested_part:
+    mir-classic-manual
+    mir-classic-automated
+
+id: mir-classic-manual
+unit: test plan
+_name: mir - Manual only QA tests for Ubuntu Classic
+_description:
+ Ubuntu Classic QA test plan for the mir hardware. This test plan contains
+ all of the tests that require manual control of device hardware
+ or some other user input to complete.
+estimated_duration: 3600
+include:
+    com.canonical.certification::disk/encryption/check-fde-tpm                 # keep if FDE with TPM is enabled
+nested_part:
+    com.canonical.certification::client-cert-iot-server-22-04-manual
+exclude:
+    com.canonical.certification::audio.*                                       # keep if audio is not supported
+    com.canonical.certification::bluetooth.*                                   # keep if bluetooth is not supported
+    com.canonical.certification::camera.*                                      # keep if camera is not supported
+    com.canonical.certification::ethernet.*                                    # keep if ethernet is not supported
+    com.canonical.certification::ethernet/wol.*                                # keep if ethernet is supported but ethernet WoL is not
+    com.canonical.certification::mediacard.*                                   # keep if external storage cards are not supported
+    com.canonical.certification::mediacard/(?!sd).*                            # keep if only SD cards are supported and other external storage cards are not
+    com.canonical.certification::monitor.*                                     # keep if there is no graphics output ports
+    com.canonical.certification::serial.*                                      # keep if serial ports are not supported
+    com.canonical.certification::socketcan.*                                   # keep if socketcan is not supported
+    com.canonical.certification::usb/(?!storage-preinserted).*                 # keep if USB2 is not supported
+    com.canonical.certification::usb3.*                                        # keep if USB3 is not supported
+    com.canonical.certification::usb-c.*                                       # keep if usb-c is not supported
+    com.canonical.certification::watchdog.*                                    # keep if watchdog is not supported
+    com.canonical.certification::wireless.*                                    # keep if wifi is not supported
+    com.canonical.certification::wireless/wifi_ap.*                            # keep if wifi is supported but wifi hotspot is not
+    com.canonical.certification::wwan.*                                        # keep if wwan/4G/5G is not supported
+    com.canonical.certification::led/fn                                        # keep if there's no function key LED
+    com.canonical.certification::led/bluetooth                                 # keep if there's no bluetooth LED
+    com.canonical.certification::led/power-blink-suspend                       # keep if suspend is not supported, or if there's no suspend LED
+    com.canonical.certification::led/serial                                    # keep if there are no serial LEDs
+    com.canonical.certification::after-suspend-audio.*                         # keep if post-suspend audio is not supported
+    com.canonical.certification::after-suspend.*bluetooth.*                    # keep if post-suspend bluetooth is not supported
+    com.canonical.certification::after-suspend-ethernet.*                      # keep if post-suspend ethernet is not supported
+    com.canonical.certification::after-suspend-monitor.*                       # keep if post-suspend graphics output ports are not supported
+    com.canonical.certification::after-suspend-serial.*                        # keep if post-suspend serial ports are not supported
+    com.canonical.certification::after-suspend-socketcan.*                     # keep if post-suspend socketcan is not supported
+    com.canonical.certification::after-suspend-usb/(?!storage-preinserted).*   # keep if post-suspend USB2 is not supported
+    com.canonical.certification::after-suspend-usb3.*                          # keep if post-suspend USB3 is not supported
+    com.canonical.certification::after-suspend-usb-c.*                         # keep if post-suspend USB-C is not supported
+    com.canonical.certification::after-suspend-wireless.*                      # keep if post-suspend wifi is not supported
+    com.canonical.certification::after-suspend-wireless/wifi_ap.*              # keep if post-suspend wifi hotspot is not supported
+    com.canonical.certification::after-suspend.*wwan.*                         # keep if post-suspend wwan/4G/5G is not supported
+
+id: mir-classic-automated
+unit: test plan
+_name: mir - Automated only QA tests for Ubuntu Classic
+_description:
+ Ubuntu Classic QA test plan for the mir hardware. This test plan contains
+ all of the automated tests used to validate the mir device.
+include:
+    com.canonical.certification::miscellanea/secure_boot_mode_.*               # keep if secure boot is enabled
+    com.canonical.certification::disk/encryption/detect                        # keep if FDE is enabled
+nested_part:
+    com.canonical.certification::client-cert-iot-server-22-04-automated
+exclude:
+    com.intel.ipdt::ipdt.*                                                     # keep if project is an ARM platform
+    com.canonical.certification::audio.*                                       # keep if audio is not supported
+    com.canonical.certification::bluetooth.*                                   # keep if bluetooth is not supported
+    com.canonical.certification::camera.*                                      # keep if camera is not supported
+    com.canonical.certification::docker.*                                      # keep if docker is unsupported
+    com.canonical.certification::ethernet.*                                    # keep if ethernet is not supported
+    com.canonical.certification::firmware/fwts_.*                              # keep if your device is an ARM platform
+    com.canonical.certification::networking/predictable_names                  # keep if ethernet is supported and only one ethernet port exists
+    com.canonical.certification::gpio.*                                        # keep if gpio is not supported
+    com.canonical.certification::i2c.*                                         # keep if i2c is not supported
+    com.canonical.certification::location.*                                    # keep if GPS is not supported
+    com.canonical.certification::mediacard.*                                   # keep if external storage cards are not supported
+    com.canonical.certification::mediacard/(?!sd).*                            # keep if only SD cards are supported and other external storage cards are not
+    com.canonical.certification::serial.*                                      # keep if serial ports are not supported
+    com.canonical.certification::socketcan.*                                   # keep if socketcan is not supported
+    com.canonical.certification::tpm2.0_4.1.1.*                                # keep if TPM is not supported
+    com.canonical.certification::usb/.*                                        # keep if USB is not supported
+    com.canonical.certification::watchdog.*                                    # keep if watchdog is not supported
+    com.canonical.certification::wireless.*                                    # keep if wifi is not supported
+    com.canonical.certification::wireless/wifi_ap.*                            # keep if wifi is supported but wifi hotspot is not
+    com.canonical.certification::wwan.*                                        # keep if wwan/4G/5G is not supported
+    com.canonical.certification::after-suspend-audio.*                         # keep if post-suspend audio is not supported
+    com.canonical.certification::after-suspend.*bluetooth.*                    # keep if post-suspend bluetooth is not supported
+    com.canonical.certification::after-suspend-ethernet.*                      # keep if post-suspend ethernet is not supported
+    com.canonical.certification::after-suspend-ipv6.*                          # keep if suspend is not supported (or else these jobs will trigger suspend tests)
+    com.canonical.certification::after-suspend-gpio.*                          # keep if post-suspend gpio is not supported
+    com.canonical.certification::after-suspend-location.*                      # keep if post-suspend GPS is not supported
+    com.canonical.certification::after-suspend-serial.*                        # keep if post-suspend serial ports are not supported
+    com.canonical.certification::after-suspend-usb/.*                          # keep if post-suspend USB is not supported
+    com.canonical.certification::after-suspend-wireless.*                      # keep if post-suspend wifi is not supported
+    com.canonical.certification::after-suspend.*wwan.*                         # keep if post-suspend wwan/4G/5G is not supported
+
+id: mir-classic-stress
+unit: test plan
+_name: mir - Stress tests for Ubuntu Classic
+_description:
+ Ubuntu Classic QA test plan that includes all stress tests required for mir devices
+include:
+nested_part:
+    com.canonical.certification::stress-iperf3-automated                       # keep if ethernet is supported
+    com.canonical.certification::client-cert-iot-server-22-04-stress
+exclude:
+    com.canonical.certification::stress-tests/suspend.*                        # keep if suspend is not supported
+    com.canonical.certification::stress-tests/hibernate.*                      # keep if hibernate is not supported

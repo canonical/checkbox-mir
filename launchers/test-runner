@@ -1,0 +1,13 @@
+#!/usr/bin/env checkbox-cli-wrapper
+[launcher]
+app_id = com.canonical.qa.mir:checkbox
+launcher_version = 1
+stock_reports = text, submission_files, certification
+
+[test plan]
+unit = com.canonical.qa.mir::mir
+filter = com.canonical.qa.mir::mir
+        com.canonical.qa.mir::mir-manual
+        com.canonical.qa.mir::mir-automated
+        com.canonical.qa.mir::mir-stress
+
