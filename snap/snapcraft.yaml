@@ -1,8 +1,8 @@
 name: checkbox-mir
-summary: Checkbox tests for the mir project
+summary: Checkbox tests for the Mir project
 description: |
   Collection of tests to be run on devices that are part of the mir project
-version: '0.1dev'
+version: git
 confinement: strict
 grade: stable
 
@@ -69,10 +69,8 @@ parts:
     plugin: checkbox-provider
     source: ./checkbox-provider-mir
     source-type: local
-    build-attributes: [no-patchelf]
   parts-meta-info:
     plugin: nil
-    build-attributes: [no-patchelf]
     override-build: |
       snapcraftctl build
       for p in `ls -d ../../*`; do
@@ -88,10 +86,8 @@ parts:
   launchers:
     plugin: dump
     source: launchers/
-    build-attributes: [no-patchelf]
     organize:
       '*': bin/
   config-variables:
     plugin: dump
     source: config/
-    build-attributes: [no-patchelf]

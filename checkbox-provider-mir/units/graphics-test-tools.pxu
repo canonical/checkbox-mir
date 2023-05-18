@@ -1,0 +1,21 @@
+unit: template
+template-imports: from com.canonical.certification import graphics_card
+template-resource: graphics_card
+id: graphics/{index}_drm-info_{product_slug}
+_summary: Dump DRM information for card {index}: {product_slug}
+plugin: shell
+estimated_duration: 0.1
+command:
+  CARD={path}
+  graphics-test-tools.drm-info /dev/dri/by-path/pci-${{CARD##*/}}-card
+
+unit: template
+template-imports: from com.canonical.certification import graphics_card
+template-resource: graphics_card
+id: graphics/{index}_kmscube_{product_slug}
+_summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
+plugin: shell
+estimated_duration: 1.0
+command:
+  CARD={path}
+  graphics-test-tools.kmscube --count 60 --device /dev/dri/by-path/pci-${{CARD##*/}}-card
