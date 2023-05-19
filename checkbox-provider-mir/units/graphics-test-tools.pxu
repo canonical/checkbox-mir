@@ -4,7 +4,11 @@ id: graphics/{index}_drm-info_{product_slug}
 _summary: Dump DRM information for card {index}: {product_slug}
 plugin: shell
 estimated_duration: 0.1
-command: graphics-test-tools.drm-info {path}
+command:
+  set -euo pipefail
+  OUTPUT=$( mktemp )
+  graphics-test-tools.drm-info {path} | tee $OUTPUT
+  [ "$( head -n1 $OUTPUT )" == 'Node: {path}' ]
 
 unit: template
 template-resource: drm_device
