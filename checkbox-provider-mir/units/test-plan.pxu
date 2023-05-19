@@ -11,6 +11,6 @@ _description:
   This test plan verifies that the graphics-core22 environment
   is working correctly on this device.
 bootstrap_include:
-  com.canonical.certification::graphics_card
+  drm_device
 include:
   io.mir-server::.*

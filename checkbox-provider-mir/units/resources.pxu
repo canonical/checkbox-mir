@@ -1,0 +1,4 @@
+id: drm_device
+estimated_runtime: 0.1
+plugin: resource
+command: drm_device_resource.py
