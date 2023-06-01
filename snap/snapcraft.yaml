@@ -21,30 +21,54 @@ plugs:
     interface: content
     target: $SNAP/providers/checkbox-provider-base
     default-provider: checkbox22
+  graphics-core22:
+    interface: content
+    target: $SNAP/graphics
+    default-provider: mesa-core22
+
+layout:
+  /usr/share/libdrm:
+    bind: $SNAP/graphics/libdrm
+  /usr/share/drirc.d:
+    symlink: $SNAP/graphics/drirc.d
+  /usr/share/X11/XErrorDB:
+    symlink: $SNAP/graphics/X11/XErrorDB
+  /usr/share/X11/locale:
+    symlink: $SNAP/graphics/X11/locale
+  /usr/lib/xorg:
+    symlink: $SNAP/usr/lib/xorg
+  /usr/share/icons:
+    bind: $SNAP/usr/share/icons
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+
+environment:
+  MIR_SERVER_PLATFORM_PATH: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/mir/server-platform
+  XKB_CONFIG_ROOT: $SNAP/usr/share/X11/xkb
 
 apps:
   checkbox-cli:
-    command-chain: [bin/wrapper_local]
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-cli-wrapper
     plugs: &standard [home, network-bind, hardware-observe,
       mount-observe, network-manager, pulseaudio, serial-port,
       system-observe]
   checkbox-mir:
-    command-chain: [bin/wrapper_local]
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-mir
     plugs: *standard
   test-runner:
-    command-chain: [bin/wrapper_local]
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/test-runner
     plugs: *standard
   service:
-    command-chain: [bin/wrapper_local]
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-cli-wrapper service
     daemon: simple
     restart-condition: on-failure
     plugs: *standard
   shell:
-    command-chain: [bin/wrapper_local]
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/shell-wrapper
     plugs: *standard
 
@@ -66,8 +90,32 @@ parts:
       checkbox-provider-tools install --layout=relocatable --prefix=/providers/checkbox-provider-mir --root="$SNAPCRAFT_PART_INSTALL"
     stage-packages:
       - lsof
+
+  mir_demo_server:
+    plugin: nil
+    stage-packages:
+      - mir-test-tools
+      - mir-graphics-drivers-desktop
+      - mir-graphics-drivers-nvidia
+      - dmz-cursor-theme
+
+  xorg:
+    plugin: nil
+    stage-packages:
+      - xserver-xorg
+
   launchers:
     plugin: dump
     source: launchers/
     organize:
       '*': bin/
+
+  graphics-core22:
+    after: [mir_demo_server, xorg]
+    source: https://github.com/MirServer/graphics-core22.git
+    plugin: dump
+    override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/graphics-core22-cleanup mesa-core22 nvidia-core22
+    prime:
+    - bin/graphics-core22-wrapper
