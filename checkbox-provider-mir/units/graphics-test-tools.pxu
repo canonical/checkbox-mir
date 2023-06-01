@@ -1,6 +1,21 @@
+id: graphics/graphics-test-tools
+_summary: Confirm graphics-test-tools is installed and set up
+plugin: shell
+estimated_duration: 0.1
+command:
+  set -euo pipefail
+  STATUS=0
+  snap list graphics-test-tools || STATUS=1
+  snap connections graphics-test-tools \
+    | grep -P 'graphics-test-tools:graphics-core22 +(?!-)\w+' \
+    || STATUS=2
+  exit $STATUS
+
 unit: template
 template-resource: drm_device
 id: graphics/{index}_drm-info_{product_slug}
+depends:
+  graphics/graphics-test-tools
 _summary: Dump DRM information for card {index}: {product_slug}
 plugin: shell
 estimated_duration: 0.1
@@ -13,29 +28,39 @@ command:
 unit: template
 template-resource: drm_device
 id: graphics/{index}_kmscube_{product_slug}
+depends:
+  graphics/{index}_drm-info_{product_slug}
 _summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
 plugin: shell
 estimated_duration: 1.0
 command: graphics-test-tools.kmscube --count 60 --device {path}
 
 id: graphics/eglinfo-gbm
+depends:
+  graphics/graphics-test-tools
 _summary: Run eglinfo to verify EGL setup for the GBM platform
 plugin: shell
 command: graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version:.*'
 
 id: graphics/eglinfo-x11
+depends:
+  graphics/graphics-test-tools
 _summary: Run eglinfo to verify EGL setup with a X server
 plugin: shell
 user: root
 command: run_with_x.sh graphics-test-tools.eglinfo | grep -oPz 'X11 platform:\nEGL API version:.*'
 
 id: graphics/eglinfo-wayland
+depends:
+  graphics/graphics-test-tools
 _summary: Run eglinfo to verify EGL setup with a Wayland server
 plugin: shell
 user: root
 command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland platform:\nEGL API version:.*'
 
 id: graphics/vkcube-x11
+depends:
+  graphics/graphics-test-tools
 _summary: Run vkcube to verify Vulkan setup with a X server
 plugin: shell
 user: root
