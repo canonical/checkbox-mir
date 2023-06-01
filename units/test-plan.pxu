@@ -13,4 +13,4 @@ _description:
 bootstrap_include:
   drm_device
 include:
-  io.mir-server::.*
+  graphics.*
