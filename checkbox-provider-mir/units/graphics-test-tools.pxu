@@ -29,6 +29,12 @@ plugin: shell
 user: root
 command: run_with_x.sh graphics-test-tools.eglinfo | grep -oPz 'X11 platform:\nEGL API version:.*'
 
+id: graphics/eglinfo-wayland
+_summary: Run eglinfo to verify EGL setup with a Wayland server
+plugin: shell
+user: root
+command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland platform:\nEGL API version:.*'
+
 id: graphics/vkcube-x11
 _summary: Run vkcube to verify Vulkan setup with a X server
 plugin: shell
