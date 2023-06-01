@@ -15,38 +15,31 @@ plugs:
     default-provider: checkbox22
   provider-resource:
     interface: content
-    target: $SNAP/providers/plainbox-provider-resource
+    target: $SNAP/providers/checkbox-provider-resource
     default-provider: checkbox22
   provider-checkbox:
     interface: content
-    target: $SNAP/providers/plainbox-provider-checkbox
-    default-provider: checkbox22
-  provider-ipdt:
-    interface: content
-    target: $SNAP/providers/plainbox-provider-ipdt
-    default-provider: checkbox22
-  provider-tpm2:
-    interface: content
-    target: $SNAP/providers/plainbox-provider-tpm2
-    default-provider: checkbox22
-  provider-certification-client:
-    interface: content
-    target: $SNAP/providers/plainbox-provider-certification-client
+    target: $SNAP/providers/checkbox-provider-base
     default-provider: checkbox22
 
 apps:
   checkbox-cli:
     command-chain: [bin/wrapper_local]
     command: bin/checkbox-cli-wrapper
-    plugs: &standard [home, network-bind, hardware-observe, bluez, bluetooth-control,
-      gpio, modem-manager, mount-observe, network-manager, pulseaudio, serial-port,
-      system-observe, tpm, timezone-control, timeserver-control]
-  configure:
+    plugs: &standard [home, network-bind, hardware-observe,
+      mount-observe, network-manager, pulseaudio, serial-port,
+      system-observe]
+  checkbox-mir:
     command-chain: [bin/wrapper_local]
-    command: bin/configure
-  remote-slave:
+    command: bin/checkbox-mir
+    plugs: *standard
+  test-runner:
     command-chain: [bin/wrapper_local]
-    command: bin/checkbox-cli-wrapper slave
+    command: bin/test-runner
+    plugs: *standard
+  service:
+    command-chain: [bin/wrapper_local]
+    command: bin/checkbox-cli-wrapper service
     daemon: simple
     restart-condition: on-failure
     plugs: *standard
@@ -54,40 +47,27 @@ apps:
     command-chain: [bin/wrapper_local]
     command: bin/shell-wrapper
     plugs: *standard
-  test-runner:
-    command-chain: [bin/wrapper_local]
-    command: bin/test-runner
-    plugs: *standard
-
-passthrough:
-  hooks:
-    configure:
-      command-chain: [bin/wrapper_local]
 
 parts:
   checkbox-provider-mir:
-    plugin: checkbox-provider
-    source: ./checkbox-provider-mir
+    plugin: dump
+    source: ./
     source-type: local
-  parts-meta-info:
-    plugin: nil
+    build-snaps:
+      - checkbox-provider-tools
+      - checkbox22
     override-build: |
-      snapcraftctl build
-      for p in `ls -d ../../*`; do
-          if [ -d $p/src ]; then
-            (cd $p/src
-                if [ -d $p/src/.git ]; then
-                    (echo `basename $p`\: && git show --pretty=format:"%h%d %aN %ci%n%s%n" -q ; echo ) >> $SNAPCRAFT_PART_INSTALL/parts_meta_info
-                fi # for additional `source-type` support, elif them here
-            )
-          fi
-      done
-    after: [checkbox-provider-mir]
+      export PYTHONPATH=$SNAPCRAFT_STAGE/lib/python3.8/site-packages:$SNAPCRAFT_STAGE/usr/lib/python3/dist-packages
+      # Comment out for now because it uses old tests to export paths
+      # See: https://github.com/canonical/checkbox/blob/8cdd92cb7b02b64d76f4fe474569abb3f0d6f561/checkbox-core-snap/series22/snap/snapcraft.yaml#L397
+      # for path in $(find "/snap/checkbox22/current/providers/" -mindepth 1 -maxdepth 1 -type d); do export PROVIDERPATH=$path${PROVIDERPATH:+:$PROVIDERPATH}; done
+      checkbox-provider-tools validate
+      checkbox-provider-tools build
+      checkbox-provider-tools install --layout=relocatable --prefix=/providers/checkbox-provider-mir --root="$SNAPCRAFT_PART_INSTALL"
+    stage-packages:
+      - lsof
   launchers:
     plugin: dump
     source: launchers/
     organize:
       '*': bin/
-  config-variables:
-    plugin: dump
-    source: config/

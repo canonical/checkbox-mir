@@ -1,13 +1,19 @@
 #!/usr/bin/env checkbox-cli-wrapper
 [launcher]
-app_id = com.canonical.qa.mir:checkbox
+app_id = com.canonical.certification:checkbox-edgexfoundry
+api_flags = restartable
 launcher_version = 1
-stock_reports = text, submission_files, certification
+stock_reports = text, submission_files
 
 [test plan]
-unit = com.canonical.qa.mir::mir
-filter = com.canonical.qa.mir::mir
-        com.canonical.qa.mir::mir-manual
-        com.canonical.qa.mir::mir-automated
-        com.canonical.qa.mir::mir-stress
+unit = com.canonical.certification::edgex-jakarta-tp
+forced = yes
 
+[test selection]
+forced = yes
+
+[ui]
+type = silent
+auto_retry = yes
+max_attempts = 4
+delay_before_retry = 30
