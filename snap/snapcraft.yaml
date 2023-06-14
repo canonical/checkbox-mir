@@ -26,6 +26,10 @@ plugs:
     target: $SNAP/graphics
     default-provider: mesa-core22
 
+slots:
+  wayland:
+  x11:
+
 layout:
   /usr/share/libdrm:
     bind: $SNAP/graphics/libdrm
