@@ -1,10 +1,15 @@
 #!/bin/bash
 
 set -euo pipefail
+
 OUTPUT=$( mktemp )
 export WAYLAND_DISPLAY=wayland-99
-export XDG_RUNTIME_DIR=/run/user/$UID
-mkdir -p $XDG_RUNTIME_DIR
+
+[ -n "${XDG_RUNTIME_DIR:-}" ] || ( echo "ERROR: XDG_RUNTIME_DIR unset"; exit 3 )
+
+# Mangle the XDG runtime path
+mkdir -p $XDG_RUNTIME_DIR/..
+REAL_RUNTIME_DIR=$( readlink -f $XDG_RUNTIME_DIR/.. )
 
 # Default to an error
 echo 128 > $OUTPUT.status
@@ -24,9 +29,9 @@ cleanup() {
 
 trap cleanup EXIT
 
-mir_demo_server &
+env XDG_RUNTIME_DIR=$REAL_RUNTIME_DIR mir_demo_server &
 
-timeout 10 bash -c "until [ -S $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do sleep 1; done" \
+timeout 10 bash -c "until [ -S $REAL_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do sleep 1; done" \
   || ( echo "ERROR: Wayland failed to start"; exit 2 )
 
 timeout 10 "$@" \
