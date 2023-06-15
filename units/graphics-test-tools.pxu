@@ -64,3 +64,23 @@ _summary: Run vkcube to verify Vulkan setup
 plugin: shell
 user: root
 command: run_with_x.sh graphics-test-tools.vkcube --c 60
+
+id: graphics/vainfo-x11
+requires:
+  graphics_test_tools_connections.interface == "content[graphics-core22]"
+  graphics_test_tools_connections.interface == "opengl"
+  graphics_test_tools_connections.interface == "x11"
+_summary: Run vainfo to verify libVA setup
+plugin: shell
+user: root
+command: run_with_x.sh graphics-test-tools.vainfo
+
+id: graphics/vdpauinfo-x11
+requires:
+  graphics_test_tools_connections.interface == "content[graphics-core22]"
+  graphics_test_tools_connections.interface == "opengl"
+  graphics_test_tools_connections.interface == "x11"
+_summary: Run vdpauinfo to verify VDPAU setup
+plugin: shell
+user: root
+command: run_with_x.sh graphics-test-tools.vdpauinfo
