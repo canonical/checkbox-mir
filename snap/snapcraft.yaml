@@ -31,14 +31,14 @@ slots:
   x11:
 
 layout:
+  /usr/bin/xkbcomp:
+    symlink: $SNAP/usr/bin/xkbcomp
   /usr/share/libdrm:
     bind: $SNAP/graphics/libdrm
   /usr/share/drirc.d:
     symlink: $SNAP/graphics/drirc.d
-  /usr/share/X11/XErrorDB:
-    symlink: $SNAP/graphics/X11/XErrorDB
-  /usr/share/X11/locale:
-    symlink: $SNAP/graphics/X11/locale
+  /usr/share/X11:
+    symlink: $SNAP/usr/share/X11
   /usr/lib/xorg:
     symlink: $SNAP/usr/lib/xorg
   /usr/share/icons:
@@ -48,7 +48,6 @@ layout:
 
 environment:
   MIR_SERVER_PLATFORM_PATH: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/mir/server-platform
-  XKB_CONFIG_ROOT: $SNAP/usr/share/X11/xkb
 
 apps:
   checkbox-cli:
@@ -107,6 +106,7 @@ parts:
     plugin: nil
     stage-packages:
       - xserver-xorg
+      - x11-xkb-utils
 
   launchers:
     plugin: dump
