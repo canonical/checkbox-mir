@@ -14,3 +14,4 @@ bootstrap_include:
   drm_device
 include:
   graphics.*
+  mir.*

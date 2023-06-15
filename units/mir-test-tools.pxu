@@ -1,0 +1,18 @@
+id: mir/smoke
+requires:
+  mir_test_tools_connections.interface == "content[graphics-core22]"
+  mir_test_tools_connections.interface == "opengl"
+_summary: Run Mir smoke tests
+plugin: shell
+user: root
+command: mir-test-tools.smoke-test
+
+id: mir/performance
+requires:
+  mir_test_tools_connections.interface == "content[graphics-core22]"
+  mir_test_tools_connections.interface == "opengl"
+_summary: Run Mir performance tests
+plugin: shell
+user: root
+command: mir-test-tools.performance-test
+
