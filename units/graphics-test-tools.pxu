@@ -19,6 +19,7 @@ depends:
 _summary: Dump DRM information for card {index}: {product_slug}
 plugin: shell
 estimated_duration: 0.1
+user: root
 command:
   set -euo pipefail
   OUTPUT=$( mktemp )
@@ -33,6 +34,7 @@ depends:
 _summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
 plugin: shell
 estimated_duration: 1.0
+user: root
 command: graphics-test-tools.kmscube --count 60 --device {path}
 
 id: graphics/eglinfo-gbm
@@ -40,6 +42,7 @@ depends:
   graphics/graphics-test-tools
 _summary: Run eglinfo to verify EGL setup for the GBM platform
 plugin: shell
+user: root
 command: graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version:.*'
 
 id: graphics/eglinfo-x11
