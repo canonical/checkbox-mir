@@ -1,6 +1,9 @@
 id: mir/smoke
-imports: from com.canonical.certification import connections
+imports:
+  from com.canonical.certification import connections
+  from com.canonical.certification import snap
 requires:
+  snap.name == "mir-test-tools"
   connections.plug == "graphics-test-tools:graphics-core22"
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run Mir smoke tests
@@ -11,8 +14,11 @@ command: mir-test-tools.smoke-test
 unit: template
 template-resource: resource/mir_test_tools_performance_cases
 id: mir/performance_{case}
-imports: from com.canonical.certification import connections
+imports:
+  from com.canonical.certification import connections
+  from com.canonical.certification import snap
 requires:
+  snap.name == "mir-test-tools"
   connections.plug == "graphics-test-tools:graphics-core22"
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run Mir performance test case: {case}
