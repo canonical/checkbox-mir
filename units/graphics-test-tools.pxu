@@ -1,8 +1,9 @@
 unit: template
-template-resource: drm_device
+template-resource: resource/drm_device
+imports: from com.canonical.certification import connections as connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
 id: graphics/{index}_drm-info_{product_slug}
 _summary: Dump DRM information for card {index}: {product_slug}
 plugin: shell
@@ -15,11 +16,12 @@ command:
   [ "$( head -n1 $OUTPUT )" == 'Node: {path}' ]
 
 unit: template
-template-resource: drm_device
+template-resource: resource/drm_device
 id: graphics/{index}_kmscube_{product_slug}
+imports: from com.canonical.certification import connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
 _summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
 plugin: shell
 estimated_duration: 1.0
@@ -27,59 +29,65 @@ user: root
 command: graphics-test-tools.kmscube --count 60 --device {path}
 
 id: graphics/eglinfo-gbm
+imports: from com.canonical.certification import connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
 _summary: Run eglinfo to verify EGL setup for the GBM platform
 plugin: shell
 user: root
 command: graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version:.*'
 
 id: graphics/eglinfo-x11
+imports: from com.canonical.certification import connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
-  graphics_test_tools_connections.interface == "x11"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
+  connections.plug == "graphics-test-tools:x11"
 _summary: Run eglinfo to verify EGL setup with a X server
 plugin: shell
 user: root
 command: run_with_x.sh graphics-test-tools.eglinfo | grep -oPz 'X11 platform:\nEGL API version:.*'
 
 id: graphics/eglinfo-wayland
+imports: from com.canonical.certification import connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
-  graphics_test_tools_connections.interface == "wayland"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
+  connections.plug == "graphics-test-tools:wayland"
 _summary: Run eglinfo to verify EGL setup with a Wayland server
 plugin: shell
 user: root
 command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland platform:\nEGL API version:.*'
 
 id: graphics/vkcube-x11
+imports: from com.canonical.certification import connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
-  graphics_test_tools_connections.interface == "x11"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
+  connections.plug == "graphics-test-tools:x11"
 _summary: Run vkcube to verify Vulkan setup
 plugin: shell
 user: root
 command: run_with_x.sh graphics-test-tools.vkcube --c 60
 
 id: graphics/vainfo-x11
+imports: from com.canonical.certification import connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
-  graphics_test_tools_connections.interface == "x11"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
+  connections.plug == "graphics-test-tools:x11"
 _summary: Run vainfo to verify libVA setup
 plugin: shell
 user: root
 command: run_with_x.sh graphics-test-tools.vainfo
 
 id: graphics/vdpauinfo-x11
+imports: from com.canonical.certification import connections
 requires:
-  graphics_test_tools_connections.interface == "content[graphics-core22]"
-  graphics_test_tools_connections.interface == "opengl"
-  graphics_test_tools_connections.interface == "x11"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
+  connections.plug == "graphics-test-tools:x11"
 _summary: Run vdpauinfo to verify VDPAU setup
 plugin: shell
 user: root

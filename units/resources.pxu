@@ -1,42 +1,10 @@
-id: drm_device
+id: resource/drm_device
 estimated_runtime: 0.1
 plugin: resource
 command: drm_device_resource.py
 
 plugin: resource
-id: graphics_test_tools_connections
-_summary: Enumerate connections for the graphics-test-tools snap
-estimated_duration: 0.1
-command:
-  while IFS=" " read -r interface plug slot notes; do
-    [ "$interface" == "Interface" ] && continue
-    if [ "$slot" != "-" ]; then
-      echo "interface: $interface"
-      echo "plug: $plug"
-      echo "slot: $slot"
-      echo "notes: $notes"
-      echo
-    fi
-  done < <( snap connections graphics-test-tools )
-
-plugin: resource
-id: mir_test_tools_connections
-_summary: Enumerate connections for the mir-test-tools snap
-estimated_duration: 0.1
-command:
-  while IFS=" " read -r interface plug slot notes; do
-    [ "$interface" == "Interface" ] && continue
-    if [ "$slot" != "-" ]; then
-      echo "interface: $interface"
-      echo "plug: $plug"
-      echo "slot: $slot"
-      echo "notes: $notes"
-      echo
-    fi
-  done < <( snap connections mir-test-tools )
-
-plugin: resource
-id: mir_test_tools_performance_cases
+id: resource/mir_test_tools_performance_cases
 _summary: Enumerate the cases for the mir-test-tools performance suite
 estimated_duration: 0.1
 imports: from com.canonical.certification import snap

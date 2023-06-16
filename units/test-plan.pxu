@@ -11,8 +11,8 @@ _description:
   This test plan verifies that the graphics-core22 environment
   is working correctly on this device.
 bootstrap_include:
-  drm_device
-  mir_test_tools_performance_cases
+  resource/drm_device
+  resource/mir_test_tools_performance_cases
 include:
-  graphics.*
-  mir.*
+  graphics/.*
+  mir/.*

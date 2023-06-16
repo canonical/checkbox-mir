@@ -1,18 +1,20 @@
 id: mir/smoke
+imports: from com.canonical.certification import connections
 requires:
-  mir_test_tools_connections.interface == "content[graphics-core22]"
-  mir_test_tools_connections.interface == "opengl"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
 _summary: Run Mir smoke tests
 plugin: shell
 user: root
 command: mir-test-tools.smoke-test
 
 unit: template
-template-resource: mir_test_tools_performance_cases
+template-resource: resource/mir_test_tools_performance_cases
 id: mir/performance_{case}
+imports: from com.canonical.certification import connections
 requires:
-  mir_test_tools_connections.interface == "content[graphics-core22]"
-  mir_test_tools_connections.interface == "opengl"
+  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug == "graphics-test-tools:opengl"
 _summary: Run Mir performance test case: {case}
 plugin: shell
 user: root
