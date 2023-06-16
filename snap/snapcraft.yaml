@@ -22,10 +22,6 @@ plugs:
     target: $SNAP/graphics
     default-provider: mesa-core22
 
-slots:
-  wayland:
-  x11:
-
 layout:
   /usr/bin/xkbcomp:
     symlink: $SNAP/usr/bin/xkbcomp
@@ -49,27 +45,32 @@ apps:
   checkbox-cli:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-cli-wrapper
-    plugs: &standard [home, network-bind, hardware-observe,
+    plugs: &plugs [home, network-bind, hardware-observe,
       mount-observe, network-manager, pulseaudio, serial-port,
       system-observe]
+    slots: &slots [wayland, x11]
   checkbox-mir:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-mir
-    plugs: *standard
+    plugs: *plugs
+    slots: *slots
   test-runner:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/test-runner
-    plugs: *standard
+    plugs: *plugs
+    slots: *slots
   service:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-cli-wrapper service
     daemon: simple
     restart-condition: on-failure
-    plugs: *standard
+    plugs: *plugs
+    slots: *slots
   shell:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/shell-wrapper
-    plugs: *standard
+    plugs: *plugs
+    slots: *slots
 
 parts:
   checkbox-provider-mir:
