@@ -34,3 +34,22 @@ command:
       echo
     fi
   done < <( snap connections mir-test-tools )
+
+plugin: resource
+id: mir_test_tools_performance_cases
+_summary: Enumerate the cases for the mir-test-tools performance suite
+estimated_duration: 0.1
+imports: from com.canonical.certification import snap
+requires:
+  snap.name == "mir-test-tools"
+user: root
+command:
+  set -euo pipefail
+  while read line; do
+    if [[ "$line" =~ ^([A-Za-z0-9_/]*)\.$ ]]; then
+      SUITE=${BASH_REMATCH[1]}
+    elif [[ "$line" =~ ^[A-Za-z0-9_/]+$ ]]; then
+      echo case: $SUITE.${BASH_REMATCH}
+      echo
+    fi
+  done < <( mir-test-tools.performance-test --gtest_list_tests || kill $$ )

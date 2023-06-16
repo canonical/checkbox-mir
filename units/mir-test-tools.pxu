@@ -7,12 +7,14 @@ plugin: shell
 user: root
 command: mir-test-tools.smoke-test
 
-id: mir/performance
+unit: template
+template-resource: mir_test_tools_performance_cases
+id: mir/performance_{case}
 requires:
   mir_test_tools_connections.interface == "content[graphics-core22]"
   mir_test_tools_connections.interface == "opengl"
-_summary: Run Mir performance tests
+_summary: Run Mir performance test case: {case}
 plugin: shell
 user: root
-command: mir-test-tools.performance-test
+command: mir-test-tools.performance-test --gtest_filter={case}
 
