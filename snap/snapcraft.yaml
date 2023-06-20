@@ -49,9 +49,14 @@ apps:
       mount-observe, network-manager, pulseaudio, serial-port,
       system-observe]
     slots: &slots [wayland, x11]
+  checkbox-graphics:
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command: bin/checkbox-graphics
+    plugs: *plugs
+    slots: *slots
   checkbox-mir:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
-    command: bin/checkbox-mir
+    command: bin/checkbox-graphics
     plugs: *plugs
     slots: *slots
   test-runner:

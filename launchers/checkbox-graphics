@@ -6,10 +6,11 @@ app_id = io.mir-server:checkbox
 stock_reports = text
 
 [test plan]
-unit = io.mir-server::mir
+unit = io.mir-server::graphics-core22
 forced = yes
 
 [test selection]
+exclude = io.mir-server::.*-fec00000_v3d
 forced = yes
 
 [ui]

@@ -12,7 +12,15 @@ _description:
   is working correctly on this device.
 bootstrap_include:
   resource/drm_device
-  resource/mir_test_tools_performance_cases
 include:
   graphics/.*
+
+id: mir
+unit: test plan
+_name: Mir - smoke and performance testing of Mir itself
+_description:
+  This test plan runs the Mir smoke and performance tests.
+bootstrap_include:
+  resource/mir_test_tools_performance_cases
+include:
   mir/.*
