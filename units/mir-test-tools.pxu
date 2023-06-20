@@ -24,5 +24,16 @@ requires:
 _summary: Run Mir performance test case: {case}
 plugin: shell
 user: root
-command: mir-test-tools.performance-test --gtest_filter={case}
+command:
+  mir-test-tools.performance-test \
+    --gtest_filter={case} \
+    --gtest_output=xml:/tmp/{case}.xml
 
+unit: template
+template-resource: resource/mir_test_tools_performance_cases
+id: mir/performance_{case}.xml
+depends: mir/performance_{case}
+_summary: Collect the test report from mir/performance_{case}
+plugin: attachment
+user: root
+command: cat /tmp/snap-private-tmp/snap.mir-test-tools/tmp/{case}.xml

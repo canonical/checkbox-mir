@@ -3,7 +3,7 @@
 [launcher]
 launcher_version = 1
 app_id = io.mir-server:checkbox
-stock_reports = text
+stock_reports = text, submission_files
 
 [test plan]
 unit = io.mir-server::mir
