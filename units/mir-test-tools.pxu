@@ -25,9 +25,17 @@ _summary: Run Mir performance test case: {case}
 plugin: shell
 user: root
 command:
+  set -euo pipefail
   mir-test-tools.performance-test \
     --gtest_filter={case} \
     --gtest_output=xml:/tmp/{case}.xml
+  LOGNAME=$( echo {case} | tr '.' '_' )
+  for log in "" _server _host; do
+    echo
+    echo "=== 8< $LOGNAME$log.log ==="
+    cat /tmp/snap-private-tmp/snap.mir-test-tools/tmp/$LOGNAME$log.log || true
+    echo "=== $LOGNAME$log.log >8 ==="
+  done
 
 unit: template
 template-resource: resource/mir_test_tools_performance_cases
