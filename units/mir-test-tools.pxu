@@ -28,14 +28,15 @@ command:
   set -euo pipefail
   mir-test-tools.performance-test \
     --gtest_filter={case} \
-    --gtest_output=xml:/tmp/{case}.xml
+    --gtest_output=xml:/tmp/{case}.xml && STATUS=0 || STATUS=$?
   LOGNAME=$( echo {case} | tr '.' '_' )
   for log in "" _server _host; do
     echo
     echo "=== 8< $LOGNAME$log.log ==="
-    cat /tmp/snap-private-tmp/snap.mir-test-tools/tmp/$LOGNAME$log.log || true
+    snap run --shell mir-test-tools.performance-test -c "cat /tmp/$LOGNAME$log.log" || true
     echo "=== $LOGNAME$log.log >8 ==="
   done
+  exit $STATUS
 
 unit: template
 template-resource: resource/mir_test_tools_performance_cases
@@ -44,4 +45,4 @@ depends: mir/performance_{case}
 _summary: Collect the test report from mir/performance_{case}
 plugin: attachment
 user: root
-command: cat /tmp/snap-private-tmp/snap.mir-test-tools/tmp/{case}.xml
+command: snap run --shell mir-test-tools.performance-test -c "cat /tmp/{case}.xml"
