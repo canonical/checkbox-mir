@@ -3,9 +3,8 @@ imports:
   from com.canonical.certification import connections
   from com.canonical.certification import snap
 requires:
-  snap.name == "mir-test-tools"
-  connections.plug == "graphics-test-tools:graphics-core22"
-  connections.plug == "graphics-test-tools:opengl"
+  connections.plug == "mir-test-tools:graphics-core22"
+  connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir smoke tests
 plugin: shell
 user: root
@@ -18,9 +17,8 @@ imports:
   from com.canonical.certification import connections
   from com.canonical.certification import snap
 requires:
-  snap.name == "mir-test-tools"
-  connections.plug == "graphics-test-tools:graphics-core22"
-  connections.plug == "graphics-test-tools:opengl"
+  connections.plug == "mir-test-tools:graphics-core22"
+  connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir performance test case: {case}
 plugin: shell
 user: root
