@@ -15,13 +15,13 @@ sudo snap connect checkbox-mir:provider-resource checkbox22:provider-resource
 
 ## Launchers
 Here are the launchers available:
-- `checkbox-mir`:
+- `checkbox-mir.mir`:
   This automatically runs the mir-test-tools suites, to be used in CI.
 
   The operator is responsible to install the mir-test-tools snap along with
   an appropriate graphics-core22 provider.
 
-- `checkbox-mir.checkbox-graphics`:
+- `checkbox-mir.graphics`:
   This automatically runs the various graphics-test-tools utilities to verify
   the graphics setup on the device under test.
 
@@ -38,7 +38,7 @@ Here are the launchers available:
   sudo snap connect graphics-test-tools:x11 checkbox-mir
   ```
 
-- `checkbox-mir.checkbox-snaps`:
+- `checkbox-mir.snaps`:
   This gives you a selection of snaps to test updates of. This is a semi-manual
   suite guiding the operator through the steps required to confirm the updated
   snap is working fine, and what to do with the result.
