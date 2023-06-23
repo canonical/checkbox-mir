@@ -24,3 +24,17 @@ bootstrap_include:
   resource/mir_test_tools_performance_cases
 include:
   mir/.*
+
+id: snaps
+unit: test plan
+_name: Snap - verify that the snaps work fine
+_description:
+  This test installs updated snaps and guides the user
+  through verification that they work correctly.
+bootstrap_include:
+  resource/client-snaps
+  resource/server-snaps
+  resource/session-snaps
+  resource/frame-channels
+include:
+  snaps/.*

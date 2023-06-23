@@ -59,6 +59,10 @@ apps:
     command: bin/checkbox-mir
     plugs: *plugs
     slots: *slots
+  checkbox-snaps:
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command: bin/checkbox-snaps
+    plugs: *plugs
   test-runner:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/test-runner

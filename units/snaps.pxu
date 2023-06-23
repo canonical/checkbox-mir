@@ -1,0 +1,118 @@
+id: resource/client-snaps
+plugin: resource
+command: cat $PLAINBOX_PROVIDER_DATA/client-snaps.resource
+
+id: resource/server-snaps
+plugin: resource
+command: cat $PLAINBOX_PROVIDER_DATA/server-snaps.resource
+
+id: resource/session-snaps
+plugin: resource
+command: cat $PLAINBOX_PROVIDER_DATA/session-snaps.resource
+
+id: resource/frame-channels
+plugin: resource
+command:
+  echo track: 20
+  echo risk: beta
+  echo jenkins-query: -beta
+  echo
+  echo track: 22
+  echo risk: beta
+  echo jenkins-query: -22-beta
+
+unit: template
+template-resource: resource/client-snaps
+id: snaps/{snap}-{channel}
+plugin: user-interact-verify
+estimated_duration: 60.0
+_purpose:
+  This test verifies that {snap}/{channel} runs fine
+command:
+  set -xeuo pipefail
+  snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
+    {snap} --channel {channel}
+  frame-it {snap}
+_verification:
+  1. Did {snap} start up in Frame?
+  2. Can interact with it?
+  3. Quit {snap}
+  .
+  Promote from `{channel}` to `stable` at https://snapcraft.io/{snap}/releases
+
+unit: template
+template-resource: resource/server-snaps
+id: snaps/{snap}-{channel}
+plugin: user-interact-verify
+estimated_duration: 60.0
+_purpose:
+  This test verfies that {snap}/{channel} runs fine
+command:
+  set -xeuo pipefail
+  snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
+    {snap} --channel {channel}
+  {snap}
+_verification:
+  1. Check that {snap} starts up
+  2. Check that you can interact with it
+  3. Quit {snap}
+  .
+  Promote from `{channel}` to `stable` at https://snapcraft.io/{snap}/releases
+
+unit: template
+template-resource: resource/session-snaps
+id: snaps/{snap}-{channel}
+plugin: user-interact-verify
+estimated_duration: 60.0
+_purpose:
+  This test verfies that the {snap}/{channel} session works
+command:
+  set -xeuo pipefail
+  snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
+    {snap} --channel {channel}
+  if [ -x /snap/{snap}/current/bin/setup.sh ]; then
+    /snap/{snap}/current/bin/setup.sh
+  fi
+_verification:
+  1. Check that you can log in to the {snap} session
+  2. Check that you can use the session OK
+  3. Quit the session
+
+unit: template
+template-resource: resource/frame-channels
+id: snaps/ubuntu-frame-osk-{track}-{risk}
+plugin: user-interact-verify
+estimated_duration: 60.0
+_purpose:
+  This test verfies that the Ubuntu Frame OSK {track}/{risk} works
+command:
+  set -xeuo pipefail
+  export WAYLAND_DISPLAY=wayland-99
+  snap $( snap list ubuntu-frame-osk > /dev/null && echo "refresh" || echo "install" ) \
+    ubuntu-frame-osk --channel {track}/{risk}
+  ubuntu-frame-osk &
+  frame-it gnome-text-editor
+_verification:
+  1. Did the OSK show up in Frame?
+  2. Could you use the OSK fine?
+  3. Quit the editor
+  .
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/ubuntu-frame-osk/releases
+
+unit: template
+template-resource: resource/frame-channels
+id: snaps/mir-test-tools-{track}-{risk}
+plugin: user-interact-verify
+estimated_duration: 60.0
+_purpose:
+  This verfies that mir-test-tools {track}/{risk} tested fine
+command:
+  curl -s -H "Snap-Device-Series: 16" \
+    "https://api.snapcraft.io/v2/snaps/info/mir-test-tools" \
+  | jq -r --arg TRACK "{track}" '."channel-map" | .[] | select(.channel.risk=="{risk}") | [select(.channel.track==$TRACK).channel.architecture, select(.channel.track==$TRACK).revision] | @tsv' \
+  | grep -v '^$'
+_verification:
+  1. Check the results at http://10.102.156.15:8080/blue/pipelines/?search=cert*mir-test-tools{jenkins-query}
+  2. Check that the revisions above were tested and succeeded
+  .
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/ubuntu-frame-osk/releases

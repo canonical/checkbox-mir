@@ -1,0 +1,11 @@
+#!/usr/bin/env checkbox-cli
+
+[launcher]
+launcher_version = 1
+app_id = io.mir-server:checkbox
+stock_reports = text, submission_files
+
+[test plan]
+unit = io.mir-server::snaps
+forced = yes
+
