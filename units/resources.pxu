@@ -4,6 +4,13 @@ plugin: resource
 command: drm_device_resource.py
 
 plugin: resource
+id: normal_user
+_summary: Provide details about the normal_user
+command:
+  echo uid: $UID
+  echo user: $USER
+
+plugin: resource
 id: logind_sessions
 _summary: Provide information about logind sessions
 estimated_duration: 0.1
