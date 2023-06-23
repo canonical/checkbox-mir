@@ -1,16 +1,16 @@
-id: resource/client-snaps
+id: client-snaps
 plugin: resource
 command: cat $PLAINBOX_PROVIDER_DATA/client-snaps.resource
 
-id: resource/server-snaps
+id: server-snaps
 plugin: resource
 command: cat $PLAINBOX_PROVIDER_DATA/server-snaps.resource
 
-id: resource/session-snaps
+id: session-snaps
 plugin: resource
 command: cat $PLAINBOX_PROVIDER_DATA/session-snaps.resource
 
-id: resource/frame-channels
+id: frame-channels
 plugin: resource
 command:
   echo track: 20
@@ -22,7 +22,7 @@ command:
   echo jenkins-query: -22-beta
 
 unit: template
-template-resource: resource/client-snaps
+template-resource: client-snaps
 id: snaps/{snap}-{channel}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -41,7 +41,7 @@ _verification:
   Promote from `{channel}` to `stable` at https://snapcraft.io/{snap}/releases
 
 unit: template
-template-resource: resource/server-snaps
+template-resource: server-snaps
 id: snaps/{snap}-{channel}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -60,7 +60,7 @@ _verification:
   Promote from `{channel}` to `stable` at https://snapcraft.io/{snap}/releases
 
 unit: template
-template-resource: resource/session-snaps
+template-resource: session-snaps
 id: snaps/{snap}-{channel}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -79,7 +79,7 @@ _verification:
   3. Quit the session
 
 unit: template
-template-resource: resource/frame-channels
+template-resource: frame-channels
 id: snaps/ubuntu-frame-osk-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -100,7 +100,7 @@ _verification:
   Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/ubuntu-frame-osk/releases
 
 unit: template
-template-resource: resource/frame-channels
+template-resource: frame-channels
 id: snaps/mir-test-tools-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0

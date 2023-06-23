@@ -1,10 +1,10 @@
-id: resource/drm_device
+id: drm_device
 estimated_runtime: 0.1
 plugin: resource
 command: drm_device_resource.py
 
 plugin: resource
-id: resource/logind_sessions
+id: logind_sessions
 _summary: Provide information about logind sessions
 estimated_duration: 0.1
 command:
@@ -14,7 +14,7 @@ command:
   done < <( loginctl list-sessions --no-legend || kill $$ )
 
 plugin: resource
-id: resource/mir_test_tools_performance_cases
+id: mir_test_tools_performance_cases
 _summary: Enumerate the cases for the mir-test-tools performance suite
 estimated_duration: 0.1
 imports: from com.canonical.certification import snap

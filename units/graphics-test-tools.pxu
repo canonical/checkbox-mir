@@ -1,6 +1,6 @@
 unit: template
-template-resource: resource/drm_device
-imports: from com.canonical.certification import connections as connections
+template-resource: drm_device
+imports: from com.canonical.certification import connections
 requires:
   connections.plug == "graphics-test-tools:graphics-core22"
   connections.plug == "graphics-test-tools:opengl"
@@ -16,7 +16,7 @@ command:
   [ "$( head -n1 $OUTPUT )" == 'Node: {path}' ]
 
 unit: template
-template-resource: resource/drm_device
+template-resource: drm_device
 id: graphics/{index}_kmscube_{product_slug}
 imports: from com.canonical.certification import connections
 requires:

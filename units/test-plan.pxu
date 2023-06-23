@@ -11,7 +11,7 @@ _description:
   This test plan verifies that the graphics-core22 environment
   is working correctly on this device.
 bootstrap_include:
-  resource/drm_device
+  drm_device
 include:
   graphics/.*
 
@@ -21,7 +21,7 @@ _name: Mir - smoke and performance testing of Mir itself
 _description:
   This test plan runs the Mir smoke and performance tests.
 bootstrap_include:
-  resource/mir_test_tools_performance_cases
+  mir_test_tools_performance_cases
 include:
   mir/.*
 
@@ -32,9 +32,9 @@ _description:
   This test installs updated snaps and guides the user
   through verification that they work correctly.
 bootstrap_include:
-  resource/client-snaps
-  resource/server-snaps
-  resource/session-snaps
-  resource/frame-channels
+  client-snaps
+  server-snaps
+  session-snaps
+  frame-channels
 include:
   snaps/.*

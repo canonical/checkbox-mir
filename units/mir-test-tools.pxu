@@ -19,7 +19,7 @@ _siblings: [
   ]
 
 unit: template
-template-resource: resource/mir_test_tools_performance_cases
+template-resource: mir_test_tools_performance_cases
 id: mir/performance_{case}
 imports:
   from com.canonical.certification import connections
@@ -45,7 +45,7 @@ command:
   exit $STATUS
 
 unit: template
-template-resource: resource/mir_test_tools_performance_cases
+template-resource: mir_test_tools_performance_cases
 id: mir/performance_{case}.xml
 depends: mir/performance_{case}
 _summary: Collect the test report from mir/performance_{case}
