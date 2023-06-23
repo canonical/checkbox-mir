@@ -4,6 +4,16 @@ plugin: resource
 command: drm_device_resource.py
 
 plugin: resource
+id: resource/logind_sessions
+_summary: Provide information about logind sessions
+estimated_duration: 0.1
+command:
+  IFS=$' '; while read -r id uid; do
+    loginctl show-session $id | sed -e 's/\([^=]\+\)=/\L\1: /'
+    echo
+  done < <( loginctl list-sessions --no-legend || kill $$ )
+
+plugin: resource
 id: resource/mir_test_tools_performance_cases
 _summary: Enumerate the cases for the mir-test-tools performance suite
 estimated_duration: 0.1
