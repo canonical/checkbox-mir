@@ -23,9 +23,11 @@ unit: template
 template-resource: mir_test_tools_performance_cases
 id: mir/performance_{case}
 imports:
+  from com.canonical.plainbox import manifest
   from com.canonical.certification import connections
   from com.canonical.certification import snap
 requires:
+  [manifest.run_wayland_tests, "{wayland}"] == ["True", "True"] or [manifest.run_xwayland_tests, "{xwayland}"] == ["True", "True"] or [manifest.run_hosted_tests, "{hosted}"] == ["True", "True"]
   connections.plug == "mir-test-tools:graphics-core22"
   connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir performance test case: {case}

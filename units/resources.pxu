@@ -35,6 +35,23 @@ command:
       SUITE=${BASH_REMATCH[1]}
     elif [[ "$line" =~ ^[A-Za-z0-9_/]+$ ]]; then
       echo case: $SUITE.${BASH_REMATCH}
+      case "$SUITE" in
+        *Xwayland*)
+          echo wayland: False
+          echo xwayland: True
+          echo hosted: False
+          ;;
+        Hosted*)
+          echo wayland: False
+          echo xwayland: False
+          echo hosted: True
+          ;;
+        *)
+          echo wayland: True
+          echo xwayland: False
+          echo hosted: False
+          ;;
+      esac
       echo
     fi
   done < <( mir-test-tools.performance-test --gtest_list_tests || kill $$ )

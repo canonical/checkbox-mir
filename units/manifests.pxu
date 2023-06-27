@@ -1,0 +1,14 @@
+unit: manifest entry
+id: run_wayland_tests
+_name: Run Wayland tests
+value-type: bool
+
+unit: manifest entry
+id: run_hosted_tests
+_name: Run Hosted tests
+value-type: bool
+
+unit: manifest entry
+id: run_xwayland_tests
+_name: Run Xwayland tests
+value-type: bool
