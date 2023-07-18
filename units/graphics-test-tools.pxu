@@ -1,7 +1,10 @@
 unit: template
 template-resource: drm_device
-imports: from com.canonical.certification import connections
+imports:
+  from com.canonical.certification import connections
+  from com.canonical.certification import executable
 requires:
+  executable.name == "graphics-test-tools.drm-info"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
 id: graphics/{index}_drm-info_{product_slug}
@@ -18,8 +21,11 @@ command:
 unit: template
 template-resource: drm_device
 id: graphics/{index}_kmscube_{product_slug}
-imports: from com.canonical.certification import connections
+imports:
+  from com.canonical.certification import connections
+  from com.canonical.certification import executable
 requires:
+  executable.name == "graphics-test-tools.kmscube"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
@@ -61,8 +67,11 @@ user: root
 command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland platform:\nEGL API version:.*'
 
 id: graphics/vkcube-x11
-imports: from com.canonical.certification import connections
+imports:
+  from com.canonical.certification import connections
+  from com.canonical.certification import executable
 requires:
+  executable.name == "graphics-test-tools.vkcube"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
@@ -72,8 +81,11 @@ user: root
 command: run_with_x.sh graphics-test-tools.vkcube --c 60
 
 id: graphics/vainfo-x11
-imports: from com.canonical.certification import connections
+imports:
+  from com.canonical.certification import connections
+  from com.canonical.certification import executable
 requires:
+  executable.name == "graphics-test-tools.vainfo"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
@@ -83,8 +95,11 @@ user: root
 command: run_with_x.sh graphics-test-tools.vainfo
 
 id: graphics/vdpauinfo-x11
-imports: from com.canonical.certification import connections
+imports:
+  from com.canonical.certification import connections
+  from com.canonical.certification import executable
 requires:
+  executable.name == "graphics-test-tools.vdpauinfo"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
