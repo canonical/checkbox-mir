@@ -2,7 +2,7 @@ unit: template
 template-resource: drm_device
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
 id: graphics/{index}_drm-info_{product_slug}
 _summary: Dump DRM information for card {index}: {product_slug}
@@ -20,7 +20,7 @@ template-resource: drm_device
 id: graphics/{index}_kmscube_{product_slug}
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
 plugin: shell
@@ -31,7 +31,7 @@ command: graphics-test-tools.kmscube --count 60 --device {path}
 id: graphics/eglinfo-gbm
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run eglinfo to verify EGL setup for the GBM platform
 plugin: shell
@@ -41,7 +41,7 @@ command: graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version
 id: graphics/eglinfo-x11
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
 _summary: Run eglinfo to verify EGL setup with a X server
@@ -52,7 +52,7 @@ command: run_with_x.sh graphics-test-tools.eglinfo | grep -oPz 'X11 platform:\nE
 id: graphics/eglinfo-wayland
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:wayland"
 _summary: Run eglinfo to verify EGL setup with a Wayland server
@@ -63,7 +63,7 @@ command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland pl
 id: graphics/vkcube-x11
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
 _summary: Run vkcube to verify Vulkan setup
@@ -74,7 +74,7 @@ command: run_with_x.sh graphics-test-tools.vkcube --c 60
 id: graphics/vainfo-x11
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
 _summary: Run vainfo to verify libVA setup
@@ -85,7 +85,7 @@ command: run_with_x.sh graphics-test-tools.vainfo
 id: graphics/vdpauinfo-x11
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug == "graphics-test-tools:graphics-core22"
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
 _summary: Run vdpauinfo to verify VDPAU setup
