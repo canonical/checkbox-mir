@@ -28,6 +28,11 @@ plugin: user-interact-verify
 estimated_duration: 60.0
 _purpose:
   This test verifies that {snap}/{channel} runs fine
+imports:
+  from com.canonical.certification import executable
+requires:
+  executable.name == "frame-it"
+  executable.name == "ubuntu-frame"
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
@@ -85,6 +90,11 @@ plugin: user-interact-verify
 estimated_duration: 60.0
 _purpose:
   This test verfies that the Ubuntu Frame OSK {track}/{risk} works
+imports:
+  from com.canonical.certification import executable
+requires:
+  executable.name == "frame-it"
+  executable.name == "ubuntu-frame"
 command:
   set -xeuo pipefail
   export WAYLAND_DISPLAY=wayland-99
