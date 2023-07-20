@@ -54,4 +54,4 @@ command:
       esac
       echo
     fi
-  done < <( mir-test-tools.performance-test --gtest_list_tests || kill $$ )
+  done < <( mir-test-tools.performance-test --gtest_list_tests --gtest_filter=* || kill $$ )
