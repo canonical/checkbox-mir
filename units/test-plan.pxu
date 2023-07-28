@@ -35,6 +35,6 @@ bootstrap_include:
   client-snaps
   server-snaps
   session-snaps
-  frame-channels
+  mir-channels
 include:
   snaps/.*
