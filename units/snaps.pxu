@@ -21,6 +21,41 @@ command:
   echo risk: beta
   echo jenkins-query: -22-beta
 
+id: jenkins-snaps
+plugin: resource
+command:
+  echo snap: checkbox-mir
+  echo track: latest
+  echo risk: edge
+  echo
+  echo snap: graphics-test-tools
+  echo track: 20
+  echo risk: beta
+  echo
+  echo snap: graphics-test-tools
+  echo track: 22
+  echo risk: beta
+  echo
+  echo snap: mesa-core20
+  echo track: latest
+  echo risk: beta
+  echo
+  echo snap: mesa-core22
+  echo track: latest
+  echo risk: beta
+  echo
+  echo snap: mir-test-tools
+  echo track: 20
+  echo risk: beta
+  echo
+  echo snap: mir-test-tools
+  echo track: 22
+  echo risk: beta
+  echo
+  echo snap: nvidia-core22
+  echo track: latest
+  echo risk: beta
+
 unit: template
 template-resource: client-snaps
 id: snaps/{snap}-{channel}
@@ -110,19 +145,19 @@ _verification:
   Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/ubuntu-frame-osk/releases
 
 unit: template
-template-resource: mir-channels
-id: snaps/mir-test-tools-{track}-{risk}
+template-resource: jenkins-snaps
+id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 _purpose:
-  This verfies that mir-test-tools {track}/{risk} tested fine
+  This verfies that {snap} {track}/{risk} tested fine
 command:
   curl -s -H "Snap-Device-Series: 16" \
-    "https://api.snapcraft.io/v2/snaps/info/mir-test-tools" \
-  | jq -r --arg TRACK "{track}" '."channel-map" | .[] | select(.channel.risk=="{risk}") | [select(.channel.track==$TRACK).channel.architecture, select(.channel.track==$TRACK).revision] | @tsv' \
+    "https://api.snapcraft.io/v2/snaps/info/{snap}" \
+  | jq -r --arg TRACK "{track}" --arg RISK "{risk}" '."channel-map" | .[] | select(.channel.risk==$RISK) | [select(.channel.track==$TRACK).channel.architecture, select(.channel.track==$TRACK).revision] | @tsv' \
   | grep -v '^$'
 _verification:
-  1. Check the results at http://10.102.156.15:8080/blue/pipelines/?search=cert*mir-test-tools{jenkins-query}
+  1. Check the results at http://10.102.156.15:8080/blue/pipelines/?search=cert*{snap}-{track}-{risk}
   2. Check that the revisions above were tested and succeeded
   .
-  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/mir-test-tools/releases
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
