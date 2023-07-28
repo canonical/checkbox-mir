@@ -125,4 +125,4 @@ _verification:
   1. Check the results at http://10.102.156.15:8080/blue/pipelines/?search=cert*mir-test-tools{jenkins-query}
   2. Check that the revisions above were tested and succeeded
   .
-  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/ubuntu-frame-osk/releases
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/mir-test-tools/releases
