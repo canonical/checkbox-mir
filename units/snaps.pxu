@@ -105,6 +105,10 @@ plugin: user-interact-verify
 estimated_duration: 60.0
 _purpose:
   This test verfies that the {snap}/{channel} session works
+  .
+  1. Check that you can log in to the {snap} session
+  2. Check that you can use the session OK
+  3. Quit the session
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
@@ -113,9 +117,8 @@ command:
     /snap/{snap}/current/bin/setup.sh
   fi
 _verification:
-  1. Check that you can log in to the {snap} session
-  2. Check that you can use the session OK
-  3. Quit the session
+  1. Were you able to log into the {snap} session?
+  2. Could you use the session OK?
 
 unit: template
 template-resource: ancillary-snaps
