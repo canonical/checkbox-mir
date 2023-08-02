@@ -63,6 +63,7 @@ requires:
   executable.name == "ubuntu-frame"
 command:
   set -xeuo pipefail
+  export XDG_RUNTIME_DIR=$( dirname $XDG_RUNTIME_DIR )
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
     {snap} --channel {channel}
   frame-it {snap}
