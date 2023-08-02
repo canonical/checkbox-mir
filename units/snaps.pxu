@@ -10,16 +10,9 @@ id: session-snaps
 plugin: resource
 command: cat $PLAINBOX_PROVIDER_DATA/session-snaps.resource
 
-id: mir-channels
+id: ancillary-snaps
 plugin: resource
-command:
-  echo track: 20
-  echo risk: beta
-  echo jenkins-query: -beta
-  echo
-  echo track: 22
-  echo risk: beta
-  echo jenkins-query: -22-beta
+command: cat $PLAINBOX_PROVIDER_DATA/ancillary-snaps.resource
 
 id: jenkins-snaps
 plugin: resource
@@ -119,12 +112,16 @@ _verification:
   3. Quit the session
 
 unit: template
-template-resource: mir-channels
-id: snaps/ubuntu-frame-osk-{track}-{risk}
+template-resource: ancillary-snaps
+id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 _purpose:
-  This test verfies that the Ubuntu Frame OSK {track}/{risk} works
+  This test verfies that {snap} {track}/{risk} works
+  .
+  {purpose}
+  .
+  Quit the editor to continue.
 imports:
   from com.canonical.certification import executable
 requires:
@@ -132,17 +129,44 @@ requires:
   executable.name == "ubuntu-frame"
 command:
   set -xeuo pipefail
-  export WAYLAND_DISPLAY=wayland-99
-  snap $( snap list ubuntu-frame-osk > /dev/null && echo "refresh" || echo "install" ) \
-    ubuntu-frame-osk --channel {track}/{risk}
-  ubuntu-frame-osk &
-  frame-it gnome-text-editor
-_verification:
-  1. Did the OSK show up in Frame?
-  2. Could you use the OSK fine?
-  3. Quit the editor
   .
-  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/ubuntu-frame-osk/releases
+  OUTPUT=$( mktemp )
+  export XDG_RUNTIME_DIR=$( dirname $XDG_RUNTIME_DIR )
+  export WAYLAND_DISPLAY=wayland-99
+  .
+  snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
+    {snap} --channel {track}/{risk}
+  /snap/{snap}/current/bin/setup.sh
+  .
+  cleanup() {{
+    # Run through cleanup despite errors
+    set +euo pipefail
+    STATUS=$( cat $OUTPUT.status )
+    rm $OUTPUT*
+    for pid in $( jobs -p ); do
+        kill $pid
+        timeout 10 tail --pid=$pid -f /dev/null || kill -9 $pid
+        timeout 10 tail --pid=$pid -f /dev/null || echo "WARNING: Failed to clean up PID $pid"
+    done
+    exit $STATUS
+  }}
+  .
+  wait_and_run() {{
+    timeout 10 sh -c "until [ -S $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do sleep 1; done"
+    exec "$@"
+  }}
+  .
+  trap cleanup EXIT
+  .
+  wait_and_run {snap} &
+  .
+  frame-it gnome-text-editor \
+  && echo 0 > $OUTPUT.status \
+  || echo $? > $OUTPUT.status
+_verification:
+  {verification}
+  .
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
 
 unit: template
 template-resource: jenkins-snaps

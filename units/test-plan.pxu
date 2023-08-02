@@ -35,7 +35,7 @@ bootstrap_include:
   client-snaps
   server-snaps
   session-snaps
-  mir-channels
+  ancillary-snaps
   jenkins-snaps
 include:
   snaps/.*
