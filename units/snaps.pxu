@@ -63,10 +63,12 @@ requires:
   executable.name == "ubuntu-frame"
 command:
   set -xeuo pipefail
-  export XDG_RUNTIME_DIR=$( dirname $XDG_RUNTIME_DIR )
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
     {snap} --channel {channel}
-  frame-it {snap}
+  if [ -x /snap/{snap}/current/bin/setup.sh ]; then
+    /snap/{snap}/current/bin/setup.sh
+  fi
+  clean_env.sh frame-it {snap}
 _verification:
   1. Did {snap} start up in Frame?
   2. Can interact with it?
@@ -85,7 +87,10 @@ command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
     {snap} --channel {channel} {snap-options}
-  {snap}
+  if [ -x /snap/{snap}/current/bin/setup.sh ]; then
+    /snap/{snap}/current/bin/setup.sh
+  fi
+  clean_env.sh {snap}
 _verification:
   1. Check that {snap} starts up
   2. Check that you can interact with it
@@ -132,7 +137,7 @@ command:
   set -xeuo pipefail
   .
   OUTPUT=$( mktemp )
-  export XDG_RUNTIME_DIR=$( dirname $XDG_RUNTIME_DIR )
+  export XDG_RUNTIME_DIR=/run/user/$( id -u )
   export WAYLAND_DISPLAY=wayland-99
   .
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
@@ -161,7 +166,7 @@ command:
   .
   wait_and_run {snap} &
   .
-  frame-it gnome-text-editor \
+  clean_env.sh frame-it gnome-text-editor \
   && echo 0 > $OUTPUT.status \
   || echo $? > $OUTPUT.status
 _verification:
