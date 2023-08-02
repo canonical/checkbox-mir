@@ -90,7 +90,7 @@ _purpose:
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
-    {snap} --channel {channel}
+    {snap} --channel {channel} {snap-options}
   {snap}
 _verification:
   1. Check that {snap} starts up
