@@ -7,7 +7,7 @@ track: 20
 risk: beta
 
 snap: graphics-test-tools
-track: 22
+track: latest
 risk: beta
 
 snap: mesa-core20
