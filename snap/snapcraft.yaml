@@ -118,8 +118,15 @@ parts:
     organize:
       '*': bin/
 
+  bits:
+    plugin: nil
+    stage-packages:
+      - dpkg-dev
+    prime:
+      - usr/bin/dpkg-architecture
+
   graphics-core22:
-    after: [mir_demo_server, xorg]
+    after: [mir_demo_server, xorg, bits]
     source: https://github.com/MirServer/graphics-core22.git
     plugin: dump
     override-prime: |

@@ -18,6 +18,25 @@ id: jenkins-snaps
 plugin: resource
 command: cat $PLAINBOX_PROVIDER_DATA/jenkins-snaps.resource
 
+id: store
+_summary: Enumerate revisions for all tested snaps
+plugin: resource
+command:
+  set -euo pipefail
+  while read snap; do
+    while read track risk revision; do
+      echo snap: $snap
+      echo track: $track
+      echo risk: $risk
+      echo revision: $revision
+      echo
+    done < <( curl -s -H "Snap-Device-Series: 16" "https://api.snapcraft.io/v2/snaps/info/${snap}" \
+              | jq -r --arg TRACK "latest" --arg ARCH "$( dpkg-architecture -qDEB_HOST_ARCH )" \
+                '."channel-map" | .[] | select(.channel.architecture==$ARCH)
+                 | [.channel.track, .channel.risk, .revision] | @tsv' \
+              || kill $$ )
+  done < <( cat $PLAINBOX_PROVIDER_DATA/*-snaps.resource | awk '/^snap:/ { print $2 }' | sort -u )
+
 unit: template
 template-resource: client-snaps
 id: snaps/{snap}-{channel}
