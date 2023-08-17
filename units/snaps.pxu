@@ -44,6 +44,9 @@ plugin: user-interact-verify
 estimated_duration: 60.0
 _purpose:
   This test verifies that {snap}/{channel} runs fine
+  .
+  It will start {snap} in Ubuntu Frame - check that it does
+  and that you can interact with it OK, then quit {snap}.
 imports:
   from com.canonical.certification import executable
   from io.mir-server import store as store2
@@ -61,8 +64,7 @@ command:
   clean_env.sh frame-it {snap}
 _verification:
   1. Did {snap} start up in Frame?
-  2. Can interact with it?
-  3. Quit {snap}
+  2. Could you interact with it?
   .
   Promote from `{channel}` to `stable` at https://snapcraft.io/{snap}/releases
 
@@ -76,7 +78,10 @@ imports:
 requires:
   (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
 _purpose:
-  This test verfies that {snap}/{channel} runs fine
+  This test verfies that {snap}/{channel} runs fine.
+  .
+  It will start {snap} - check that it does and that you can interact
+  with it OK, then quit {snap}.
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
@@ -86,9 +91,8 @@ command:
   fi
   clean_env.sh {snap}
 _verification:
-  1. Check that {snap} starts up
-  2. Check that you can interact with it
-  3. Quit {snap}
+  1. Did {snap} start fine?
+  2. Could you interact with it OK?
   .
   Promote from `{channel}` to `stable` at https://snapcraft.io/{snap}/releases
 
@@ -103,10 +107,6 @@ requires:
   (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
 _purpose:
   This test verfies that the {snap}/{channel} session works
-  .
-  1. Check that you can log in to the {snap} session
-  2. Check that you can use the session OK
-  3. Quit the session
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
@@ -115,8 +115,10 @@ command:
     /snap/{snap}/current/bin/setup.sh
   fi
 _verification:
-  1. Were you able to log into the {snap} session?
-  2. Could you use the session OK?
+  1. Check that you can log in to the {snap} session
+  2. Check that you can use the session OK
+  3. Quit the session
+  4. Was everything OK?
 
 unit: template
 template-resource: ancillary-snaps
