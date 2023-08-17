@@ -46,9 +46,11 @@ _purpose:
   This test verifies that {snap}/{channel} runs fine
 imports:
   from com.canonical.certification import executable
+  from io.mir-server import store as store2
 requires:
   executable.name == "frame-it"
   executable.name == "ubuntu-frame"
+  (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
@@ -69,6 +71,10 @@ template-resource: server-snaps
 id: snaps/{snap}-{channel}
 plugin: user-interact-verify
 estimated_duration: 60.0
+imports:
+  from io.mir-server import store as store2
+requires:
+  (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
 _purpose:
   This test verfies that {snap}/{channel} runs fine
 command:
@@ -91,6 +97,10 @@ template-resource: session-snaps
 id: snaps/{snap}-{channel}
 plugin: user-interact-verify
 estimated_duration: 60.0
+imports:
+  from io.mir-server import store as store2
+requires:
+  (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
 _purpose:
   This test verfies that the {snap}/{channel} session works
   .
@@ -121,9 +131,11 @@ _purpose:
   Quit the editor to continue.
 imports:
   from com.canonical.certification import executable
+  from io.mir-server import store as store2
 requires:
   executable.name == "frame-it"
   executable.name == "ubuntu-frame"
+  (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
 command:
   set -xeuo pipefail
   .
@@ -170,6 +182,10 @@ template-resource: jenkins-snaps
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
+imports:
+  from io.mir-server import store as store2
+requires:
+  (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
 _purpose:
   This verfies that {snap} {track}/{risk} tested fine
 command:
