@@ -58,6 +58,9 @@ command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
     {snap} --channel {channel}
+  .
+  check_snap_current.sh {snap} latest {channel}
+  .
   if [ -x /snap/{snap}/current/bin/setup.sh ]; then
     /snap/{snap}/current/bin/setup.sh
   fi
@@ -86,6 +89,9 @@ command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
     {snap} --channel {channel} {snap-options}
+  .
+  check_snap_current.sh {snap} latest {channel}
+  .
   if [ -x /snap/{snap}/current/bin/setup.sh ]; then
     /snap/{snap}/current/bin/setup.sh
   fi
@@ -111,6 +117,9 @@ command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
     {snap} --channel {channel}
+  .
+  check_snap_current.sh {snap} latest {channel}
+  .
   if [ -x /snap/{snap}/current/bin/setup.sh ]; then
     /snap/{snap}/current/bin/setup.sh
   fi
@@ -147,6 +156,9 @@ command:
   .
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
     {snap} --channel {track}/{risk}
+  .
+  check_snap_current.sh {snap} {track} {risk}
+  .
   /snap/{snap}/current/bin/setup.sh
   .
   cleanup() {{
