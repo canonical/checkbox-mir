@@ -16,38 +16,7 @@ command: cat $PLAINBOX_PROVIDER_DATA/ancillary-snaps.resource
 
 id: jenkins-snaps
 plugin: resource
-command:
-  echo snap: checkbox-mir
-  echo track: latest
-  echo risk: edge
-  echo
-  echo snap: graphics-test-tools
-  echo track: 20
-  echo risk: beta
-  echo
-  echo snap: graphics-test-tools
-  echo track: 22
-  echo risk: beta
-  echo
-  echo snap: mesa-core20
-  echo track: latest
-  echo risk: beta
-  echo
-  echo snap: mesa-core22
-  echo track: latest
-  echo risk: beta
-  echo
-  echo snap: mir-test-tools
-  echo track: 20
-  echo risk: beta
-  echo
-  echo snap: mir-test-tools
-  echo track: 22
-  echo risk: beta
-  echo
-  echo snap: nvidia-core22
-  echo track: latest
-  echo risk: beta
+command: cat $PLAINBOX_PROVIDER_DATA/jenkins-snaps.resource
 
 unit: template
 template-resource: client-snaps
