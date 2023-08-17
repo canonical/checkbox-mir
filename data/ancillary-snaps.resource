@@ -6,7 +6,6 @@ purpose:
 verification:
   1. Did the OSK show up in Frame?
   2. Could you use the OSK fine?
-  3. Quit the editor
 
 snap: ubuntu-frame-osk
 track: 22
@@ -16,7 +15,6 @@ purpose:
 verification:
   1. Did the OSK show up in Frame?
   2. Could you use the OSK fine?
-  3. Quit the editor
 
 snap: ubuntu-frame-vnc
 track: 20
@@ -27,7 +25,6 @@ purpose:
 verification:
   1. Could you connect to vnc://localhost/?
   2. Could you interact with the editor over VNC?
-  3. Quit the editor
 
 snap: ubuntu-frame-vnc
 track: 22
@@ -38,4 +35,3 @@ purpose:
 verification:
   1. Could you connect to vnc://localhost/?
   2. Could you interact with the editor over VNC?
-  3. Quit the editor
