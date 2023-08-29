@@ -208,7 +208,7 @@ command:
   | jq -r --arg TRACK "{track}" --arg RISK "{risk}" '."channel-map" | .[] | select(.channel.risk==$RISK) | [select(.channel.track==$TRACK).channel.architecture, select(.channel.track==$TRACK).revision] | @tsv' \
   | grep -v '^$'
 _verification:
-  1. Check the results at http://10.102.156.15:8080/blue/pipelines/?search=cert*{snap}-{track}-{risk}
+  1. Check the results at http://10.102.156.15:8080/search/?q={snap}-{track}-{risk}
   2. Check that the revisions above were tested and succeeded
   .
   Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
