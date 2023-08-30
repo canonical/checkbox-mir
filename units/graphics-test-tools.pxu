@@ -32,7 +32,16 @@ _summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
 plugin: shell
 estimated_duration: 1.0
 user: root
-command: graphics-test-tools.kmscube --count 60 --device {path}
+command:
+  graphics-test-tools.kmscube --count 60 --device {path} || KMSCUBE_CODE=$?
+  .
+  # older `kmscube` does not have --count
+  [ $KMSCUBE_CODE != 255 ] && exit $KMSCUBE_CODE
+  .
+  timeout --kill-after=2 2 graphics-test-tools.kmscube --device {path} || TIMEOUT_CODE=$?
+  .
+  # `timeout` returns 124 on timeout, and that's what we're expecting
+  [ "$TIMEOUT_CODE" == 124 ] || exit $TIMEOUT_CODE
 
 id: graphics/eglinfo-gbm
 imports: from com.canonical.certification import connections
