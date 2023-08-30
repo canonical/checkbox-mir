@@ -4,11 +4,11 @@
 # Test plans unique to graphics-core22 and Mir testing
 #
 
-id: graphics-core22
+id: graphics-core
 unit: test plan
-_name: graphics-core22 - Verification of graphics-core22 enablement
+_name: graphics-core- Verification of graphics-core enablement
 _description:
-  This test plan verifies that the graphics-core22 environment
+  This test plan verifies that the graphics-core environment
   is working correctly on this device.
 bootstrap_include:
   drm_device
