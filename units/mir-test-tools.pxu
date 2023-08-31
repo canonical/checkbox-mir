@@ -1,7 +1,6 @@
 id: mir/smoke
 imports:
   from com.canonical.certification import connections
-  from com.canonical.certification import snap
 requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == "mir-test-tools:login-session-control"
