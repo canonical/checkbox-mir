@@ -24,10 +24,9 @@ plugin: resource
 id: mir_test_tools_performance_cases
 _summary: Enumerate the cases for the mir-test-tools performance suite
 estimated_duration: 0.1
-imports: from com.canonical.certification import snap
+imports: from com.canonical.certification import connections
 requires:
-  snap.name == "mir-test-tools"
-user: root
+  connections.plug == "mir-test-tools:login-session-control"
 command:
   set -euo pipefail
   while read line; do
