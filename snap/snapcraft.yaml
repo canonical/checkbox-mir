@@ -125,8 +125,21 @@ parts:
     prime:
       - usr/bin/dpkg-architecture
 
+  mir-ci:
+    plugin: python
+    source: https://github.com/MirServer/mir-ci.git
+    source-branch: make-package
+    source-subdir: mir-ci
+    python-packages:
+    - mypy
+    - pywayland
+    stage-packages:
+    - python3-gi
+    - pluma
+    - qterminal
+
   graphics-core22:
-    after: [mir_demo_server, xorg, bits]
+    after: [mir_demo_server, xorg, bits, mir-ci]
     source: https://github.com/MirServer/graphics-core22.git
     plugin: dump
     override-prime: |
