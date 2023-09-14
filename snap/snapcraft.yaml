@@ -88,6 +88,10 @@ slots:
   x11slot:
     interface: x11
 
+package-repositories:
+  - type: apt
+    ppa: mir-team/release
+
 parts:
   checkbox-provider-mir:
     plugin: dump
