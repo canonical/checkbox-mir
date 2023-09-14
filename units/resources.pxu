@@ -19,38 +19,3 @@ command:
     loginctl show-session $id | sed -e 's/\([^=]\+\)=/\L\1: /'
     echo
   done < <( loginctl list-sessions --no-legend || kill $$ )
-
-plugin: resource
-id: mir_test_tools_performance_cases
-_summary: Enumerate the cases for the mir-test-tools performance suite
-estimated_duration: 0.1
-imports: from com.canonical.certification import connections
-requires:
-  connections.plug == "mir-test-tools:login-session-control"
-command:
-  set -euo pipefail
-  while read line; do
-    if [[ "$line" =~ ^([A-Za-z0-9_/]*)\.$ ]]; then
-      SUITE=${BASH_REMATCH[1]}
-    elif [[ "$line" =~ ^[A-Za-z0-9_/]+$ ]]; then
-      echo case: $SUITE.${BASH_REMATCH}
-      case "$SUITE" in
-        *Xwayland*)
-          echo wayland: False
-          echo xwayland: True
-          echo hosted: False
-          ;;
-        Hosted*)
-          echo wayland: False
-          echo xwayland: False
-          echo hosted: True
-          ;;
-        *)
-          echo wayland: True
-          echo xwayland: False
-          echo hosted: False
-          ;;
-      esac
-      echo
-    fi
-  done < <( mir-test-tools.performance-test --gtest_list_tests --gtest_filter=* || kill $$ )
