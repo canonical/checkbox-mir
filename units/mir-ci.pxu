@@ -28,7 +28,8 @@ requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
 _summary: Run Mir CI test case: {function}
 plugin: shell
-command: run_mir_ci.sh --verbose --junitxml=/tmp/mir-ci_{function}.xml {case}
+# Executing through snap to take advantage of the gnome extension
+command: checkbox-mir.mir-ci --verbose --junitxml=/tmp/mir-ci_{function}.xml {case}
 
 unit: template
 template-resource: mir_ci_cases
