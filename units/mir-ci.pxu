@@ -1,0 +1,39 @@
+plugin: resource
+id: mir_ci_cases
+_summary: Enumerate the cases for the mir-ci suite
+estimated_duration: 0.1
+imports:
+  from com.canonical.plainbox import manifest
+command:
+  set -euo pipefail
+  while read line; do
+    if [[ "$line" =~ \<Module\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
+      MODULE=${BASH_REMATCH[1]}
+    elif [[ "$line" =~ \<Class\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
+      CLASS=${BASH_REMATCH[1]}
+    elif [[ "$line" =~ \<Function\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
+      echo case: $MODULE::$CLASS::${BASH_REMATCH[1]}
+      echo function: ${BASH_REMATCH[1]}
+      echo snap: ${MIR_CI_SNAP:=checkbox-mir}
+      echo
+    fi
+  done < <( run_mir_ci.sh --collect-only -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
+
+unit: template
+template-resource: mir_ci_cases
+id: mir-ci/{function}
+imports:
+  from com.canonical.certification import connections
+requires:
+  normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
+_summary: Run Mir CI test case: {function}
+plugin: shell
+command: run_mir_ci.sh --verbose --junitxml=/tmp/mir-ci_{function}.xml {case}
+
+unit: template
+template-resource: mir_ci_cases
+id: mir-ci/{function}.xml
+depends: mir-ci/{function}
+_summary: Collect the test report from mir/ci_{function}
+plugin: attachment
+command: cat /tmp/mir-ci_{function}.xml

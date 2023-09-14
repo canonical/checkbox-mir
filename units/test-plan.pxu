@@ -22,8 +22,10 @@ _description:
   This test plan runs the Mir smoke and performance tests.
 bootstrap_include:
   mir_test_tools_performance_cases
+  mir_ci_cases
 include:
   mir/.*
+  mir-ci/.*
 
 id: snaps
 unit: test plan

@@ -20,3 +20,7 @@ io.mir-server::run_wayland_tests = true
 io.mir-server::run_xwayland_tests = true
 io.mir-server::run_hosted_tests = true
 io.mir-server::run_root_tests = true
+
+[environment]
+MIR_CI_EXPRESSION = mir_demo_server
+MIR_CI_SNAP = checkbox-mir
