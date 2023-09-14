@@ -26,6 +26,9 @@ imports:
   from com.canonical.certification import connections
 requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
+  connections.plug == "{snap}:login-session-control"
+  connections.plug in ["{snap}:graphics-core20", "{snap}:graphics-core22"]
+  connections.plug == "{snap}:opengl"
 _summary: Run Mir CI test case: {function}
 plugin: shell
 # Executing through snap to take advantage of the gnome extension

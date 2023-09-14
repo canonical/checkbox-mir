@@ -44,7 +44,7 @@ apps:
     command: bin/checkbox-cli-wrapper
     plugs: &plugs [home, network-bind, hardware-observe,
       mount-observe, network-manager, pulseaudio, serial-port,
-      system-observe]
+      system-observe, login-session-control, opengl]
     slots: &slots [wayslot, x11slot]
   graphics:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
