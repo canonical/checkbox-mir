@@ -1,0 +1,9 @@
+{
+  "wayland":{
+    "allow-installation": "true"
+  },
+  "x11":{
+    "allow-installation": "true"
+  }
+}
+
