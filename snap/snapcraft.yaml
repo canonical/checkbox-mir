@@ -33,10 +33,6 @@ layout:
     symlink: $SNAP/usr/share/X11
   /usr/lib/xorg:
     symlink: $SNAP/usr/lib/xorg
-  /usr/share/icons:
-    bind: $SNAP/usr/share/icons
-  /usr/share/fonts:
-    bind: $SNAP/usr/share/fonts
 
 environment:
   MIR_SERVER_PLATFORM_PATH: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/mir/server-platform
@@ -48,7 +44,7 @@ apps:
     plugs: &plugs [home, network-bind, hardware-observe,
       mount-observe, network-manager, pulseaudio, serial-port,
       system-observe]
-    slots: &slots [wayland, x11]
+    slots: &slots [wayslot, x11slot]
   graphics:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-graphics
@@ -59,6 +55,10 @@ apps:
     command: bin/checkbox-mir
     plugs: *plugs
     slots: *slots
+  mir-ci:
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command: providers/checkbox-provider-mir/bin/run_mir_ci.sh
+    extensions: [gnome]
   snaps:
     command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
     command: bin/checkbox-snaps
@@ -80,6 +80,12 @@ apps:
     command: bin/shell-wrapper
     plugs: *plugs
     slots: *slots
+
+slots:
+  wayslot:
+    interface: wayland
+  x11slot:
+    interface: x11
 
 parts:
   checkbox-provider-mir:
