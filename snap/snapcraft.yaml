@@ -36,6 +36,7 @@ layout:
 
 environment:
   MIR_SERVER_PLATFORM_PATH: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/mir/server-platform
+  QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET}/qt5/plugins
 
 apps:
   checkbox-cli:
@@ -137,12 +138,15 @@ parts:
     source-branch: make-package
     source-subdir: mir-ci
     python-packages:
+    - asciinema
     - mypy
     - pywayland
     stage-packages:
+    - libgtk-4-dev
     - python3-gi
     - pluma
     - qterminal
+    - qtwayland5
 
   graphics-core22:
     after: [mir_demo_server, xorg, bits, mir-ci]
