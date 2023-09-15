@@ -5,11 +5,7 @@ set -euo pipefail
 OUTPUT=$( mktemp )
 export WAYLAND_DISPLAY=wayland-${RANDOM}
 
-[ -n "${XDG_RUNTIME_DIR:-}" ] || ( echo "ERROR: XDG_RUNTIME_DIR unset"; exit 3 )
-
-# Mangle the XDG runtime path
-mkdir -p $XDG_RUNTIME_DIR/..
-REAL_RUNTIME_DIR=$( readlink -f $XDG_RUNTIME_DIR/.. )
+REAL_RUNTIME_DIR=/run/user/$UID
 
 # Default to an error
 echo 128 > $OUTPUT.status
