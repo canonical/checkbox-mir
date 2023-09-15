@@ -12,8 +12,3 @@ unit: manifest entry
 id: run_xwayland_tests
 _name: Run Xwayland tests
 value-type: bool
-
-unit: manifest entry
-id: run_root_tests
-_name: Run tests as the privileged user
-value-type: bool

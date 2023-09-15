@@ -35,7 +35,6 @@ command:
 
 id: mir/smoke
 imports:
-  from com.canonical.plainbox import manifest
   from com.canonical.certification import connections
 requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
@@ -50,7 +49,7 @@ _siblings: [
       "id": "mir/smoke_root",
       "_summary": "Run Mir smoke tests as root",
       "user": "root",
-      "requires": "manifest.run_root_tests == 'True'\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22']\nconnections.plug == 'mir-test-tools:opengl'"
+      "requires": "connections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22']\nconnections.plug == 'mir-test-tools:opengl'"
     }
   ]
 
