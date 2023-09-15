@@ -139,7 +139,6 @@ parts:
   mir-ci:
     plugin: python
     source: https://github.com/MirServer/mir-ci.git
-    source-branch: make-package
     source-subdir: mir-ci
     python-packages:
     - asciinema
