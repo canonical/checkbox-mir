@@ -140,10 +140,12 @@ parts:
     plugin: python
     source: https://github.com/MirServer/mir-ci.git
     source-subdir: mir-ci
+    build-packages:
+    - libwayland-dev
+    - pkg-config
     python-packages:
     - asciinema
     - mypy
-    - pywayland
     stage-packages:
     - libgtk-4-dev
     - python3-gi
