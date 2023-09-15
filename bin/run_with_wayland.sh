@@ -3,7 +3,7 @@
 set -euo pipefail
 
 OUTPUT=$( mktemp )
-export WAYLAND_DISPLAY=wayland-99
+export WAYLAND_DISPLAY=wayland-${RANDOM}
 
 [ -n "${XDG_RUNTIME_DIR:-}" ] || ( echo "ERROR: XDG_RUNTIME_DIR unset"; exit 3 )
 
