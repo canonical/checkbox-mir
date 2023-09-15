@@ -43,7 +43,12 @@ requires:
   connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir smoke tests
 plugin: shell
-command: mir-test-tools.smoke-test
+command:
+  if [ -n "$MIR_HOST_SERVER" ]; then
+    exec run_with_wayland.sh --server $MIR_HOST_SERVER --timeout 0 -- mir-test-tools.smoke-test
+  else
+    exec mir-test-tools.smoke-test
+  fi
 _siblings: [
     {
       "id": "mir/smoke_root",
@@ -70,9 +75,16 @@ _summary: Run Mir performance test case: {case}
 plugin: shell
 command:
   set -euo pipefail
-  mir-test-tools.performance-test \
-    --gtest_filter={case} \
-    --gtest_output=xml:/tmp/{case}.xml && STATUS=0 || STATUS=$?
+  if [ -n "${{MIR_HOST_SERVER:-}}" ]; then
+    run_with_wayland.sh --server $MIR_HOST_SERVER --timeout 0 -- \
+      mir-test-tools.performance-test \
+        --gtest_filter={case} \
+        --gtest_output=xml:/tmp/{case}.xml && STATUS=0 || STATUS=$?
+  else
+    mir-test-tools.performance-test \
+      --gtest_filter={case} \
+      --gtest_output=xml:/tmp/{case}.xml && STATUS=0 || STATUS=$?
+  fi
   LOGNAME=$( echo {case} | tr '.' '_' )
   for log in "" _server _host; do
     echo

@@ -21,5 +21,6 @@ io.mir-server::run_xwayland_tests = true
 io.mir-server::run_hosted_tests = true
 
 [environment]
+MIR_HOST_SERVER =
 MIR_CI_EXPRESSION = mir_demo_server
 MIR_CI_SNAP = checkbox-mir
