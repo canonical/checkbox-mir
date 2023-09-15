@@ -2,6 +2,38 @@
 
 set -euo pipefail
 
+! PARSED=$(getopt --options=s:t: --longoptions=server:,timeout: --name "$0" -- "$@")
+if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
+    exit 2
+fi
+eval set -- "$PARSED"
+
+SERVER=mir_demo_server
+TIMEOUT=10
+while true; do
+    case "$1" in
+        -s|--server)
+            SERVER="$2"
+            shift 2
+            ;;
+        -t|--timeout)
+            TIMEOUT="$2"
+            shift 2
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Usage:"
+            echo "  $0 [--server <server>] [--timeout <timeout>] -- <command> [<arg> ...]"
+            exit 3
+            ;;
+    esac
+done
+
+
+
 OUTPUT=$( mktemp )
 export WAYLAND_DISPLAY=wayland-${RANDOM}
 
@@ -25,11 +57,14 @@ cleanup() {
 
 trap cleanup EXIT
 
-env XDG_RUNTIME_DIR=$REAL_RUNTIME_DIR mir_demo_server &
+env XDG_RUNTIME_DIR=$REAL_RUNTIME_DIR $SERVER &
+SERVER_PID=$!
 
-timeout 10 bash -c "until [ -S $REAL_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do sleep 1; done" \
-  || ( echo "ERROR: Wayland failed to start"; exit 2 )
+timeout 10 bash -c "until [ -S $REAL_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do ps -p $SERVER_PID > /dev/null || exit 1; sleep 1; done" \
+  || ( echo "ERROR: ${SERVER} failed to start"; exit 3 )
 
-timeout 10 "$@" \
+export MIR_SERVER_WAYLAND_HOST=$WAYLAND_DISPLAY
+
+timeout $TIMEOUT "$@" \
   && echo 0 > $OUTPUT.status \
   || echo $? > $OUTPUT.status
