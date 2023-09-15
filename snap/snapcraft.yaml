@@ -109,7 +109,7 @@ parts:
     stage-packages:
       - lsof
 
-  mir_demo_server:
+  mir-demo-server:
     plugin: nil
     stage-packages:
       - mir-test-tools
@@ -154,7 +154,7 @@ parts:
     - qtwayland5
 
   graphics-core22:
-    after: [mir_demo_server, xorg, bits, mir-ci]
+    after: [mir-demo-server, xorg, bits, mir-ci]
     source: https://github.com/MirServer/graphics-core22.git
     plugin: dump
     override-prime: |
