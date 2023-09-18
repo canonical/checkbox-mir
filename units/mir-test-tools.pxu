@@ -1,4 +1,15 @@
 plugin: resource
+id: mtt_context
+_summary: Provide additional context for the Mir test suite
+estimated_duration: 0.1
+command:
+  echo "host_server: ${MIR_HOST_SERVER:=checkbox-mir}"
+  echo "host_20_plug: ${MIR_HOST_SERVER}:graphics-core20"
+  echo "host_22_plug: ${MIR_HOST_SERVER}:graphics-core22"
+  echo "host_logind_plug: ${MIR_HOST_SERVER}:login-session-control"
+  echo "host_opengl_plug: ${MIR_HOST_SERVER}:login-session-control"
+
+plugin: resource
 id: mir_test_tools_performance_cases
 _summary: Enumerate the cases for the mir-test-tools performance suite
 estimated_duration: 0.1
@@ -38,7 +49,9 @@ imports:
   from com.canonical.certification import connections
 requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
-  connections.plug == "mir-test-tools:login-session-control"
+  connections.plug == mtt_context.host_logind_plug
+  connections.plug in [mtt_context.host_20_plug, mtt_context.host_22_plug]
+  connections.plug == mtt_context.host_opengl_plug
   connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22"]
   connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir smoke tests
@@ -68,7 +81,9 @@ imports:
 requires:
   [manifest.run_wayland_tests, "{wayland}"] == ["True", "True"] or [manifest.run_xwayland_tests, "{xwayland}"] == ["True", "True"] or [manifest.run_hosted_tests, "{hosted}"] == ["True", "True"]
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
-  connections.plug == "mir-test-tools:login-session-control"
+  connections.plug == mtt_context.host_logind_plug
+  connections.plug in [mtt_context.host_20_plug, mtt_context.host_22_plug]
+  connections.plug == mtt_context.host_opengl_plug
   connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22"]
   connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir performance test case: {case}
