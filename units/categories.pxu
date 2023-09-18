@@ -1,0 +1,11 @@
+unit: category
+id: performance
+_name: Performance tests
+
+unit: category
+id: smoke
+_name: Smoke tests
+
+unit: category
+id: junit
+_name: JUnit collection jobs

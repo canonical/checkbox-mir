@@ -22,6 +22,7 @@ command:
 unit: template
 template-resource: mir_ci_cases
 id: mir-ci/{function}
+category_id: performance
 imports:
   from com.canonical.certification import connections
 requires:
@@ -37,6 +38,7 @@ command: checkbox-mir.mir-ci --verbose --junitxml=/tmp/mir-ci_{function}.xml {ca
 unit: template
 template-resource: mir_ci_cases
 id: mir-ci/{function}.xml
+category_id: junit
 depends: mir-ci/{function}
 _summary: Collect the test report from mir/ci_{function}
 plugin: attachment
