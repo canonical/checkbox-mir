@@ -57,7 +57,7 @@ apps:
     plugs: *plugs
     slots: *slots
   mir-ci:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper, bin/anon-shm-preload]
     command: providers/checkbox-provider-mir/bin/run_mir_ci.sh
     extensions: [gnome]
   snaps:
@@ -108,6 +108,8 @@ parts:
       checkbox-provider-tools install --layout=relocatable --prefix=/providers/checkbox-provider-mir --root="$SNAPCRAFT_PART_INSTALL"
     stage-packages:
       - lsof
+    organize:
+      providers/checkbox-provider-mir/bin/mir_demo_server: usr/bin/mir_demo_server
 
   mir-demo-server:
     plugin: nil
@@ -116,6 +118,8 @@ parts:
       - mir-graphics-drivers-desktop
       - mir-graphics-drivers-nvidia
       - dmz-cursor-theme
+    organize:
+      usr/bin/mir_demo_server: usr/bin/mir_demo_server.real
 
   xorg:
     plugin: nil
@@ -136,6 +140,10 @@ parts:
     prime:
       - usr/bin/dpkg-architecture
 
+  anon-shm-preload:
+    source: https://github.com/MirServer/anon-shm-preload.git
+    plugin: cmake
+
   mir-ci:
     plugin: python
     source: https://github.com/MirServer/mir-ci.git
@@ -154,7 +162,7 @@ parts:
     - qtwayland5
 
   graphics-core22:
-    after: [mir-demo-server, xorg, bits, mir-ci]
+    after: [mir-demo-server, xorg, bits, anon-shm-preload, mir-ci]
     source: https://github.com/MirServer/graphics-core22.git
     plugin: dump
     override-prime: |
