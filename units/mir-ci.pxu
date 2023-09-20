@@ -14,7 +14,6 @@ command:
     elif [[ "$line" =~ \<Function\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
       echo case: $MODULE::$CLASS::${BASH_REMATCH[1]}
       echo function: ${BASH_REMATCH[1]}
-      echo snap: ${MIR_CI_SNAP:=checkbox-mir}
       echo
     fi
   done < <( run_mir_ci.sh --collect-only -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
@@ -27,9 +26,9 @@ imports:
   from com.canonical.certification import connections
 requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
-  connections.plug == "{snap}:login-session-control"
-  connections.plug in ["{snap}:graphics-core20", "{snap}:graphics-core22"]
-  connections.plug == "{snap}:opengl"
+  connections.plug == mir_context.host_logind_plug
+  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]
+  connections.plug == mir_context.host_opengl_plug
 _summary: Run Mir CI test case: {function}
 plugin: shell
 # Executing through snap to take advantage of the gnome extension

@@ -19,3 +19,13 @@ command:
     loginctl show-session $id | sed -e 's/\([^=]\+\)=/\L\1: /'
     echo
   done < <( loginctl list-sessions --no-legend || kill $$ )
+
+plugin: resource
+id: mir_context
+_summary: Provide additional context for the Mir test suite
+estimated_duration: 0.1
+command:
+  echo "host_20_plug: ${MIR_CI_SNAP:=checkbox-mir}:graphics-core20"
+  echo "host_22_plug: ${MIR_CI_SNAP}:graphics-core22"
+  echo "host_logind_plug: ${MIR_CI_SNAP}:login-session-control"
+  echo "host_opengl_plug: ${MIR_CI_SNAP}:login-session-control"
