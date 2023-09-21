@@ -29,3 +29,10 @@ command:
   echo "host_22_plug: ${MIR_CI_SNAP}:graphics-core22"
   echo "host_logind_plug: ${MIR_CI_SNAP}:login-session-control"
   echo "host_opengl_plug: ${MIR_CI_SNAP}:login-session-control"
+  if [ "${MIR_CI_SNAP}" == "checkbox-mir" ]; then
+    echo "host_executable: mir_demo_server"
+  elif [ "${MIR_CI_SNAP}" == "mir-test-tools" ]; then
+    echo "host_executable: mir-test-tools.demo-server"
+  else
+    echo "host_executable: ${MIR_CI_SNAP}"
+  fi
