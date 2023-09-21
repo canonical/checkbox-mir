@@ -57,7 +57,7 @@ _siblings: [
       "id": "mir/smoke_root",
       "_summary": "Run Mir smoke tests as root",
       "user": "root",
-      "requires": "connections.plug == mir_context.host_logind_plug\nconnections.plug in [mir_context.host_20_plug, mtt_context.host_22_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22']\nconnections.plug == 'mir-test-tools:opengl'"
+      "requires": "connections.plug == mir_context.host_logind_plug\nconnections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22']\nconnections.plug == 'mir-test-tools:opengl'"
     }
   ]
 
