@@ -8,4 +8,5 @@ exec env -i \
   PATH=/usr/sbin:/usr/bin:/snap/bin \
   WAYLAND_DISPLAY=$WAYLAND_DISPLAY \
   XDG_RUNTIME_DIR=/run/user/$( id -u ) \
+  XAUTHORITY=$XAUTHORITY \
   "$@"
