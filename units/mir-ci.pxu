@@ -42,7 +42,7 @@ imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
 requires:
-  executable.name == mir_context.host_executable and "{skip}" == "false"
+  (executable.name == mir_context.host_executable and "{skip}" == "false")
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == mir_context.host_logind_plug
   connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]
