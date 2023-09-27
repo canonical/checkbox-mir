@@ -32,7 +32,7 @@ command:
       [[ " ${SKIP_LIST[*]} " =~ " $case " ]] && echo "skip: true" || echo "skip: false"
       echo
     fi
-  done < <( run_mir_ci.sh --collect-only -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
+  done < <( run_mir_ci.sh --collect-only -m "not self" -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
 
 unit: template
 template-resource: mir_ci_cases
