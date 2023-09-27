@@ -23,5 +23,6 @@ io.mir-server::run_hosted_tests = true
 [environment]
 MIR_HOST_SERVER =
 MIR_CI_EXPRESSION = mir_demo_server
+MIR_CI_SKIP_EXPRESSION =
 MIR_CI_SNAP = checkbox-mir
 MIR_CI_SLOWDOWN = 3.0

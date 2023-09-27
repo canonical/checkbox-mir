@@ -6,14 +6,30 @@ imports:
   from com.canonical.plainbox import manifest
 command:
   set -euo pipefail
+  .
+  SKIP_LIST=()
+  if [ -n "${MIR_CI_SKIP_EXPRESSION:-}" ]; then
+    while read line; do
+      if [[ "$line" =~ \<Module\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
+        MODULE=${BASH_REMATCH[1]}
+      elif [[ "$line" =~ \<Class\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
+        CLASS=${BASH_REMATCH[1]}
+      elif [[ "$line" =~ \<Function\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
+        SKIP_LIST+=( $MODULE::$CLASS::${BASH_REMATCH[1]} )
+      fi
+    done < <( run_mir_ci.sh --collect-only -k "$MIR_CI_SKIP_EXPRESSION" || kill $$ )
+  fi
+  .
   while read line; do
     if [[ "$line" =~ \<Module\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
       MODULE=${BASH_REMATCH[1]}
     elif [[ "$line" =~ \<Class\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
       CLASS=${BASH_REMATCH[1]}
     elif [[ "$line" =~ \<Function\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
-      echo case: $MODULE::$CLASS::${BASH_REMATCH[1]}
+      case=$MODULE::$CLASS::${BASH_REMATCH[1]}
+      echo case: $case
       echo function: ${BASH_REMATCH[1]}
+      [[ " ${SKIP_LIST[*]} " =~ " $case " ]] && echo "skip: true" || echo "skip: false"
       echo
     fi
   done < <( run_mir_ci.sh --collect-only -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
@@ -26,7 +42,7 @@ imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
 requires:
-  executable.name == mir_context.host_executable
+  executable.name == mir_context.host_executable and "{skip}" == "false"
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == mir_context.host_logind_plug
   connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]
