@@ -30,6 +30,7 @@ command:
       echo case: $case
       echo function: ${BASH_REMATCH[1]}
       echo "skip: $( [[ " ${SKIP_LIST[*]} " =~ " $case " ]] && echo true || echo false )"
+      echo "cgroupv2_required: $( [[ $case == *test_app_can_run* ]] && echo 1 || echo 0 )"
       echo "mir_major_version: 2"
       echo "mir_minor_version: 0"
       echo
