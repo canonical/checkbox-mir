@@ -107,6 +107,7 @@ parts:
       checkbox-provider-tools build
       checkbox-provider-tools install --layout=relocatable --prefix=/providers/checkbox-provider-mir --root="$SNAPCRAFT_PART_INSTALL"
     stage-packages:
+      - gawk
       - lsof
     organize:
       providers/checkbox-provider-mir/bin/mir_demo_server: usr/bin/mir_demo_server
