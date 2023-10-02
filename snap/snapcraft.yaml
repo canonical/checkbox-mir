@@ -2,7 +2,7 @@ name: checkbox-mir
 summary: Checkbox tests for the Mir project
 description: |
   Collection of tests to be run on devices that are part of the mir project
-version: git
+adopt-info: mir-demo-server
 confinement: strict
 grade: stable
 
@@ -118,6 +118,11 @@ parts:
       - mir-graphics-drivers-desktop
       - mir-graphics-drivers-nvidia
       - dmz-cursor-theme
+    override-pull: |
+      craftctl default
+      mir_version=`LANG=C apt-cache policy mir-test-tools | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
+      recipe_version=`git -C ${CRAFT_PROJECT_DIR} rev-list --count HEAD`
+      craftctl set version=$recipe_version-mir$mir_version
     organize:
       usr/bin/mir_demo_server: usr/bin/mir_demo_server.real
 
