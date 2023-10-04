@@ -5,7 +5,7 @@ snap-options: --classic
 
 snap: mircade
 track: latest
-risk: beta
+risk: edge
 snap-options:
 
 snap: mir-kiosk
