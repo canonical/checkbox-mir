@@ -1,7 +1,19 @@
 snap: egmde
-channel: beta
+track: latest
+risk: beta
 snap-options: --classic
 
 snap: mircade
-channel: beta
+track: latest
+risk: beta
+snap-options:
+
+snap: ubuntu-frame
+track: 20
+risk: beta
+snap-options:
+
+snap: ubuntu-frame
+track: 22
+risk: beta
 snap-options:
