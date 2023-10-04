@@ -104,21 +104,21 @@ _verification:
 
 unit: template
 template-resource: session-snaps
-id: snaps/{snap}-{channel}
+id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 imports:
   from io.mir-server import store as store2
 requires:
-  (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
+  (store.snap == "{snap}") and store.risk == "{target_risk}" and store2.snap == "{snap}" and store2.risk == "{risk}" and store.revision != store2.revision
 _purpose:
-  This test verfies that the {snap}/{channel} session works
+  This test verfies that the {snap}/{track}/{risk} session works
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
-    {snap} --channel {channel}
+    {snap} --channel {track}/{risk}
   .
-  check_snap_current.sh {snap} latest {channel}
+  check_snap_current.sh {snap} {track} {risk}
   .
   if [ -x /snap/{snap}/current/bin/setup.sh ]; then
     /snap/{snap}/current/bin/setup.sh
@@ -128,6 +128,8 @@ _verification:
   2. Check that you can use the session OK
   3. Quit the session
   4. Was everything OK?
+  .
+  Promote from `{track}/{risk}` to `{track}/{target_risk}` at https://snapcraft.io/{snap}/releases
 
 unit: template
 template-resource: ancillary-snaps

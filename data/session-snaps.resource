@@ -1,5 +1,9 @@
 snap: confined-shell
-channel: edge
+track: latest
+risk: edge
+target_risk: beta
 
 snap: miriway
-channel: beta
+track: latest
+risk: edge
+target_risk: beta
