@@ -83,8 +83,8 @@ requires:
 _purpose:
   This test verfies that {snap}/{track}/{risk} runs fine.
   .
-  It will start {snap} - check that it does and that you can interact
-  with it OK, then quit {snap}.
+  It will start gedit in {snap} - check that it does and that you can interact
+  with it OK, then quit gedit.
 command:
   set -xeuo pipefail
   snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
@@ -95,7 +95,7 @@ command:
   if [ -x /snap/{snap}/current/bin/setup.sh ]; then
     /snap/{snap}/current/bin/setup.sh
   fi
-  clean_env.sh {snap}
+  clean_env.sh $( which run_with_wayland.sh ) --server {snap} --timeout 0 gedit
 _verification:
   1. Did {snap} start fine?
   2. Could you interact with it OK?
