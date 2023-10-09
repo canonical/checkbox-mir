@@ -33,7 +33,7 @@ plugin: shell
 estimated_duration: 1.0
 user: root
 command:
-  graphics-test-tools.kmscube --count 60 --device {drm_device} || KMSCUBE_CODE=$?
+  graphics-test-tools.kmscube --count 60 --device {drm_device} && exit || KMSCUBE_CODE=$?
   .
   # older `kmscube` does not have --count
   [ $KMSCUBE_CODE != 255 ] && exit $KMSCUBE_CODE
