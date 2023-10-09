@@ -21,6 +21,7 @@ _name: Mir - smoke and performance testing of Mir itself
 _description:
   This test plan runs the Mir smoke and performance tests.
 bootstrap_include:
+  graphics_card
   mir_test_tools_performance_cases
   mir_ci_cases
 include:

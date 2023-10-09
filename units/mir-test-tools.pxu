@@ -62,6 +62,35 @@ _siblings: [
   ]
 
 unit: template
+template-resource: graphics_card
+id: mir/smoke_{product_slug}
+category_id: smoke
+imports:
+  from com.canonical.certification import connections
+requires:
+  graphics_card.gpu_count >= "2"
+  graphics_card.driver != "{driver}"
+  normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
+  connections.plug == mir_context.host_logind_plug
+  connections.plug == mir_context.host_22_plug
+  connections.plug == mir_context.host_opengl_plug
+  connections.plug == "mir-test-tools:graphics-core22"
+  connections.plug == "mir-test-tools:opengl"
+_summary: Run hybrid Mir smoke tests rendering on {product}
+plugin: shell
+command:
+  export MIR_SERVER_PLATFORM_RENDERING_LIBS="mir:gbm-kms"
+  if [ "{driver}" == "nvidia" ]; then
+    export MIR_SERVER_PLATFORM_RENDERING_LIBS="mir:eglstream-kms"
+  fi
+  .
+  if [ -n "$MIR_HOST_SERVER" ]; then
+    exec run_with_wayland.sh --server $MIR_HOST_SERVER --timeout 0 -- mir-test-tools.smoke-test
+  else
+    exec mir-test-tools.smoke-test
+  fi
+
+unit: template
 template-resource: mir_test_tools_performance_cases
 id: mir/performance_{case}
 category_id: performance
