@@ -1,5 +1,5 @@
 unit: template
-template-resource: drm_device
+template-resource: graphics_card
 imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
@@ -15,11 +15,11 @@ user: root
 command:
   set -euo pipefail
   OUTPUT=$( mktemp )
-  graphics-test-tools.drm-info {path} | tee $OUTPUT
-  [ "$( head -n1 $OUTPUT )" == 'Node: {path}' ]
+  graphics-test-tools.drm-info {drm_device} | tee $OUTPUT
+  [ "$( head -n1 $OUTPUT )" == 'Node: {drm_device}' ]
 
 unit: template
-template-resource: drm_device
+template-resource: graphics_card
 id: graphics/{index}_kmscube_{product_slug}
 imports:
   from com.canonical.certification import connections
@@ -33,12 +33,12 @@ plugin: shell
 estimated_duration: 1.0
 user: root
 command:
-  graphics-test-tools.kmscube --count 60 --device {path} || KMSCUBE_CODE=$?
+  graphics-test-tools.kmscube --count 60 --device {drm_device} || KMSCUBE_CODE=$?
   .
   # older `kmscube` does not have --count
   [ $KMSCUBE_CODE != 255 ] && exit $KMSCUBE_CODE
   .
-  timeout --kill-after=2 2 graphics-test-tools.kmscube --device {path} || TIMEOUT_CODE=$?
+  timeout --kill-after=2 2 graphics-test-tools.kmscube --device {drm_device} || TIMEOUT_CODE=$?
   .
   # `timeout` returns 124 on timeout, and that's what we're expecting
   [ "$TIMEOUT_CODE" == 124 ] || exit $TIMEOUT_CODE

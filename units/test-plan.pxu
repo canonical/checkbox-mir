@@ -11,7 +11,7 @@ _description:
   This test plan verifies that the graphics-core environment
   is working correctly on this device.
 bootstrap_include:
-  drm_device
+  graphics_card
 include:
   graphics/.*
 

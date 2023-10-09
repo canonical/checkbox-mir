@@ -1,7 +1,7 @@
-id: drm_device
+id: graphics_card
 estimated_runtime: 0.1
 plugin: resource
-command: drm_device_resource.py
+command: graphics_card_resource_drm.py
 
 plugin: resource
 id: normal_user
