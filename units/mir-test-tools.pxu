@@ -79,7 +79,7 @@ requires:
 _summary: Run hybrid Mir smoke tests rendering on {product}
 plugin: shell
 command:
-  export MIR_SERVER_PLATFORM_RENDERING_LIBS="mir:gbm-kms"
+  export MIR_SERVER_PLATFORM_RENDERING_LIBS="mir:gbm-kms" MIR_EXPERIMENTAL_HYBRID_GRAPHICS=1
   if [ "{driver}" == "nvidia" ]; then
     export MIR_SERVER_PLATFORM_RENDERING_LIBS="mir:eglstream-kms"
   fi
