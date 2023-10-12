@@ -40,7 +40,7 @@ imports:
 requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == mir_context.host_logind_plug
-  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]
+  mir_context.host_executable == "mir-kiosk" or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]
   connections.plug == mir_context.host_opengl_plug
   connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22"]
   connections.plug == "mir-test-tools:opengl"
@@ -57,7 +57,7 @@ _siblings: [
       "id": "mir/smoke_root",
       "_summary": "Run Mir smoke tests as root",
       "user": "root",
-      "requires": "connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22']\nconnections.plug == 'mir-test-tools:opengl'"
+      "requires": "mir_context.host_executable == 'mir-kiosk' or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22']\nconnections.plug == 'mir-test-tools:opengl'"
     }
   ]
 
