@@ -1,14 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
-SNAP=$1
+INSTANCE=$1
+# Strip instance name
+SNAP=${1/_*/}
 TRACK=$2
 RISK=$3
 
 ARCH=$( dpkg-architecture -qDEB_HOST_ARCH )
 CURRENT_REV=$(
-    curl -s -H "Snap-Device-Series: 16" --unix-socket /run/snapd.socket http://localhost/v2/snaps/${SNAP} \
+    curl -s -H "Snap-Device-Series: 16" --unix-socket /run/snapd.socket http://localhost/v2/snaps/${INSTANCE} \
     | jq -r '.result.revision' \
     || exit $$
 )
