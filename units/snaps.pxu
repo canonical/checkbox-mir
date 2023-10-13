@@ -198,13 +198,13 @@ command:
   OUTPUT=$( mktemp )
   export XDG_RUNTIME_DIR=/run/user/$( id -u )
   export WAYLAND_DISPLAY=wayland-99
+  SNAP={snap}_$$
   .
-  snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
-    {snap} --channel {track}/{risk}
+  trap "snap remove --purge $SNAP" EXIT
+  snap install $SNAP --channel {track}/{risk}
+  check_snap_current.sh $SNAP {track} {risk}
   .
-  check_snap_current.sh {snap} {track} {risk}
-  .
-  timeout 10 sudo /snap/{snap}/current/bin/setup.sh
+  timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
   .
   cleanup() {{
     # Run through cleanup despite errors
@@ -226,7 +226,7 @@ command:
   .
   trap cleanup EXIT
   .
-  wait_and_run {snap} &
+  wait_and_run ${SNAP} &
   .
   clean_env.sh frame-it gnome-text-editor \
   && echo 0 > $OUTPUT.status \
