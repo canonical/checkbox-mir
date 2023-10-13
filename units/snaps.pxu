@@ -133,7 +133,7 @@ command:
   fi
   snap connect $SNAP:x11
   .
-  clean_env.sh $SNAP
+  WAYLAND_DISPLAY=wayland-00$$ clean_env.sh $SNAP
 _verification:
   1. Did {snap} start fine?
   2. Could you interact with it OK?
@@ -197,7 +197,7 @@ command:
   .
   OUTPUT=$( mktemp )
   export XDG_RUNTIME_DIR=/run/user/$( id -u )
-  export WAYLAND_DISPLAY=wayland-99
+  export WAYLAND_DISPLAY=wayland-00$$
   SNAP={snap}_$$
   .
   trap "snap remove --purge $SNAP" EXIT
