@@ -91,15 +91,19 @@ _purpose:
   with it OK, then quit {snap}.
 command:
   set -xeuo pipefail
-  snap $( snap list {snap} > /dev/null && echo "refresh" || echo "install" ) \
-    {snap} --channel {track}/{risk} {snap-options}
+  snap set system experimental.parallel-instances=true
+  SNAP={snap}_$$
   .
-  check_snap_current.sh {snap} {track} {risk}
+  trap "snap remove --purge $SNAP" EXIT
+  snap install $SNAP --channel {track}/{risk} {snap-options}
+  check_snap_current.sh $SNAP {track} {risk}
   .
-  if [ -x /snap/{snap}/current/bin/setup.sh ]; then
-    /snap/{snap}/current/bin/setup.sh
+  if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
+    sudo /snap/$SNAP/current/bin/setup.sh
   fi
-  clean_env.sh {snap}
+  snap connect $SNAP:x11
+  .
+  clean_env.sh $SNAP
 _verification:
   1. Did {snap} start fine?
   2. Could you interact with it OK?
