@@ -9,3 +9,19 @@ _name: Smoke tests
 unit: category
 id: junit
 _name: JUnit collection jobs
+
+unit: category
+id: client
+_name: Client and ancillary snaps (require Ubuntu Frame and frame-it)
+
+unit: category
+id: server
+_name: Server snaps
+
+unit: category
+id: session
+_name: Session snaps (will ask you to log into the session)
+
+unit: category
+id: utility
+_name: Utility snaps - verified through Jenkins

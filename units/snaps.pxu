@@ -39,6 +39,7 @@ command:
 
 unit: template
 template-resource: client-snaps
+category_id: client
 id: snaps/{snap}-{channel}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -75,6 +76,7 @@ _verification:
 
 unit: template
 template-resource: server-snaps
+category_id: server
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -106,6 +108,7 @@ _verification:
 
 unit: template
 template-resource: session-snaps
+category_id: session
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -135,6 +138,7 @@ _verification:
 
 unit: template
 template-resource: ancillary-snaps
+category_id: client
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
@@ -197,6 +201,7 @@ _verification:
 
 unit: template
 template-resource: jenkins-snaps
+category_id: utility
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
