@@ -37,12 +37,43 @@ command:
               || kill $$ )
   done < <( cat $PLAINBOX_PROVIDER_DATA/*-snaps.resource | awk '/^snap:/ { print $2 }' | sort -u )
 
+id: snaps/check_environment
+plugin: shell
+_summary: Check the testing environment
+command:
+  set -euo pipefail
+  if [ "$( snap whoami | awk '/^email:/ { print $2 }' )" == "-" ]; then
+    echo 'These tests require the `snap` command to be logged in, please run:' >&2
+    echo '  snap login' >&2
+    exit 1
+  fi
+  .
+  if [ "$( snap get system experimental.parallel-instances )" != "true" ] || ! snap set system experimental.parallel-instances=true; then
+    echo 'These tests require parallel instance support, please run:' >&2
+    echo '  snap set system experimental.parallel-instances true' >&2
+    exit 2
+  fi
+  .
+  if [ -x /snap/checkbox-mir/current/bin/setup.sh ]; then
+    if ! timeout .1 sudo -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null; then
+      echo >&2
+      echo 'These tests require passwordless `sudo` for `/snap/*/current/bin/setup.sh`.' >&2
+      echo >&2
+      echo 'Please place this line in sudoers(5):' >&2
+      echo '  %sudo   ALL = NOPASSWD: /snap/*/current/bin/setup.sh' >&2
+      exit 3
+    fi
+  else
+    echo 'WARNING: Could not check whether `sudo /snap/…/setup.sh` works.' >&2
+  fi
+
 unit: template
 template-resource: client-snaps
 category_id: client
 id: snaps/{snap}-{channel}
 plugin: user-interact-verify
 estimated_duration: 60.0
+depends: snaps/check_environment
 _purpose:
   This test verifies that {snap}/{channel} runs fine
   .
@@ -57,7 +88,6 @@ requires:
   (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
 command:
   set -xeuo pipefail
-  snap set system experimental.parallel-instances=true
   SNAP={snap}_$$
   .
   trap "snap remove --purge $SNAP" EXIT
@@ -80,6 +110,7 @@ category_id: server
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
+depends: snaps/check_environment
 imports:
   from io.mir-server import store as store2
 requires:
@@ -91,7 +122,6 @@ _purpose:
   with it OK, then quit {snap}.
 command:
   set -xeuo pipefail
-  snap set system experimental.parallel-instances=true
   SNAP={snap}_$$
   .
   trap "snap remove --purge $SNAP" EXIT
@@ -99,7 +129,7 @@ command:
   check_snap_current.sh $SNAP {track} {risk}
   .
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
-    sudo /snap/$SNAP/current/bin/setup.sh
+    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
   fi
   snap connect $SNAP:x11
   .
@@ -116,6 +146,7 @@ category_id: session
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
+depends: snaps/check_environment
 imports:
   from io.mir-server import store as store2
 requires:
@@ -124,7 +155,6 @@ _purpose:
   This test verfies that the {snap}/{track}/{risk} session works
 command:
   set -xeuo pipefail
-  snap set system experimental.parallel-instances=true
   SNAP={snap}_$$
   .
   trap "snap remove --purge $SNAP" EXIT
@@ -132,7 +162,7 @@ command:
   check_snap_current.sh $SNAP {track} {risk}
   .
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
-    sudo /snap/$SNAP/current/bin/setup.sh
+    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
   fi
 _verification:
   1. Check that you can log in to the {snap} session
@@ -148,6 +178,7 @@ category_id: client
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
+depends: snaps/check_environment
 _purpose:
   This test verfies that {snap} {track}/{risk} works
   .
@@ -173,7 +204,7 @@ command:
   .
   check_snap_current.sh {snap} {track} {risk}
   .
-  /snap/{snap}/current/bin/setup.sh
+  timeout 10 sudo /snap/{snap}/current/bin/setup.sh
   .
   cleanup() {{
     # Run through cleanup despite errors

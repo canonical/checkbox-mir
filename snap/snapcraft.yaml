@@ -167,8 +167,12 @@ parts:
     - qterminal
     - qtwayland5
 
+  glue:
+    plugin: dump
+    source: snap/local/glue
+
   graphics-core22:
-    after: [mir-demo-server, xorg, bits, anon-shm-preload, mir-ci]
+    after: [mir-demo-server, xorg, bits, anon-shm-preload, mir-ci, glue]
     source: https://github.com/MirServer/graphics-core22.git
     plugin: dump
     override-prime: |
