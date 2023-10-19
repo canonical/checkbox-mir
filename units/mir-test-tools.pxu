@@ -111,12 +111,12 @@ plugin: shell
 command:
   set -euo pipefail
   if [ -n "${{MIR_HOST_SERVER:-}}" ]; then
-    run_with_wayland.sh --server $MIR_HOST_SERVER --timeout 0 -- \
+    run_with_wayland.sh --server $MIR_HOST_SERVER --timeout 120 -- \
       mir-test-tools.performance-test \
         --gtest_filter={case} \
         --gtest_output=xml:/tmp/{case}.xml && STATUS=0 || STATUS=$?
   else
-    mir-test-tools.performance-test \
+    timeout 120 mir-test-tools.performance-test \
       --gtest_filter={case} \
       --gtest_output=xml:/tmp/{case}.xml && STATUS=0 || STATUS=$?
   fi
