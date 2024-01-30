@@ -1,7 +1,7 @@
 # Copyright Canonical Ltd.
 # All rights reserved.
 #
-# Test plans unique to graphics-core22 and Mir testing
+# Test plans unique to graphics-coreXX and Mir testing
 #
 
 id: graphics-core
