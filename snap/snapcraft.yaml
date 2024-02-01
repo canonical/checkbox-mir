@@ -37,6 +37,9 @@ layout:
 environment:
   MIR_SERVER_PLATFORM_PATH: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/mir/server-platform
   QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET}/qt5/plugins
+  XCURSOR_PATH: $SNAP/data-dir/icons:$SNAP/gnome-platform/usr/share/icons
+  FONTCONFIG_PATH: $SNAP/gnome-platform/etc/fonts
+  FONTCONFIG_FILE: $SNAP/gnome-platform/etc/fonts/fonts.conf
 
 apps:
   checkbox-cli:
@@ -118,7 +121,6 @@ parts:
       - mir-test-tools
       - mir-graphics-drivers-desktop
       - mir-graphics-drivers-nvidia
-      - dmz-cursor-theme
     override-pull: |
       craftctl default
       mir_version=`LANG=C apt-cache policy mir-test-tools | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
