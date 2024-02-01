@@ -38,6 +38,7 @@ OUTPUT=$( mktemp )
 export WAYLAND_DISPLAY=wayland-${RANDOM}
 
 REAL_RUNTIME_DIR=/run/user/$UID
+mkdir -p $REAL_RUNTIME_DIR
 
 # Default to an error
 echo 128 > $OUTPUT.status
