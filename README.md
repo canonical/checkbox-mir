@@ -19,20 +19,20 @@ Here are the launchers available:
   This automatically runs the mir-test-tools suites, to be used in CI.
 
   The operator is responsible to install the mir-test-tools snap along with
-  an appropriate graphics-core22 provider.
+  an appropriate graphics-coreXX (20, 22 or 24) provider.
 
 - `checkbox-mir.graphics`:
   This automatically runs the various graphics-test-tools utilities to verify
   the graphics setup on the device under test.
 
   The operator is responsible to install the graphics stack and connect
-  the interfaces, if appropriate:
+  the interfaces, if appropriate (replace 24 with 20 or 22, as appropriate):
   ```
-  sudo snap install graphics-test-tools --channel 22/stable
-  sudo snap disconnect graphics-test-tools:graphics-core22
-  sudo snap disconnect checkbox-mir:graphics-core22
-  sudo snap connect graphics-test-tools:graphics-core22 <your-graphics22-provider>
-  sudo snap connect checkbox-mir:graphics-core22 <your-graphics22-provider>
+  sudo snap install graphics-test-tools --channel 24/stable
+  sudo snap disconnect graphics-test-tools:graphics-core24
+  sudo snap disconnect checkbox-mir:graphics-core24
+  sudo snap connect graphics-test-tools:graphics-core24 <your-graphics24-provider>
+  sudo snap connect checkbox-mir:graphics-core24 <your-graphics24-provider>
 
   sudo snap connect graphics-test-tools:wayland checkbox-mir
   sudo snap connect graphics-test-tools:x11 checkbox-mir
