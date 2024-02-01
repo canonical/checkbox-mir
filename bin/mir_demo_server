@@ -2,4 +2,4 @@
 
 # undo anon-shm-preload
 unset LD_PRELOAD
-exec $SNAP/usr/bin/mir_demo_server
+exec $SNAP/usr/bin/mir_demo_server.real
