@@ -62,6 +62,7 @@ requires:
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
+  connections.plug != "checkbox-mir:x11"
 _summary: Run eglinfo to verify EGL setup with a X server
 plugin: shell
 user: root
@@ -87,6 +88,7 @@ requires:
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
+  connections.plug != "checkbox-mir:x11"
 _summary: Run vkcube to verify Vulkan setup
 plugin: shell
 user: root
@@ -101,6 +103,7 @@ requires:
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
+  connections.plug != "checkbox-mir:x11"
 _summary: Run vainfo to verify libVA setup
 plugin: shell
 user: root
@@ -115,6 +118,7 @@ requires:
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
+  connections.plug != "checkbox-mir:x11"
 _summary: Run vdpauinfo to verify VDPAU setup
 plugin: shell
 user: root
