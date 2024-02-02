@@ -25,11 +25,13 @@ id: mir_context
 _summary: Provide additional context for the Mir test suite
 estimated_duration: 0.1
 command:
+  set -euo pipefail
+  .
   echo "host_20_plug: ${MIR_CI_SNAP:=checkbox-mir}:graphics-core20"
   echo "host_22_plug: ${MIR_CI_SNAP}:graphics-core22"
   echo "host_24_plug: ${MIR_CI_SNAP}:graphics-core24"
   echo "host_logind_plug: ${MIR_CI_SNAP}:login-session-control"
-  echo "host_opengl_plug: ${MIR_CI_SNAP}:login-session-control"
+  echo "host_opengl_plug: ${MIR_CI_SNAP}:opengl"
   if [ "${MIR_CI_SNAP}" == "checkbox-mir" ]; then
     echo "host_executable: mir_demo_server"
   elif [ "${MIR_CI_SNAP}" == "mir-test-tools" ]; then
@@ -37,6 +39,6 @@ command:
   else
     echo "host_executable: ${MIR_CI_SNAP}"
   fi
-  echo "major_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir)([0-9]+)\.[0-9]+/,m) { print m[2] }' )"
-  echo "minor_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir)[0-9]+\.([0-9]+)/,m) { print m[2] }' )"
+  echo "major_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir)([0-9]+)\.[0-9]+/,m) { print m[2] }' || kill $$ )"
+  echo "minor_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir)[0-9]+\.([0-9]+)/,m) { print m[2] }' || kill $$ )"
   echo "cgroupv2_support: $( [ -f /sys/fs/cgroup/cgroup.controllers ] && echo 1 || echo 0 )"
