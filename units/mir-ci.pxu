@@ -7,6 +7,8 @@ imports:
 command:
   set -euo pipefail
   .
+  # Default to failure status
+  STATUS=1
   SKIP_LIST=()
   if [ -n "${MIR_CI_SKIP_EXPRESSION:-}" ]; then
     while read line; do
@@ -14,8 +16,8 @@ command:
         MODULE=${BASH_REMATCH[1]}
       elif [[ "$line" =~ \<Class\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
         CLASS=${BASH_REMATCH[1]}
-      elif [[ "$line" =~ \<Function\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
-        SKIP_LIST+=( $MODULE::$CLASS::${BASH_REMATCH[1]} )
+      elif [[ "$line" =~ \<(Function|Coroutine)\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
+        SKIP_LIST+=( $MODULE::$CLASS::${BASH_REMATCH[2]} )
       fi
     done < <( run_mir_ci.sh --collect-only -k "$MIR_CI_SKIP_EXPRESSION" || kill $$ )
   fi
@@ -25,10 +27,12 @@ command:
       MODULE=${BASH_REMATCH[1]}
     elif [[ "$line" =~ \<Class\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
       CLASS=${BASH_REMATCH[1]}
-    elif [[ "$line" =~ \<Function\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
-      case=$MODULE::$CLASS::${BASH_REMATCH[1]}
+    elif [[ "$line" =~ \<(Function|Coroutine)\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
+      # Found a case, so exit 0
+      STATUS=0
+      case=$MODULE::$CLASS::${BASH_REMATCH[2]}
       echo case: $case
-      echo function: ${BASH_REMATCH[1]}
+      echo function: ${BASH_REMATCH[2]}
       echo "skip: $( [[ " ${SKIP_LIST[*]} " =~ " $case " ]] && echo true || echo false )"
       echo "cgroupv2_required: $( [[ $case == *test_app_can_run* ]] && echo 1 || echo 0 )"
       echo "mir_major_version: 2"
@@ -40,6 +44,8 @@ command:
       echo
     fi
   done < <( run_mir_ci.sh --collect-only -m "not self" -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
+  .
+  exit $STATUS
 
 unit: template
 template-resource: mir_ci_cases
