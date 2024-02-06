@@ -156,14 +156,17 @@ parts:
     plugin: python
     source: https://github.com/MirServer/mir-ci.git
     source-subdir: mir-ci
-    source-commit: ea62df3c5eff97429c6e3ec6f4d716ec0ac09ef1
+    source-commit: 4048fdd6c99910016eaece34af3446bb582b01b5
     build-packages:
+    - libssl-dev
     - libwayland-dev
     - pkg-config
     python-packages:
     - asciinema
     - mypy
     - robotframework~=6.1.1
+    - rpaframework
+    - rpaframework-recognition
     stage-packages:
     - libgtk-4-dev
     - python3-gi
