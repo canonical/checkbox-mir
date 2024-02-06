@@ -35,8 +35,8 @@ layout:
     symlink: $SNAP/usr/lib/xorg
 
 environment:
-  MIR_SERVER_PLATFORM_PATH: $SNAP/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/mir/server-platform
-  QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET}/qt5/plugins
+  MIR_SERVER_PLATFORM_PATH: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/mir/server-platform
+  QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/qt5/plugins
   XCURSOR_PATH: $SNAP/data-dir/icons:$SNAP/gnome-platform/usr/share/icons
   FONTCONFIG_PATH: $SNAP/gnome-platform/etc/fonts
   FONTCONFIG_FILE: $SNAP/gnome-platform/etc/fonts/fonts.conf
@@ -104,11 +104,11 @@ parts:
       - checkbox-provider-tools
       - checkbox22
     override-build: |
-      export PYTHONPATH=$SNAPCRAFT_STAGE/lib/python3.10/site-packages:$SNAPCRAFT_STAGE/usr/lib/python3/dist-packages
+      export PYTHONPATH=${CRAFT_STAGE}/lib/python3.10/site-packages:${CRAFT_STAGE}/usr/lib/python3/dist-packages
       for path in $(find "/snap/checkbox22/current/providers/" -mindepth 1 -maxdepth 1 -type d); do export PROVIDERPATH=$path${PROVIDERPATH:+:$PROVIDERPATH}; done
       checkbox-provider-tools validate
       checkbox-provider-tools build
-      checkbox-provider-tools install --layout=relocatable --prefix=/providers/checkbox-provider-mir --root="$SNAPCRAFT_PART_INSTALL"
+      checkbox-provider-tools install --layout=relocatable --prefix=/providers/checkbox-provider-mir --root="${CRAFT_PART_INSTALL}"
     stage-packages:
       - gawk
       - lsof
