@@ -3,6 +3,8 @@ name: Snap
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+    types: [checks_requested]
 
 concurrency:
   group: ${{ github.workflow }}-pr${{ github.event.number }}
