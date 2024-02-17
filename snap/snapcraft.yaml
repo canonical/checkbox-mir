@@ -158,6 +158,7 @@ parts:
     source-subdir: mir-ci
     source-commit: 4048fdd6c99910016eaece34af3446bb582b01b5
     build-packages:
+    - git-lfs
     - libssl-dev
     - libwayland-dev
     - pkg-config
@@ -165,8 +166,14 @@ parts:
     - asciinema
     - mypy
     - robotframework~=6.1.1
-    - rpaframework
-    - rpaframework-recognition
+    override-build: |
+      # Work around build failures on armhf
+      craftctl default
+      git -C ${CRAFT_PROJECT_DIR} lfs pull
+      ${CRAFT_PART_INSTALL}/bin/pip install \
+        $( ls ${CRAFT_PROJECT_DIR}/wheels/${CRAFT_ARCH_BUILD_FOR}/*.whl ) \
+        rpaframework \
+        rpaframework-recognition
     stage-packages:
     - libgtk-4-dev
     - python3-gi
