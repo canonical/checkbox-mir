@@ -1,0 +1,7 @@
+${CRAFT_PROJECT_DIR}/wheels/armhf/PyYAML-6.0.1-cp310-cp310-linux_armv7l.whl
+${CRAFT_PROJECT_DIR}/wheels/armhf/cryptography-42.0.3-cp310-cp310-linux_armv7l.whl
+${CRAFT_PROJECT_DIR}/wheels/armhf/lxml-5.1.0-cp310-cp310-linux_armv7l.whl
+${CRAFT_PROJECT_DIR}/wheels/armhf/numpy-1.26.4-cp310-cp310-linux_armv7l.whl
+${CRAFT_PROJECT_DIR}/wheels/armhf/opencv_python_headless-4.8.1.78-cp310-cp310-linux_armv7l.whl
+${CRAFT_PROJECT_DIR}/wheels/armhf/pendulum-2.1.2-cp310-cp310-manylinux_2_35_armv7l.whl
+${CRAFT_PROJECT_DIR}/wheels/armhf/pillow-10.2.0-cp310-cp310-linux_armv7l.whl
