@@ -30,9 +30,10 @@ jobs:
       with:
         fetch-depth: 0  # needed for version determination
 
-    - name: Patch PPA and version
+    - name: Patch PPA and version, disable LFS
       run: |
         sed -i 's@mir-team/release@mir-team/dev@' snap/snapcraft.yaml
+        git lfs uninstall
 
     - name: Build and publish the snap
       uses: canonical/actions/build-snap@release
