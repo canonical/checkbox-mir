@@ -131,7 +131,9 @@ command:
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
     timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
   fi
-  snap connect $SNAP:x11
+  if snap connections $SNAP | grep ^x11; then
+    snap connect $SNAP:x11
+  fi
   .
   WAYLAND_DISPLAY=wayland-00$$ clean_env.sh $SNAP
 _verification:
