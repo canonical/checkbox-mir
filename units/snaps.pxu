@@ -50,7 +50,7 @@ command:
   .
   if [ "$( snap get system experimental.parallel-instances )" != "true" ] || ! snap set system experimental.parallel-instances=true; then
     echo 'These tests require parallel instance support, please run:' >&2
-    echo '  snap set system experimental.parallel-instances true' >&2
+    echo '  snap set system experimental.parallel-instances=true' >&2
     exit 2
   fi
   .
@@ -94,7 +94,7 @@ command:
   snap install $SNAP --channel {channel}
   check_snap_current.sh $SNAP latest {channel}
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
-    /snap/$SNAP/current/bin/setup.sh
+    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
   fi
   .
   clean_env.sh frame-it $SNAP
@@ -204,7 +204,9 @@ command:
   snap install $SNAP --channel {track}/{risk}
   check_snap_current.sh $SNAP {track} {risk}
   .
-  timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
+  if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
+    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
+  fi
   .
   cleanup() {{
     # Run through cleanup despite errors
