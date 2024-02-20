@@ -160,7 +160,7 @@ command:
   SNAP={snap}_$$
   .
   trap "snap remove --purge $SNAP" EXIT
-  snap install $SNAP --channel {track}/{risk}
+  snap install $SNAP --channel {track}/{risk} {snap_options}
   check_snap_current.sh $SNAP {track} {risk}
   .
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
