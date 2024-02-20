@@ -228,7 +228,7 @@ command:
   .
   trap cleanup EXIT
   .
-  wait_and_run ${SNAP} &
+  wait_and_run $SNAP &
   .
   clean_env.sh frame-it gnome-text-editor \
   && echo 0 > $OUTPUT.status \
