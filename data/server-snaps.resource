@@ -1,6 +1,6 @@
 snap: egmde
 track: latest
-risk: beta
+risk: edge
 snap-options: --classic
 
 snap: mircade
