@@ -1,22 +1,22 @@
 id: client-snaps
 plugin: resource
-command: cat $PLAINBOX_PROVIDER_DATA/client-snaps.resource
+command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/client-snaps.resource
 
 id: server-snaps
 plugin: resource
-command: cat $PLAINBOX_PROVIDER_DATA/server-snaps.resource
+command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/server-snaps.resource
 
 id: session-snaps
 plugin: resource
-command: cat $PLAINBOX_PROVIDER_DATA/session-snaps.resource
+command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/session-snaps.resource
 
 id: ancillary-snaps
 plugin: resource
-command: cat $PLAINBOX_PROVIDER_DATA/ancillary-snaps.resource
+command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/ancillary-snaps.resource
 
 id: jenkins-snaps
 plugin: resource
-command: cat $PLAINBOX_PROVIDER_DATA/jenkins-snaps.resource
+command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/jenkins-snaps.resource
 
 id: store
 _summary: Enumerate revisions for all tested snaps
@@ -102,6 +102,8 @@ _verification:
   1. Did {snap} start up in Frame?
   2. Could you interact with it?
   .
+  {to_check}
+  .
   Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
 
 unit: template
@@ -140,6 +142,8 @@ _verification:
   1. Did {snap} start fine?
   2. Could you interact with it OK?
   .
+  {to_check}
+  .
   Promote from `{track}/{risk}` to `{track}/stable` at https://snapcraft.io/{snap}/releases
 
 unit: template
@@ -171,6 +175,8 @@ _verification:
   2. Check that you can use the session OK
   3. Quit the session
   4. Was everything OK?
+  .
+  {to_check}
   .
   Promote from `{track}/{risk}` to `{track}/{target_risk}` at https://snapcraft.io/{snap}/releases
 
@@ -238,6 +244,8 @@ command:
 _verification:
   {verification}
   .
+  {to_check}
+  .
   Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
 
 unit: template
@@ -253,12 +261,16 @@ requires:
 _purpose:
   This verfies that {snap} {track}/{risk} tested fine
 command:
+  if [ -z "{version}" ]; then
+    echo "ERROR: No artefact found at https://test-observer.canonical.com, ensure the tests ran." >&2
+    exit 1
+  fi
   curl -s -H "Snap-Device-Series: 16" \
     "https://api.snapcraft.io/v2/snaps/info/{snap}" \
   | jq -r --arg TRACK "{track}" --arg RISK "{risk}" '."channel-map" | .[] | select(.channel.risk==$RISK) | [select(.channel.track==$TRACK).channel.architecture, select(.channel.track==$TRACK).revision] | @tsv' \
   | grep -v '^$'
 _verification:
-  1. Check the results at http://10.102.156.15:8080/search/?q={snap}-{track}-{risk}
+  1. {to_check}
   2. Check that the revisions above were tested and succeeded
   .
   Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
