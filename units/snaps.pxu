@@ -70,29 +70,29 @@ command:
 unit: template
 template-resource: client-snaps
 category_id: client
-id: snaps/{snap}-{channel}
+id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 depends: snaps/check_environment
-_purpose:
-  This test verifies that {snap}/{channel} runs fine
-  .
-  It will start {snap} in Ubuntu Frame - check that it does
-  and that you can interact with it OK, then quit {snap}.
 imports:
   from com.canonical.certification import executable
   from io.mir-server import store as store2
 requires:
   executable.name == "frame-it"
   executable.name == "ubuntu-frame"
-  (store.snap == "{snap}") and store.risk == "stable" and store2.snap == "{snap}" and store2.risk == "{channel}" and store.revision != store2.revision
+  (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
+_purpose:
+  This test verifies that {snap}/{track}/{risk} runs fine
+  .
+  It will start {snap} in Ubuntu Frame - check that it does
+  and that you can interact with it OK, then quit {snap}.
 command:
   set -xeuo pipefail
   SNAP={snap}_$$
   .
   trap "snap remove --purge $SNAP" EXIT
-  snap install $SNAP --channel {channel}
-  check_snap_current.sh $SNAP latest {channel}
+  snap install $SNAP --channel {track}/{risk}
+  check_snap_current.sh $SNAP {track} {risk}
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
     timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
   fi
@@ -102,7 +102,7 @@ _verification:
   1. Did {snap} start up in Frame?
   2. Could you interact with it?
   .
-  Promote from `{channel}` to `stable` at https://snapcraft.io/{snap}/releases
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
 
 unit: template
 template-resource: server-snaps
