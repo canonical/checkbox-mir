@@ -1,8 +1,11 @@
 snap: mir-kiosk-kodi
-channel: edge
+track: latest
+risk: edge
 
 snap: mir-kiosk-scummvm
-channel: edge
+track: latest
+risk: edge
 
 snap: mir-kiosk-neverputt
-channel: edge
+track: latest
+risk: edge
