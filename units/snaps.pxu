@@ -31,7 +31,7 @@ command:
       echo revision: $revision
       echo
     done < <( curl -s -H "Snap-Device-Series: 16" "https://api.snapcraft.io/v2/snaps/info/${snap}" \
-              | jq -r --arg TRACK "latest" --arg ARCH "$( dpkg-architecture -qDEB_HOST_ARCH )" \
+              | jq -r --arg ARCH "$( dpkg-architecture -qDEB_HOST_ARCH )" \
                 '."channel-map" | .[] | select(.channel.architecture==$ARCH)
                  | [.channel.track, .channel.risk, .revision] | @tsv' \
               || kill $$ )
