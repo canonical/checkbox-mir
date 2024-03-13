@@ -163,6 +163,8 @@ parts:
     - libwayland-dev
     - pkg-config
     override-pull: |
+      # TODO: remove with `base: core24` migration, as this is only required for old git-lfs
+      awk --include inplace '/\Wurl = / { print $0 "/info/lfs"; next }; { print }' ${CFAFT_PROJECT_DIR}/.lfsconfig
       git -C ${CRAFT_PROJECT_DIR} lfs pull
       craftctl default
     python-packages:
