@@ -156,7 +156,7 @@ parts:
     plugin: python
     source: https://github.com/MirServer/mir-ci.git
     source-subdir: mir-ci
-    source-commit: 4048fdd6c99910016eaece34af3446bb582b01b5
+    source-commit: adb441e2014341d1abd8f178f02a14d5ffe38b4b
     build-packages:
     - git-lfs
     - libssl-dev
