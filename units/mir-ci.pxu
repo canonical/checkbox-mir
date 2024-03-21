@@ -7,45 +7,23 @@ imports:
 command:
   set -euo pipefail
   .
-  # Default to failure status
-  STATUS=1
-  SKIP_LIST=()
-  if [ -n "${MIR_CI_SKIP_EXPRESSION:-}" ]; then
-    while read line; do
-      if [[ "$line" =~ \<Module\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
-        MODULE=${BASH_REMATCH[1]}
-      elif [[ "$line" =~ \<Class\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
-        CLASS=${BASH_REMATCH[1]}
-      elif [[ "$line" =~ \<(Function|Coroutine)\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
-        SKIP_LIST+=( $MODULE::$CLASS::${BASH_REMATCH[2]} )
-      fi
-    done < <( checkbox-mir.mir-ci --collect-only -k "$MIR_CI_SKIP_EXPRESSION" || kill $$ )
+  if [ -n "$MIR_CI_SKIP_EXPRESSION" ]; then
+    SKIP_LIST=( $( checkbox-mir.mir-ci --collect-only --quiet -k "$MIR_CI_SKIP_EXPRESSION" | head -n -2 ) )
   fi
   .
-  while read line; do
-    if [[ "$line" =~ \<Module\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
-      MODULE=${BASH_REMATCH[1]}
-    elif [[ "$line" =~ \<Class\ ([a-zA-Z0-9_.-]*)\>$ ]]; then
-      CLASS=${BASH_REMATCH[1]}
-    elif [[ "$line" =~ \<(Function|Coroutine)\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
-      # Found a case, so exit 0
-      STATUS=0
-      case=$MODULE::$CLASS::${BASH_REMATCH[2]}
-      echo case: $case
-      echo function: ${BASH_REMATCH[2]}
-      echo "skip: $( [[ " ${SKIP_LIST[*]} " =~ " $case " ]] && echo true || echo false )"
-      echo "cgroupv2_required: $( [[ $case == *test_app_can_run* ]] && echo 1 || echo 0 )"
-      echo "mir_major_version: 2"
-      if [[ $case == *DragAndDrop* ]]; then
-        echo "mir_minor_version: 14"
-      else
-        echo "mir_minor_version: 0"
-      fi
-      echo
+  while read case; do
+    echo case: $case
+    echo function: ${case/*::}
+    echo "skip: $( [[ " ${SKIP_LIST[*]:-} " =~ " $case " ]] && echo true || echo false )"
+    echo "cgroupv2_required: $( [[ $case == *test_app_can_run* ]] && echo 1 || echo 0 )"
+    echo "mir_major_version: 2"
+    if [[ $case == *DragAndDrop* ]]; then
+      echo "mir_minor_version: 14"
+    else
+      echo "mir_minor_version: 0"
     fi
-  done < <( checkbox-mir.mir-ci --collect-only -m "not self" -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
-  .
-  exit $STATUS
+    echo
+  done < <( checkbox-mir.mir-ci --collect-only --quiet -m "not self" -k "${MIR_CI_EXPRESSION:-}" | head -n -2 || kill $$ )
 
 unit: template
 template-resource: mir_ci_cases
