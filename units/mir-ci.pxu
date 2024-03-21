@@ -19,7 +19,7 @@ command:
       elif [[ "$line" =~ \<(Function|Coroutine)\ ([]a-zA-Z0-9_.[-]*)\>$ ]]; then
         SKIP_LIST+=( $MODULE::$CLASS::${BASH_REMATCH[2]} )
       fi
-    done < <( run_mir_ci.sh --collect-only -k "$MIR_CI_SKIP_EXPRESSION" || kill $$ )
+    done < <( checkbox-mir.mir-ci --collect-only -k "$MIR_CI_SKIP_EXPRESSION" || kill $$ )
   fi
   .
   while read line; do
@@ -43,7 +43,7 @@ command:
       fi
       echo
     fi
-  done < <( run_mir_ci.sh --collect-only -m "not self" -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
+  done < <( checkbox-mir.mir-ci --collect-only -m "not self" -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
   .
   exit $STATUS
 
