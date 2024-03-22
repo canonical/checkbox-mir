@@ -10,11 +10,13 @@ command:
   if [ -n "$MIR_CI_SKIP_EXPRESSION" ]; then
     SKIP_LIST=( $( checkbox-mir.mir-ci --collect-only --quiet -k "$MIR_CI_SKIP_EXPRESSION" | head -n -2 ) )
   fi
+  ZAPPER_LIST=( $( checkbox-mir.mir-ci --collect-only --quiet -m zapper | head -n -2 ) )
   .
   while read case; do
     echo case: $case
     echo function: ${case/*::}
     echo "skip: $( [[ " ${SKIP_LIST[*]:-} " =~ " $case " ]] && echo true || echo false )"
+    echo "zapper: $( [[ " ${ZAPPER_LIST[*]} " =~ " $case " ]] && echo true || echo false )"
     echo "cgroupv2_required: $( [[ $case == *test_app_can_run* ]] && echo 1 || echo 0 )"
     echo "mir_major_version: 2"
     if [[ $case == *DragAndDrop* ]]; then
@@ -32,8 +34,11 @@ category_id: performance
 imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
+  from com.canonical.certification import zapper_capabilities
 requires:
   (executable.name == mir_context.host_executable and "{skip}" == "false")
+  ("{zapper}" == "false" or zapper_capabilities.capability == "hdmi-capture")
+  "{zapper}" == "false" or (zapper_capabilities.capability == "hid" and zapper_capabilities.mouse == "True")
   mir_context.cgroupv2_support >= "{cgroupv2_required}"
   mir_context.major_version > "{mir_major_version}" or (mir_context.major_version == "{mir_major_version}" and mir_context.minor_version >= "{mir_minor_version}")
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
