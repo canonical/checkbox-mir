@@ -43,7 +43,7 @@ requires:
 _summary: Run Mir CI test case: {function}
 plugin: shell
 # Executing through snap to take advantage of the gnome extension
-command: dbus-run-session checkbox-mir.mir-ci --verbose --junitxml=/tmp/mir-ci_{function}.xml {case}
+command: dbus-run-session checkbox-mir.mir-ci --verbose --junitxml=/tmp/mir-ci_{function}.xml --robot-log=/tmp/mir-ci_{function}.robot.html {case}
 
 unit: template
 template-resource: mir_ci_cases
@@ -53,3 +53,12 @@ depends: mir-ci/{function}
 _summary: Collect the test report from mir/ci_{function}
 plugin: attachment
 command: cat /tmp/mir-ci_{function}.xml
+
+unit: template
+template-resource: mir_ci_cases
+id: mir-ci/{function}.robot.html
+category_id: junit
+salvages: mir-ci/{function}
+_summary: Collect the robot log from mir/ci_{function}
+plugin: attachment
+command: cat /tmp/mir-ci_{function}.robot.html
