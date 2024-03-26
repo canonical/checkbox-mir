@@ -1,0 +1,14 @@
+plugin: shell
+id: setup/edid
+_summary: Set Zapper EDID so we get the desired default resolution
+estimated_duration: 0.1
+imports:
+  from com.canonical.certification import zapper_capabilities
+requires: zapper_capabilities.edid_cycling == "True"
+command:
+  set -xeuo pipefail
+  python3 <<EOF
+  from checkbox_support.scripts.zapper_proxy import zapper_run
+  with open("$PLAINBOX_PROVIDER_DATA/$ZAPPER_RESOLUTION.edid", "rb") as f:
+    zapper_run("$ZAPPER_HOST", "change_edid", f.read())
+  EOF
