@@ -149,12 +149,12 @@ parts:
       - usr/bin/dpkg-architecture
 
   anon-shm-preload:
-    source: https://github.com/MirServer/anon-shm-preload.git
+    source: https://github.com/canonical/anon-shm-preload.git
     plugin: cmake
 
   mir-ci:
     plugin: python
-    source: https://github.com/MirServer/mir-ci.git
+    source: https://github.com/canonical/mir-ci.git
     source-subdir: mir-ci
     source-commit: 19c426123c0c656f41a5b0ab327a505e8b32a2cc
     build-packages:
@@ -189,7 +189,7 @@ parts:
 
   graphics-core22:
     after: [mir-demo-server, xorg, bits, anon-shm-preload, mir-ci, glue]
-    source: https://github.com/MirServer/graphics-core22.git
+    source: https://github.com/canonical/graphics-core22.git
     plugin: dump
     override-prime: |
       craftctl default
