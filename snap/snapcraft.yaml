@@ -188,9 +188,9 @@ parts:
     plugin: dump
     source: snap/local/glue
 
-  graphics-core22:
+  graphics-core:
     after: [mir-demo-server, xorg, bits, anon-shm-preload, mir-ci, glue]
-    source: https://github.com/canonical/graphics-core22.git
+    source: https://github.com/canonical/graphics-core.git
     plugin: dump
     override-prime: |
       craftctl default
