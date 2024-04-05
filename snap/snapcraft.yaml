@@ -43,44 +43,44 @@ environment:
 
 apps:
   checkbox-cli:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: &wrappers [bin/graphics-core22-wrapper, bin/wrapper_local]
     command: bin/checkbox-cli-wrapper
     plugs: &plugs [home, network-bind, hardware-observe,
       mount-observe, network-manager, pulseaudio, serial-port,
       system-observe, login-session-control, opengl]
     slots: &slots [wayslot, x11slot]
   graphics:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: *wrappers
     command: bin/checkbox-graphics
     plugs: *plugs
     slots: *slots
   mir:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: *wrappers
     command: bin/checkbox-mir
     plugs: *plugs
     slots: *slots
   mir-ci:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper, bin/anon-shm-preload]
+    command-chain: [bin/graphics-core22-wrapper, bin/wrapper_local, bin/anon-shm-preload]
     command: providers/checkbox-provider-mir/bin/run_mir_ci.sh
     extensions: [gnome]
   snaps:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: *wrappers
     command: bin/checkbox-snaps
     plugs: *plugs
   test-runner:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: *wrappers
     command: bin/test-runner
     plugs: *plugs
     slots: *slots
   service:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: *wrappers
     command: bin/checkbox-cli-wrapper service
     daemon: simple
     restart-condition: on-failure
     plugs: *plugs
     slots: *slots
   shell:
-    command-chain: [bin/wrapper_local, bin/graphics-core22-wrapper]
+    command-chain: *wrappers
     command: bin/shell-wrapper
     plugs: *plugs
     slots: *slots
