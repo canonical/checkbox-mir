@@ -5,7 +5,7 @@ imports:
   from com.canonical.certification import executable
 requires:
   executable.name == "graphics-test-tools.drm-info"
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
 id: graphics/{index}_drm-info_{product_slug}
 _summary: Dump DRM information for card {index}: {product_slug}
@@ -26,7 +26,7 @@ imports:
   from com.canonical.certification import executable
 requires:
   (executable.name == "graphics-test-tools.kmscube" and "{driver}" != "nvidia")
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}
 plugin: shell
@@ -49,7 +49,7 @@ imports:
   from com.canonical.certification import executable
 requires:
   (executable.name == "eglinfo" and "{driver}" != "nvidia")
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run eglinfo to verify EGL setup for the GBM platform
 plugin: shell
@@ -59,7 +59,7 @@ command: graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version
 id: graphics/eglinfo-x11
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
   connections.plug != "checkbox-mir:x11"
@@ -71,7 +71,7 @@ command: run_with_x.sh graphics-test-tools.eglinfo | grep -oPz 'X11 platform:\nE
 id: graphics/eglinfo-wayland
 imports: from com.canonical.certification import connections
 requires:
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:wayland"
 _summary: Run eglinfo to verify EGL setup with a Wayland server
@@ -85,7 +85,7 @@ imports:
   from com.canonical.certification import executable
 requires:
   executable.name == "graphics-test-tools.vkcube"
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
   connections.plug != "checkbox-mir:x11"
@@ -100,7 +100,7 @@ imports:
   from com.canonical.certification import executable
 requires:
   executable.name == "graphics-test-tools.vainfo"
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
   connections.plug != "checkbox-mir:x11"
@@ -115,7 +115,7 @@ imports:
   from com.canonical.certification import executable
 requires:
   executable.name == "graphics-test-tools.vdpauinfo"
-  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:graphics-core24"]
+  connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
   connections.plug != "checkbox-mir:x11"

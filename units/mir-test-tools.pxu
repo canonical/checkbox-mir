@@ -42,7 +42,7 @@ requires:
   connections.plug == mir_context.host_logind_plug
   mir_context.host_executable == "mir-kiosk" or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]
   connections.plug == mir_context.host_opengl_plug
-  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:graphics-core24"]
+  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404"]
   connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir smoke tests
 plugin: shell
@@ -57,7 +57,7 @@ _siblings: [
       "id": "mir/smoke_root",
       "_summary": "Run Mir smoke tests as root",
       "user": "root",
-      "requires": "mir_context.host_executable == 'mir-kiosk' or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22', 'mir-test-tools:graphics-core24']\nconnections.plug == 'mir-test-tools:opengl'"
+      "requires": "mir_context.host_executable == 'mir-kiosk' or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22', 'mir-test-tools:gpu-2404']\nconnections.plug == 'mir-test-tools:opengl'"
     }
   ]
 
@@ -74,7 +74,7 @@ requires:
   connections.plug == mir_context.host_logind_plug
   connections.plug in [mir_context.host_22_plug, mir_context.host_24_plug]
   connections.plug == mir_context.host_opengl_plug
-  connections.plug in ["mir-test-tools:graphics-core22", "mir-test-tools:graphics-core24"]
+  connections.plug in ["mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404"]
   connections.plug == "mir-test-tools:opengl"
 _summary: Run hybrid Mir smoke tests rendering on {product}
 plugin: shell
@@ -104,7 +104,7 @@ requires:
   connections.plug == mir_context.host_logind_plug
   connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]
   connections.plug == mir_context.host_opengl_plug
-  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:graphics-core24"]
+  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404"]
   connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir performance test case: {case}
 plugin: shell
