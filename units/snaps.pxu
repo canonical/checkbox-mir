@@ -1,21 +1,30 @@
+id: test-observer
+plugin: shell
+command: curl --silent --head --fail https://test-observer.canonical.com
+
 id: client-snaps
 plugin: resource
+depends: test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/client-snaps.resource
 
 id: server-snaps
 plugin: resource
+depends: test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/server-snaps.resource
 
 id: session-snaps
 plugin: resource
+depends: test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/session-snaps.resource
 
 id: ancillary-snaps
 plugin: resource
+depends: test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/ancillary-snaps.resource
 
 id: jenkins-snaps
 plugin: resource
+depends: test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/jenkins-snaps.resource
 
 id: store
