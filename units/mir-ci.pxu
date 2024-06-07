@@ -13,6 +13,7 @@ command:
   ZAPPER_LIST=( $( checkbox-mir.mir-ci --collect-only --quiet -m zapper | head -n -2 ) )
   .
   while read case; do
+    [ -n "$case" ] || break
     echo case: $case
     echo function: ${case/*::}
     echo "skip: $( [[ " ${SKIP_LIST[*]:-} " =~ " $case " ]] && echo true || echo false )"
@@ -25,7 +26,7 @@ command:
       echo "mir_minor_version: 0"
     fi
     echo
-  done < <( checkbox-mir.mir-ci --collect-only --quiet -m "not self" -k "${MIR_CI_EXPRESSION:-}" | head -n -2 || kill $$ )
+  done < <( checkbox-mir.mir-ci --collect-only --quiet -m "not self" -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
 
 unit: template
 template-resource: mir_ci_cases
