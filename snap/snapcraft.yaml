@@ -171,6 +171,7 @@ parts:
     - --requirement
     - ${CRAFT_PROJECT_DIR}/wheels/${CRAFT_ARCH_BUILD_FOR}.txt
     - asciinema
+    - asyncvnc
     - mypy
     - robotframework~=6.1.1
     - rpaframework
