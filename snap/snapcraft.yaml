@@ -156,7 +156,7 @@ parts:
     plugin: python
     source: https://github.com/canonical/mir-ci.git
     source-subdir: mir-ci
-    source-commit: 1fcf6ed05e7a1c6500d26c4e9020d985b40aab17
+    source-commit: 95c6b45ca5f51ec39ba6198c9db5a4b29d11ba50
     build-packages:
     - git-lfs
     - libssl-dev
@@ -176,6 +176,7 @@ parts:
     - rpaframework
     - rpaframework-recognition
     stage-packages:
+    - ffmpeg
     - libblas3
     - libgtk-4-dev
     - liblapack3

@@ -24,7 +24,7 @@ command:
       echo "mir_minor_version: 0"
     fi
     echo
-  done < <( checkbox-mir.mir-ci --collect-only --quiet -m "not self" -k "${MIR_CI_EXPRESSION:-}" || kill $$ )
+  done < <( checkbox-mir.mir-ci --collect-only --quiet -m "not self" -k "(${MIR_CI_EXPRESSION:-}) and not flutter" || kill $$ )
 
 unit: template
 template-resource: mir_ci_cases
