@@ -156,7 +156,7 @@ parts:
     plugin: python
     source: https://github.com/canonical/mir-ci.git
     source-subdir: mir-ci
-    source-commit: dcddebb5891b8d62cfcc21fc389c9a54a368681b
+    source-commit: 8ba929f7ec5e51f4f0d39c0cfd834cb06209991e
     build-packages:
     - git-lfs
     - libssl-dev
