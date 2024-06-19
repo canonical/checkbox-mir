@@ -110,6 +110,7 @@ _summary: Run Mir performance test case: {case}
 plugin: shell
 command:
   set -euo pipefail
+  unset MIR_SERVER_DISPLAY_CONFIG
   if [ -n "${{MIR_HOST_SERVER:-}}" ]; then
     run_with_wayland.sh --server $MIR_HOST_SERVER --timeout 120 -- \
       mir-test-tools.performance-test \
