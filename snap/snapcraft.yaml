@@ -134,6 +134,13 @@ parts:
     stage-packages:
       - xserver-xorg
       - x11-xkb-utils
+      # **NB**: this has to match the driver used by nvidia-core22 and/or installed on the classic system
+      - on amd64:
+        - xserver-xorg-video-nvidia-535
+      - on arm64:
+        - xserver-xorg-video-nvidia-535
+    stage:
+      - -usr/share/X11/xorg.conf.d/*nvidia.conf
 
   launchers:
     plugin: dump
