@@ -223,9 +223,12 @@ def main():
                 # that video_devices[0] is the built-in one
                 video_devices[0]['switch_to_cmd'] = (
                     switch_cmds[record['driver']][1])
-            cards = tuple(Path('/sys' + record['path']).glob('drm/card*'))
-            assert len(cards) == 1, "Only single-node cards currently supported"
-            record['drm_device'] = Path('/dev/dri') / cards[0].name
+            if 'name' in record and (drm_path := Path('/dev/') / record['name']) and drm_path.exists():
+                record['drm_device'] = drm_path
+            elif (cards := tuple(Path('/sys' + record['path']).glob('drm/card*'))) and len(cards) == 1:
+                record['drm_device'] = Path('/dev/dri') / cards[0].name
+            else:
+                record['drm_device'] = ''
         # Finally, print the records
         for record in video_devices:
             items = ["{key}: {value}".format(key=k, value=record[k])
