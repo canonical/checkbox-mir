@@ -98,12 +98,14 @@ id: graphics/vainfo-x11
 imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
+  from io.mir-server import graphics_card
 requires:
   executable.name == "graphics-test-tools.vainfo"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
   connections.plug != "checkbox-mir:x11"
+  graphics_card.driver in ["i915", "iris", "radeon", "radeonsi"]
 _summary: Run vainfo to verify libVA setup
 plugin: shell
 user: root
@@ -113,12 +115,14 @@ id: graphics/vdpauinfo-x11
 imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
+  from io.mir-server import graphics_card
 requires:
   executable.name == "graphics-test-tools.vdpauinfo"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
   connections.plug != "checkbox-mir:x11"
+  graphics_card.driver in ["nvidia", "i915", "radeon", "radeonsi"]
 _summary: Run vdpauinfo to verify VDPAU setup
 plugin: shell
 user: root
