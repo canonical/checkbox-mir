@@ -54,7 +54,13 @@ requires:
 _summary: Run eglinfo to verify EGL setup for the GBM platform
 plugin: shell
 user: root
-command: graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version:.*'
+command:
+  # work around eglinfo only looking at `/dev/dri/card0`
+  if ! [ -e /dev/dri/card0 ]; then
+    ln -ivs $( basename $( ls /dev/dri/card? | head -n1 ) ) /dev/dri/card0
+    trap "rm /dev/dri/card0" EXIT
+  fi
+  graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version:.*'
 
 id: graphics/eglinfo-x11
 imports: from com.canonical.certification import connections
