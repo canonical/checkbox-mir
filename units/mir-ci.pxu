@@ -44,7 +44,7 @@ requires:
 _summary: Run Mir CI test case: {function}
 plugin: shell
 # Executing through snap to take advantage of the gnome extension
-command: checkbox-mir.mir-ci --verbose --junitxml=/tmp/mir-ci_{function}.xml --robot-log=/tmp/mir-ci_{function}.robot.html {case}
+command: DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus checkbox-mir.mir-ci --verbose --junitxml=/tmp/mir-ci_{function}.xml --robot-log=/tmp/mir-ci_{function}.robot.html {case}
 
 unit: template
 template-resource: mir_ci_cases
