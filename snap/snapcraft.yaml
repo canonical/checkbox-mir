@@ -194,6 +194,13 @@ parts:
     - qtwayland5
     - wayvnc
 
+  robot:
+    plugin: dump
+    source: robot
+    organize:
+      resources: lib/python3.10/site-packages/mir_ci/tests/robot/resources
+      suites: lib/python3.10/site-packages/mir_ci/tests/robot/suites
+
   glue:
     plugin: dump
     source: snap/local/glue
