@@ -61,6 +61,18 @@ _siblings: [
     }
   ]
 
+id: mir/nvidia-userspace-match
+requires: graphics_card.driver == "nvidia"
+salvages: mir/smoke_root
+plugin: shell
+user: root
+command:
+  NVRM="$( dmesg | grep NVRM )"
+  echo "$NVRM" >&2
+  if [[ "$NVRM" == *mismatch* ]]; then
+      exit 1
+  fi
+
 unit: template
 template-resource: graphics_card
 id: mir/smoke_{product_slug}
