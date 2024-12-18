@@ -85,6 +85,18 @@ plugin: shell
 user: root
 command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland platform:\nEGL API version:.*'
 
+id: graphics/nvidia-userspace-match
+requires: graphics_card.driver == "nvidia"
+salvages: graphics/eglinfo-wayland
+plugin: shell
+user: root
+command:
+  NVRM="$( dmesg | grep NVRM )"
+  echo "$NVRM" >&2
+  if [[ "$NVRM" == *mismatch* ]]; then
+      exit 1
+  fi
+
 id: graphics/vkcube-x11
 imports:
   from com.canonical.certification import connections
