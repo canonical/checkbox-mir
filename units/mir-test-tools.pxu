@@ -80,6 +80,7 @@ category_id: smoke
 imports:
   from com.canonical.certification import connections
 requires:
+  mir_context.host_server == ""
   graphics_card.gpu_count >= "2"
   graphics_card.driver != "{driver}"
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
