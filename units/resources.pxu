@@ -27,6 +27,7 @@ estimated_duration: 0.1
 command:
   set -euo pipefail
   .
+  echo "host_server: ${MIR_HOST_SERVER:-}"
   echo "host_20_plug: ${MIR_CI_SNAP:=checkbox-mir}:graphics-core20"
   echo "host_22_plug: ${MIR_CI_SNAP}:graphics-core22"
   echo "host_24_plug: ${MIR_CI_SNAP}:gpu-2404"
