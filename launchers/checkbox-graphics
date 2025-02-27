@@ -10,7 +10,7 @@ unit = io.mir-server::graphics-core
 forced = yes
 
 [test selection]
-exclude = io.mir-server::.*-fec00000_v3d
+exclude = io.mir-server::.*fec00000_v3d
 forced = yes
 
 [ui]
