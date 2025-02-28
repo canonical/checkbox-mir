@@ -27,6 +27,7 @@ bootstrap_include:
 include:
   mir/.*
   mir-ci/.*
+  com.canonical.certification::mir/.*
 
 id: snaps
 unit: test plan
