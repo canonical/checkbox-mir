@@ -17,6 +17,9 @@ plugs:
     interface: content
     target: $SNAP/providers/checkbox-provider-resource
     default-provider: checkbox22
+  provider-extra:
+    interface: content
+    target: $SNAP/providers/checkbox-provider-extra
   graphics-core22:
     interface: content
     target: $SNAP/graphics
