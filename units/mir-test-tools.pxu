@@ -63,7 +63,6 @@ _siblings: [
 
 id: mir/nvidia-userspace-match
 requires: graphics_card.driver == "nvidia"
-salvages: mir/smoke_root
 plugin: shell
 user: root
 command:
