@@ -87,7 +87,6 @@ command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland pl
 
 id: graphics/nvidia-userspace-match
 requires: graphics_card.driver == "nvidia"
-salvages: graphics/eglinfo-wayland
 plugin: shell
 user: root
 command:
