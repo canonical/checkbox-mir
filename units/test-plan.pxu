@@ -36,6 +36,7 @@ _description:
   This test installs updated snaps and guides the user
   through verification that they work correctly.
 bootstrap_include:
+  check_environment
   client-snaps
   server-snaps
   session-snaps
