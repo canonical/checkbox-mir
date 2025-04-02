@@ -64,7 +64,7 @@ command:
   fi
   .
   if [ -x /snap/checkbox-mir/current/bin/setup.sh ]; then
-    if ! timeout .1 sudo -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null; then
+    if ! timeout 1 sudo -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null; then
       echo >&2
       echo 'These tests require passwordless `sudo` for `/snap/*/current/bin/setup.sh`.' >&2
       echo >&2
