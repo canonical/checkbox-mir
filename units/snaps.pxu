@@ -79,7 +79,7 @@ command:
 unit: template
 template-resource: client-snaps
 category_id: client
-id: snaps/{snap}-{track}-{risk}
+id: snaps/client/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 depends: snaps/check_environment
@@ -118,7 +118,7 @@ _verification:
 unit: template
 template-resource: server-snaps
 category_id: server
-id: snaps/{snap}-{track}-{risk}
+id: snaps/server/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 depends: snaps/check_environment
@@ -158,7 +158,7 @@ _verification:
 unit: template
 template-resource: session-snaps
 category_id: session
-id: snaps/{snap}-{track}-{risk}
+id: snaps/session/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 depends: snaps/check_environment
@@ -192,7 +192,7 @@ _verification:
 unit: template
 template-resource: ancillary-snaps
 category_id: client
-id: snaps/{snap}-{track}-{risk}
+id: snaps/ancillary/{snap}-{track}-{risk}
 plugin: user-interact-verify
 estimated_duration: 60.0
 depends: snaps/check_environment
