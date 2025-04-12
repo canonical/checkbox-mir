@@ -7,9 +7,7 @@ imports:
 command:
   set -euo pipefail
   .
-  if [ -n "$MIR_CI_SKIP_EXPRESSION" ]; then
-    SKIP_LIST=( $( checkbox-mir.mir-ci --collect-only --quiet -k "$MIR_CI_SKIP_EXPRESSION" | head -n -2 ) )
-  fi
+  mapfile -t SKIP_LIST < <( checkbox-mir.mir-ci --collect-only --quiet -k "${MIR_CI_SKIP_EXPRESSION:-}" | head -n -2 )
   .
   while read case; do
     [ -n "$case" ] || break
