@@ -60,4 +60,4 @@ category_id: junit
 salvages: mir-ci/{function}
 _summary: Collect the robot log from mir/ci_{function}
 plugin: attachment
-command: cat /tmp/mir-ci_{function}.robot.html
+command: cat /tmp/mir-ci_{function}.robot.html || /bin/true
