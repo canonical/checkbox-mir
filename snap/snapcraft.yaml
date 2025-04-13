@@ -181,6 +181,7 @@ parts:
     - rpaframework-recognition
     stage-packages:
     - ffmpeg
+    - gtk-4-examples
     - libblas3
     - libgtk-4-dev
     - liblapack3
