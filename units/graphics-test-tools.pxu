@@ -47,8 +47,10 @@ id: graphics/eglinfo-gbm
 imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
+  from io.mir-server import graphics_card
 requires:
-  (executable.name == "eglinfo" and "{driver}" != "nvidia")
+  executable.name == "eglinfo"
+  graphics_card.driver != "nvidia"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
 _summary: Run eglinfo to verify EGL setup for the GBM platform
