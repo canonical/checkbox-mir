@@ -40,6 +40,6 @@ command:
   else
     echo "host_executable: ${MIR_CI_SNAP}"
   fi
-  echo "major_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir)([0-9]+)\.[0-9]+/,m) { print m[2] }' || kill $$ )"
-  echo "minor_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir)[0-9]+\.([0-9]+)/,m) { print m[2] }' || kill $$ )"
+  echo "major_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir|v)([0-9]+)\.[0-9]+/,m) { print m[2] }' || kill $$ )"
+  echo "minor_version: $( snap list ${MIR_CI_SNAP} | gawk 'match($2, /(^|mir|v)[0-9]+\.([0-9]+)/,m) { print m[2] }' || kill $$ )"
   echo "cgroupv2_support: $( [ -f /sys/fs/cgroup/cgroup.controllers ] && echo 1 || echo 0 )"
