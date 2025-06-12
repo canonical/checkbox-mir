@@ -190,6 +190,8 @@ parts:
     - qterminal
     - qtwayland5
     - wayvnc
+    stage:
+    - -lib/python3.10/site-packages/mir_ci/tests/robot/suites/scale/variants/noble/22
 
   robot:
     plugin: dump
