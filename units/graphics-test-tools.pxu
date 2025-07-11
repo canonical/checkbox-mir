@@ -107,6 +107,7 @@ requires:
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:wayland"
+  graphics_card.driver != vc4-drm
 _summary: Run vulkaninfo to verify Vulkan setup on Wayland
 plugin: shell
 user: root
