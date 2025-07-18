@@ -3,6 +3,7 @@ template-resource: graphics_card
 imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
+  from io.mir-server import graphics_card
 requires:
   executable.name == "graphics-test-tools.drm-info"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
@@ -105,6 +106,7 @@ imports:
 requires:
   executable.name == "graphics-test-tools.vulkaninfo"
   connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"]
+  connections.plug in ["graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404"] or graphics_card.driver in ["i915", "iris", "radeonsi", "nvidia"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:wayland"
 _summary: Run vulkaninfo to verify Vulkan setup on Wayland
