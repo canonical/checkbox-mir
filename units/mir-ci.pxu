@@ -33,6 +33,7 @@ category_id: performance
 imports:
   from com.canonical.certification import connections
   from com.canonical.certification import executable
+  from com.canonical.certification import os
 requires:
   (executable.name == mir_context.host_executable and "{skip}" == "false")
   mir_context.cgroupv2_support >= "{cgroupv2_required}"
@@ -41,6 +42,7 @@ requires:
   connections.plug == mir_context.host_logind_plug
   connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]
   connections.plug == mir_context.host_opengl_plug
+  os.codename != "Ubuntu Core 18"
 _summary: Run Mir CI test case: {function}
 plugin: shell
 # Executing through snap to take advantage of the gnome extension
