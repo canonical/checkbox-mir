@@ -180,7 +180,9 @@ parts:
     - rpaframework
     - rpaframework-recognition
     stage-packages:
-    - ffmpeg
+    # our ARM targets have too little oomph to handle ffmpeg
+    - to amd64:
+      - ffmpeg
     - gtk-4-examples
     - libblas3
     - libgtk-4-dev
