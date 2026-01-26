@@ -13,6 +13,10 @@ plugs:
     interface: content
     target: $SNAP/checkbox-runtime
     default-provider: checkbox22
+  provider-checkbox:
+    interface: content
+    target: $SNAP/providers/checkbox-provider-checkbox
+    default-provider: checkbox22
   provider-resource:
     interface: content
     target: $SNAP/providers/checkbox-provider-resource
