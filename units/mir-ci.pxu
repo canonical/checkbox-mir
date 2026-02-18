@@ -40,7 +40,7 @@ requires:
   mir_context.major_version > "{mir_major_version}" or (mir_context.major_version == "{mir_major_version}" and mir_context.minor_version >= "{mir_minor_version}")
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == mir_context.host_logind_plug
-  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]
+  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
   connections.plug == mir_context.host_opengl_plug
   os.codename != "Ubuntu Core 18"
 _summary: Run Mir CI test case: {function}

@@ -31,6 +31,7 @@ command:
   echo "host_20_plug: ${MIR_CI_SNAP:=checkbox-mir}:graphics-core20"
   echo "host_22_plug: ${MIR_CI_SNAP}:graphics-core22"
   echo "host_24_plug: ${MIR_CI_SNAP}:gpu-2404"
+  echo "host_26_plug: ${MIR_CI_SNAP}:gpu-2604"
   echo "host_logind_plug: ${MIR_CI_SNAP}:login-session-control"
   echo "host_opengl_plug: ${MIR_CI_SNAP}:opengl"
   if [ "${MIR_CI_SNAP}" == "checkbox-mir" ]; then
