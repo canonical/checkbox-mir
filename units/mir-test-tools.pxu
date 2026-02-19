@@ -40,9 +40,9 @@ imports:
 requires:
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == mir_context.host_logind_plug
-  mir_context.host_executable == "mir-kiosk" or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]
+  mir_context.host_executable == "mir-kiosk" or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
   connections.plug == mir_context.host_opengl_plug
-  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404"]
+  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404", "mir-test-tools:gpu-2604"]
   connections.plug == "mir-test-tools:opengl"
   graphics_card.driver != "nvidia" or mir_context.host_server == ""
 _summary: Run Mir smoke tests
@@ -58,7 +58,7 @@ _siblings: [
       "id": "mir/smoke_root",
       "_summary": "Run Mir smoke tests as root",
       "user": "root",
-      "requires": "mir_context.host_executable == 'mir-kiosk' or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22', 'mir-test-tools:gpu-2404']\nconnections.plug == 'mir-test-tools:opengl'\ngraphics_card.driver != 'nvidia' or mir_context.host_server == ''"
+      "requires": "mir_context.host_executable == 'mir-kiosk' or connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]\nconnections.plug == mir_context.host_opengl_plug\nconnections.plug in ['mir-test-tools:graphics-core20', 'mir-test-tools:graphics-core22', 'mir-test-tools:gpu-2404', 'mir-test-tools:gpu-2604']\nconnections.plug == 'mir-test-tools:opengl'\ngraphics_card.driver != 'nvidia' or mir_context.host_server == ''"
     }
   ]
 
@@ -85,9 +85,9 @@ requires:
   graphics_card.driver != "{driver}"
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == mir_context.host_logind_plug
-  connections.plug in [mir_context.host_22_plug, mir_context.host_24_plug]
+  connections.plug in [mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
   connections.plug == mir_context.host_opengl_plug
-  connections.plug in ["mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404"]
+  connections.plug in ["mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404", "mir-test-tools:gpu-2604"]
   connections.plug == "mir-test-tools:opengl"
 _summary: Run hybrid Mir smoke tests rendering on {product}
 plugin: shell
@@ -115,9 +115,9 @@ requires:
   [manifest.run_wayland_tests, "{wayland}"] == ["True", "True"] or [manifest.run_xwayland_tests, "{xwayland}"] == ["True", "True"] or [manifest.run_hosted_tests, "{hosted}"] == ["True", "True"]
   normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
   connections.plug == mir_context.host_logind_plug
-  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug]
+  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
   connections.plug == mir_context.host_opengl_plug
-  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404"]
+  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404", "mir-test-tools:gpu-2604"]
   connections.plug == "mir-test-tools:opengl"
 _summary: Run Mir performance test case: {case}
 plugin: shell

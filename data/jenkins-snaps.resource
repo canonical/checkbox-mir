@@ -26,6 +26,10 @@ snap: mesa-2404
 track: latest
 risk: beta
 
+snap: mesa-2604
+track: latest
+risk: beta
+
 snap: mir-test-tools
 track: 20
 risk: beta
