@@ -79,9 +79,9 @@ apps:
     command: bin/test-runner
     plugs: *plugs
     slots: *slots
-  service:
+  agent:
     command-chain: *wrappers
-    command: bin/checkbox-cli-wrapper service
+    command: bin/checkbox-cli-wrapper run-agent
     daemon: simple
     restart-condition: on-failure
     plugs: *plugs
