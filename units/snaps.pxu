@@ -183,6 +183,10 @@ command:
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
     timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
+  .
+  SHELL_PID=$( timeout 120 sh -c "while ! pgrep -f ^$( readlink -f /snap/$SNAP/current/{shell_executable} ); do sleep 0.5; done" ) || exit $?
+  .
+  inotifywait -e delete_self "/proc/$SHELL_PID/exe" 2>/dev/null
 _verification:
   1. Check that you can log in to the {snap} session
   2. Check that you can use the session OK
