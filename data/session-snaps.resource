@@ -9,5 +9,5 @@ snap: miriway
 track: latest
 risk: edge
 target_risk: beta
-snap-options: --classic
+snap_options: --classic
 shell_executable: usr/bin/miriway
