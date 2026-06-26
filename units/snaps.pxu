@@ -68,7 +68,7 @@ command:
   fi
   .
   if [ -x /snap/checkbox-mir/current/bin/setup.sh ]; then
-    if ! timeout 1 sudo -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null; then
+    if ! timeout 1 $( which sudo.ws || echo sudo ) -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null; then
       echo >&2
       echo 'These tests require passwordless `sudo` for `/snap/*/current/bin/setup.sh`.' >&2
       echo >&2
@@ -107,7 +107,7 @@ command:
   snap install $SNAP --channel {track}/{risk}
   check_snap_current.sh $SNAP {track} {risk}
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
-    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
+    timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
   .
   clean_env.sh frame-it $SNAP
@@ -144,7 +144,7 @@ command:
   check_snap_current.sh $SNAP {track} {risk}
   .
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
-    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
+    timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
   if snap connections $SNAP | grep ^x11; then
     snap connect $SNAP:x11
@@ -181,7 +181,7 @@ command:
   check_snap_current.sh $SNAP {track} {risk}
   .
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
-    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
+    timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
 _verification:
   1. Check that you can log in to the {snap} session
@@ -226,7 +226,7 @@ command:
   check_snap_current.sh $SNAP {track} {risk}
   .
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
-    timeout 10 sudo /snap/$SNAP/current/bin/setup.sh
+    timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
   .
   cleanup() {{
