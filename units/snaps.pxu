@@ -1,6 +1,10 @@
 id: test-observer
 plugin: shell
-command: curl --silent --head --fail https://test-observer.canonical.com
+command:
+  if [ -z "${TEST_OBSERVER_API_KEY}" ]; then
+    echo "You need to provide TEST_OBSERVER_API_KEY from Bitwarden" >&2
+    exit 1
+  fi
 
 id: client-snaps
 plugin: resource

@@ -5,6 +5,7 @@ ARTEFACTS=${PLAINBOX_SESSION_SHARE}/artefacts.json
 curl --silent -X 'GET' \
   'https://test-observer-api.canonical.com/v1/artefacts?family=snap' \
   -H 'accept: application/json' \
+  -H 'Authorization: Bearer '"${TEST_OBSERVER_API_KEY}" \
   > ${ARTEFACTS}
 
 print_to_check() {
