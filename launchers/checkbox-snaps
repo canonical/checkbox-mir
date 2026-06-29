@@ -1,5 +1,8 @@
 #!/usr/bin/env checkbox-cli
 
+[features]
+systemd_based_job_runner=False
+
 [launcher]
 launcher_version = 1
 app_id = io.mir-server:checkbox
