@@ -172,6 +172,12 @@ requires:
   (store.snap == "{snap}") and store.risk == "{target_risk}" and store2.snap == "{snap}" and store2.risk == "{risk}" and store.revision != store2.revision
 _purpose:
   This test verfies that the {snap}/{track}/{risk} session works
+  .
+  When prompted:
+  1. Check that you can log in to the {snap} session
+  2. Check that you can use the session OK
+  3. Quit the session
+
 command:
   set -xeuo pipefail
   SNAP={snap}_$$
@@ -184,14 +190,19 @@ command:
     timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
   .
+  cat <<EOF
+  ###
+  ### Now start a desktop session for {snap} and verify it works OK.
+  ###
+  ### You have two minutes to start the session, the test will then wait for it to exit.
+  ###
+  EOF
+  .
   SHELL_PID=$( timeout 120 sh -c "while ! pgrep -f ^$( readlink -f /snap/$SNAP/current/{shell_executable} ); do sleep 0.5; done" ) || exit $?
   .
   inotifywait -e delete_self "/proc/$SHELL_PID/exe" 2>/dev/null
 _verification:
-  1. Check that you can log in to the {snap} session
-  2. Check that you can use the session OK
-  3. Quit the session
-  4. Was everything OK?
+  Did the session work fine?
   .
   {to_check}
   .
