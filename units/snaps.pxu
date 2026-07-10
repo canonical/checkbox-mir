@@ -56,29 +56,39 @@ _summary: Check the testing environment
 command:
   set -euo pipefail
   if [ "$( snap whoami | awk '/^email:/ { print $2 }' )" == "-" ]; then
-    echo 'These tests require the `snap` command to be logged in, please run:' >&2
+    echo 'ERROR: These tests require the `snap` command to be logged in, please run:' >&2
     echo '  snap login' >&2
-    exit 1
+    echo >&2
+    ERROR+=1
   fi
   .
-  if [ "$( snap get system experimental.parallel-instances )" != "true" ] || ! snap set system experimental.parallel-instances=true; then
-    echo 'These tests require parallel instance support, please run:' >&2
+  if [ "$( snap get system experimental.parallel-instances 2>/dev/null )" != "true" ] || ! snap set system experimental.parallel-instances=true >/dev/null 2>&1; then
+    echo 'ERROR: These tests require parallel instance support, please run:' >&2
     echo '  snap set system experimental.parallel-instances=true' >&2
-    exit 2
+    echo >&2
+    ERROR+=2
   fi
   .
   if [ -x /snap/checkbox-mir/current/bin/setup.sh ]; then
-    if ! timeout 1 $( which sudo.ws || echo sudo ) -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null; then
+    if ! timeout 1 --kill-after 0.1 $( which sudo.ws || echo sudo ) -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null >/dev/null 2>&1; then
       echo >&2
-      echo 'These tests require passwordless `sudo` for `/snap/*/current/bin/setup.sh`.' >&2
+      echo 'ERROR: These tests require passwordless `sudo` for `/snap/*/current/bin/setup.sh`.' >&2
+      echo '  Please place this line in sudoers(5):' >&2
+      echo '    %sudo   ALL = NOPASSWD: /snap/*/current/bin/setup.sh' >&2
       echo >&2
-      echo 'Please place this line in sudoers(5):' >&2
-      echo '  %sudo   ALL = NOPASSWD: /snap/*/current/bin/setup.sh' >&2
-      exit 3
+      ERROR+=4
     fi
   else
     echo 'WARNING: Could not check whether `sudo /snap/…/setup.sh` works.' >&2
   fi
+  .
+  if [ -z "${TEST_OBSERVER_API_KEY:-}" ]; then
+    echo "ERROR: You need to provide TEST_OBSERVER_API_KEY from Bitwarden" >&2
+    echo >&2
+    ERROR+=8
+  fi
+  .
+  exit ${ERROR:-0}
 
 unit: template
 template-resource: client-snaps
