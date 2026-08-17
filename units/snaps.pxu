@@ -70,7 +70,7 @@ command:
   fi
   .
   if [ -x /snap/checkbox-mir/current/bin/setup.sh ]; then
-    if ! timeout 1 --kill-after 0.1 $( which sudo.ws || echo sudo ) -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null >/dev/null 2>&1; then
+    if ! timeout --kill-after 0.1 1 $( which sudo.ws || echo sudo ) -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null >/dev/null 2>&1; then
       echo >&2
       echo 'ERROR: These tests require passwordless `sudo` for `/snap/*/current/bin/setup.sh`.' >&2
       echo '  Please place this line in sudoers(5):' >&2
