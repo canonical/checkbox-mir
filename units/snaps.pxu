@@ -263,12 +263,13 @@ command:
         timeout 10 tail --pid=$pid -f /dev/null || kill -9 $pid
         timeout 10 tail --pid=$pid -f /dev/null || echo "WARNING: Failed to clean up PID $pid"
     done
+    snap remove --purge $SNAP
     exit $STATUS
   }}
   .
   wait_and_run() {{
     timeout 10 sh -c "until [ -S $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do sleep 1; done"
-    exec "$@"
+    "$@"
   }}
   .
   trap cleanup EXIT
