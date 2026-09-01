@@ -9,7 +9,7 @@ fi
 eval set -- "$PARSED"
 
 SERVER=mir_demo_server
-TIMEOUT=10
+TIMEOUT=30
 while true; do
     case "$1" in
         -s|--server)
@@ -61,7 +61,7 @@ trap cleanup EXIT
 env XDG_RUNTIME_DIR=$REAL_RUNTIME_DIR $SERVER &
 SERVER_PID=$!
 
-timeout 10 bash -c "until [ -S $REAL_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do ps -p $SERVER_PID > /dev/null || exit 1; sleep 1; done" \
+timeout 30 bash -c "until [ -S $REAL_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do ps -p $SERVER_PID > /dev/null || exit 1; sleep 1; done" \
   || ( echo "ERROR: ${SERVER} failed to start"; exit 3 )
 
 export MIR_SERVER_WAYLAND_HOST=$WAYLAND_DISPLAY MIR_SERVER_PLATFORM_DISPLAY_LIBS="mir:wayland"

@@ -25,9 +25,9 @@ trap cleanup EXIT
 
 Xorg $DISPLAY &
 
-timeout 10 bash -c "until [ -S /tmp/.X11-unix/X$DISPLAYNO ]; do sleep 1; done" \
+timeout 30 bash -c "until [ -S /tmp/.X11-unix/X$DISPLAYNO ]; do sleep 1; done" \
   || ( echo "ERROR: Xorg failed to start"; exit 2 )
 
-timeout 10 "$@" \
+timeout 30 "$@" \
   && echo 0 > $OUTPUT.status \
   || echo $? > $OUTPUT.status
