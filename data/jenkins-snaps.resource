@@ -14,6 +14,10 @@ snap: graphics-test-tools
 track: 24
 risk: beta
 
+snap: graphics-test-tools
+track: 26
+risk: beta
+
 snap: mesa-core20
 track: latest
 risk: beta
@@ -40,6 +44,10 @@ risk: beta
 
 snap: mir-test-tools
 track: 24
+risk: beta
+
+snap: mir-test-tools
+track: 26
 risk: beta
 
 snap: nvidia-core22

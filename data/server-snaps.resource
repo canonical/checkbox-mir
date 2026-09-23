@@ -27,3 +27,8 @@ snap: ubuntu-frame
 track: 24
 risk: beta
 snap-options:
+
+snap: ubuntu-frame
+track: 26
+risk: beta
+snap-options:
