@@ -1,16 +1,16 @@
 plugin: resource
 id: mir_ci_cases
-_summary: Enumerate the cases for the mir-ci suite
-estimated_duration: 0.1
+summary: Enumerate the cases for the mir-ci suite
+estimated_duration: '0.1'
 imports:
-  from com.canonical.plainbox import manifest
-command:
+- from com.canonical.plainbox import manifest
+command: |
   set -euo pipefail
-  .
+
   if [ -n "${MIR_CI_SKIP_EXPRESSION:-}" ]; then
     mapfile -t SKIP_LIST < <( checkbox-mir.mir-ci --collect-only --quiet -k "${MIR_CI_SKIP_EXPRESSION:-}" | head -n -2 )
   fi
-  .
+
   while read case; do
     [ -n "$case" ] || break
     echo case: $case
@@ -25,43 +25,45 @@ command:
     fi
     echo
   done < <( checkbox-mir.mir-ci --collect-only --quiet -m "not self" -k "(${MIR_CI_EXPRESSION:-}) and not flutter" || kill $$ )
-
+---
 unit: template
 template-resource: mir_ci_cases
 id: mir-ci/{function}
 category_id: performance
 imports:
-  from com.canonical.certification import connections
-  from com.canonical.certification import executable
-  from com.canonical.certification import os
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from com.canonical.certification import os
 requires:
-  (executable.name == mir_context.host_executable and "{skip}" == "false")
-  mir_context.cgroupv2_support >= "{cgroupv2_required}"
-  mir_context.major_version > "{mir_major_version}" or (mir_context.major_version == "{mir_major_version}" and mir_context.minor_version >= "{mir_minor_version}")
-  normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
-  connections.plug == mir_context.host_logind_plug
-  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
-  connections.plug == mir_context.host_opengl_plug
-  os.codename != "Ubuntu Core 18"
-_summary: Run Mir CI test case: {function}
+- (executable.name == mir_context.host_executable and "{skip}" == "false")
+- mir_context.cgroupv2_support >= "{cgroupv2_required}"
+- mir_context.major_version > "{mir_major_version}" or (mir_context.major_version == "{mir_major_version}" and mir_context.minor_version >= "{mir_minor_version}")
+- normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
+- connections.plug == mir_context.host_logind_plug
+- connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
+- connections.plug == mir_context.host_opengl_plug
+- os.codename != "Ubuntu Core 18"
+summary: 'Run Mir CI test case: {function}'
 plugin: shell
 # Executing through snap to take advantage of the gnome extension
 command: DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$UID/bus checkbox-mir.mir-ci --verbose --junitxml=/tmp/mir-ci_{function}.xml --robot-log=/tmp/mir-ci_{function}.robot.html {case}
-
+---
 unit: template
 template-resource: mir_ci_cases
 id: mir-ci/{function}.xml
 category_id: junit
-depends: mir-ci/{function}
-_summary: Collect the test report from mir/ci_{function}
+depends:
+- mir-ci/{function}
+summary: Collect the test report from mir/ci_{function}
 plugin: attachment
 command: cat /tmp/mir-ci_{function}.xml
-
+---
 unit: template
 template-resource: mir_ci_cases
 id: mir-ci/{function}.robot.html
 category_id: junit
-salvages: mir-ci/{function}
-_summary: Collect the robot log from mir/ci_{function}
+salvages:
+- mir-ci/{function}
+summary: Collect the robot log from mir/ci_{function}
 plugin: attachment
 command: cat /tmp/mir-ci_{function}.robot.html || /bin/true

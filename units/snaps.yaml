@@ -1,40 +1,45 @@
 id: test-observer
 plugin: shell
-command:
+command: |
   if [ -z "${TEST_OBSERVER_API_KEY}" ]; then
     echo "You need to provide TEST_OBSERVER_API_KEY from Bitwarden" >&2
     exit 1
   fi
-
+---
 id: client-snaps
 plugin: resource
-depends: test-observer
+depends:
+- test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/client-snaps.resource
-
+---
 id: server-snaps
 plugin: resource
-depends: test-observer
+depends:
+- test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/server-snaps.resource
-
+---
 id: session-snaps
 plugin: resource
-depends: test-observer
+depends:
+- test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/session-snaps.resource
-
+---
 id: ancillary-snaps
 plugin: resource
-depends: test-observer
+depends:
+- test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/ancillary-snaps.resource
-
+---
 id: jenkins-snaps
 plugin: resource
-depends: test-observer
+depends:
+- test-observer
 command: annotate_to.sh < $PLAINBOX_PROVIDER_DATA/jenkins-snaps.resource
-
+---
 id: store
-_summary: Enumerate revisions for all tested snaps
+summary: Enumerate revisions for all tested snaps
 plugin: resource
-command:
+command: |
   set -euo pipefail
   while read snap; do
     while read track risk revision; do
@@ -49,11 +54,11 @@ command:
                  | [.channel.track, .channel.risk, .revision] | @tsv' \
               || kill $$ )
   done < <( cat $PLAINBOX_PROVIDER_DATA/*-snaps.resource | awk '/^snap:/ { print $2 }' | sort -u )
-
+---
 id: snaps/check_environment
 plugin: shell
-_summary: Check the testing environment
-command:
+summary: Check the testing environment
+command: |
   set -euo pipefail
   if [ "$( snap whoami | awk '/^email:/ { print $2 }' )" == "-" ]; then
     echo 'ERROR: These tests require the `snap` command to be logged in, please run:' >&2
@@ -61,14 +66,14 @@ command:
     echo >&2
     ERROR+=1
   fi
-  .
+
   if [ "$( snap get system experimental.parallel-instances 2>/dev/null )" != "true" ] || ! snap set system experimental.parallel-instances=true >/dev/null 2>&1; then
     echo 'ERROR: These tests require parallel instance support, please run:' >&2
     echo '  snap set system experimental.parallel-instances=true' >&2
     echo >&2
     ERROR+=2
   fi
-  .
+
   if [ -x /snap/checkbox-mir/current/bin/setup.sh ]; then
     if ! timeout --kill-after 0.1 1 $( which sudo.ws || echo sudo ) -S /snap/checkbox-mir/current/bin/setup.sh < /dev/null >/dev/null 2>&1; then
       echo >&2
@@ -81,124 +86,127 @@ command:
   else
     echo 'WARNING: Could not check whether `sudo /snap/…/setup.sh` works.' >&2
   fi
-  .
+
   if [ -z "${TEST_OBSERVER_API_KEY:-}" ]; then
     echo "ERROR: You need to provide TEST_OBSERVER_API_KEY from Bitwarden" >&2
     echo >&2
     ERROR+=8
   fi
-  .
-  exit ${ERROR:-0}
 
+  exit ${ERROR:-0}
+---
 unit: template
 template-resource: client-snaps
 category_id: client
 id: snaps/client/{snap}-{track}-{risk}
 plugin: user-interact-verify
-estimated_duration: 60.0
-depends: snaps/check_environment
+estimated_duration: '60.0'
+depends:
+- snaps/check_environment
 imports:
-  from com.canonical.certification import executable
-  from io.mir-server import store as store2
+- from com.canonical.certification import executable
+- from io.mir-server import store as store2
 requires:
-  executable.name == "frame-it"
-  executable.name == "ubuntu-frame"
-  (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
-_purpose:
+- executable.name == "frame-it"
+- executable.name == "ubuntu-frame"
+- (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
+purpose: |
   This test verifies that {snap}/{track}/{risk} runs fine
-  .
+
   It will start {snap} in Ubuntu Frame - check that it does
   and that you can interact with it OK, then quit {snap}.
-command:
+command: |
   set -xeuo pipefail
   SNAP={snap}_$$
-  .
+
   trap "snap remove --purge $SNAP" EXIT
   snap install $SNAP --channel {track}/{risk}
   check_snap_current.sh $SNAP {track} {risk}
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
     timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
-  .
+
   clean_env.sh frame-it $SNAP
-_verification:
+verification: |
   1. Did {snap} start up in Frame?
   2. Could you interact with it?
-  .
-  {to_check}
-  .
-  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
 
+  {to_check}
+
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
+---
 unit: template
 template-resource: server-snaps
 category_id: server
 id: snaps/server/{snap}-{track}-{risk}
 plugin: user-interact-verify
-estimated_duration: 60.0
-depends: snaps/check_environment
+estimated_duration: '60.0'
+depends:
+- snaps/check_environment
 imports:
-  from io.mir-server import store as store2
+- from io.mir-server import store as store2
 requires:
-  (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
-_purpose:
+- (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
+purpose: |
   This test verfies that {snap}/{track}/{risk} runs fine.
-  .
+
   It will start {snap} - check that it does and that you can interact
   with it OK, then quit {snap}.
-command:
+command: |
   set -xeuo pipefail
   SNAP={snap}_$$
-  .
+
   trap "snap remove --purge $SNAP" EXIT
   snap install $SNAP --channel {track}/{risk} {snap-options}
   check_snap_current.sh $SNAP {track} {risk}
-  .
+
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
     timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
   if snap connections $SNAP | grep ^x11; then
     snap connect $SNAP:x11
   fi
-  .
+
   WAYLAND_DISPLAY=wayland-00$$ clean_env.sh $SNAP
-_verification:
+verification: |
   1. Did {snap} start fine?
   2. Could you interact with it OK?
-  .
-  {to_check}
-  .
-  Promote from `{track}/{risk}` to `{track}/stable` at https://snapcraft.io/{snap}/releases
 
+  {to_check}
+
+  Promote from `{track}/{risk}` to `{track}/stable` at https://snapcraft.io/{snap}/releases
+---
 unit: template
 template-resource: session-snaps
 category_id: session
 id: snaps/session/{snap}-{track}-{risk}
 plugin: user-interact-verify
-estimated_duration: 60.0
-depends: snaps/check_environment
+estimated_duration: '60.0'
+depends:
+- snaps/check_environment
 imports:
-  from io.mir-server import store as store2
+- from io.mir-server import store as store2
 requires:
-  (store.snap == "{snap}") and store.risk == "{target_risk}" and store2.snap == "{snap}" and store2.risk == "{risk}" and store.revision != store2.revision
-_purpose:
+- (store.snap == "{snap}") and store.risk == "{target_risk}" and store2.snap == "{snap}" and store2.risk == "{risk}" and store.revision != store2.revision
+purpose: |
   This test verfies that the {snap}/{track}/{risk} session works
-  .
+
   When prompted:
   1. Check that you can log in to the {snap} session
   2. Check that you can use the session OK
   3. Quit the session
-command:
+command: |
   set -xeuo pipefail
   SNAP={snap}_$$
-  .
+
   trap "snap remove --purge $SNAP" EXIT
   snap install $SNAP --channel {track}/{risk} {snap_options}
   check_snap_current.sh $SNAP {track} {risk}
-  .
+
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
     timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
-  .
+
   cat <<EOF
   ###
   ### Now start a desktop session for {snap} and verify it works OK.
@@ -206,53 +214,54 @@ command:
   ### You have two minutes to start the session, the test will then wait for it to exit.
   ###
   EOF
-  .
-  SHELL_PID=$( timeout 120 sh -c "while ! pgrep -f ^$( readlink -f /snap/$SNAP/current/{shell_executable} ); do sleep 0.5; done" ) || exit $?
-  .
-  inotifywait -e delete_self "/proc/$SHELL_PID/exe" 2>/dev/null
-_verification:
-  Did the session work fine?
-  .
-  {to_check}
-  .
-  Promote from `{track}/{risk}` to `{track}/{target_risk}` at https://snapcraft.io/{snap}/releases
 
+  SHELL_PID=$( timeout 120 sh -c "while ! pgrep -f ^$( readlink -f /snap/$SNAP/current/{shell_executable} ); do sleep 0.5; done" ) || exit $?
+
+  inotifywait -e delete_self "/proc/$SHELL_PID/exe" 2>/dev/null
+verification: |
+  Did the session work fine?
+
+  {to_check}
+
+  Promote from `{track}/{risk}` to `{track}/{target_risk}` at https://snapcraft.io/{snap}/releases
+---
 unit: template
 template-resource: ancillary-snaps
 category_id: client
 id: snaps/ancillary/{snap}-{track}-{risk}
 plugin: user-interact-verify
-estimated_duration: 60.0
-depends: snaps/check_environment
-_purpose:
+estimated_duration: '60.0'
+depends:
+- snaps/check_environment
+purpose: |
   This test verfies that {snap} {track}/{risk} works
-  .
+
   {purpose}
-  .
+
   Quit the editor to continue.
 imports:
-  from com.canonical.certification import executable
-  from io.mir-server import store as store2
+- from com.canonical.certification import executable
+- from io.mir-server import store as store2
 requires:
-  executable.name == "frame-it"
-  executable.name == "ubuntu-frame"
-  (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
-command:
+- executable.name == "frame-it"
+- executable.name == "ubuntu-frame"
+- (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
+command: |
   set -xeuo pipefail
-  .
+
   OUTPUT=$( mktemp )
   export XDG_RUNTIME_DIR=/run/user/$( id -u )
   export WAYLAND_DISPLAY=wayland-00$$
   SNAP={snap}_$$
-  .
+
   trap "snap remove --purge $SNAP" EXIT
   snap install $SNAP --channel {track}/{risk}
   check_snap_current.sh $SNAP {track} {risk}
-  .
+
   if [ -x /snap/$SNAP/current/bin/setup.sh ]; then
     timeout 10 $( which sudo.ws || echo sudo ) /snap/$SNAP/current/bin/setup.sh
   fi
-  .
+
   cleanup() {{
     # Run through cleanup despite errors
     set +euo pipefail
@@ -266,39 +275,38 @@ command:
     snap remove --purge $SNAP
     exit $STATUS
   }}
-  .
+
   wait_and_run() {{
     timeout 10 sh -c "until [ -S $XDG_RUNTIME_DIR/$WAYLAND_DISPLAY ]; do sleep 1; done"
     "$@"
   }}
-  .
+
   trap cleanup EXIT
-  .
+
   wait_and_run $SNAP &
-  .
+
   clean_env.sh frame-it gnome-text-editor \
   && echo 0 > $OUTPUT.status \
   || echo $? > $OUTPUT.status
-_verification:
+verification: |
   {verification}
-  .
-  {to_check}
-  .
-  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
 
+  {to_check}
+
+  Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases
+---
 unit: template
 template-resource: jenkins-snaps
 category_id: utility
 id: snaps/{snap}-{track}-{risk}
 plugin: user-interact-verify
-estimated_duration: 60.0
+estimated_duration: '60.0'
 imports:
-  from io.mir-server import store as store2
+- from io.mir-server import store as store2
 requires:
-  (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
-_purpose:
-  This verfies that {snap} {track}/{risk} tested fine
-command:
+- (store.snap == "{snap}") and store.track == "{track}" and store.risk == "stable" and store2.snap == "{snap}" and store2.track == "{track}" and store2.risk == "{risk}" and store.revision != store2.revision
+purpose: This verfies that {snap} {track}/{risk} tested fine
+command: |
   if [ -z "{version}" ]; then
     echo "ERROR: No artefact found at https://test-observer.canonical.com, ensure the tests ran." >&2
     exit 1
@@ -307,8 +315,8 @@ command:
     "https://api.snapcraft.io/v2/snaps/info/{snap}" \
   | jq -r --arg TRACK "{track}" --arg RISK "{risk}" '."channel-map" | .[] | select(.channel.risk==$RISK) | [select(.channel.track==$TRACK).channel.architecture, select(.channel.track==$TRACK).revision] | @tsv' \
   | grep -v '^$'
-_verification:
+verification: |
   1. {to_check}
   2. Check that the revisions above were tested and succeeded
-  .
+
   Promote from `{track}/{risk}` to `stable` at https://snapcraft.io/{snap}/releases

@@ -1,0 +1,189 @@
+unit: template
+template-resource: graphics_card
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from io.mir-server import graphics_card
+requires:
+- executable.name == "graphics-test-tools.drm-info"
+- connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug == "graphics-test-tools:opengl"
+id: graphics/{index}_drm-info_{product_slug}
+summary: 'Dump DRM information for card {index}: {product_slug}'
+plugin: shell
+estimated_duration: '0.1'
+user: root
+command: |
+  set -euo pipefail
+  OUTPUT=$( mktemp )
+  graphics-test-tools.drm-info {drm_device} | tee $OUTPUT
+  [ "$( head -n1 $OUTPUT )" == 'Node: {drm_device}' ]
+---
+unit: template
+template-resource: graphics_card
+id: graphics/{index}_kmscube_{product_slug}
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+requires:
+- (executable.name == "graphics-test-tools.kmscube" and "{driver}" != "nvidia")
+- connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug == "graphics-test-tools:opengl"
+summary: 'Run kmscube to verify GBM-KMS setup for card {index}: {product_slug}'
+plugin: shell
+estimated_duration: '1.0'
+user: root
+command: |
+  graphics-test-tools.kmscube --count 60 --device {drm_device} && exit || KMSCUBE_CODE=$?
+
+  # older `kmscube` does not have --count
+  [ $KMSCUBE_CODE != 255 ] && exit $KMSCUBE_CODE
+
+  timeout --kill-after=2 2 graphics-test-tools.kmscube --device {drm_device} || TIMEOUT_CODE=$?
+
+  # `timeout` returns 124 on timeout, and that's what we're expecting
+  [ "$TIMEOUT_CODE" == 124 ] || exit $TIMEOUT_CODE
+---
+id: graphics/eglinfo-gbm
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from io.mir-server import graphics_card
+requires:
+- executable.name == "eglinfo"
+- graphics_card.driver != "nvidia"
+- connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug == "graphics-test-tools:opengl"
+summary: Run eglinfo to verify EGL setup for the GBM platform
+plugin: shell
+user: root
+command: |
+  # work around eglinfo only looking at `/dev/dri/card0`
+  if ! [ -e /dev/dri/card0 ]; then
+    ln -ivs $( basename $( ls /dev/dri/card? | head -n1 ) ) /dev/dri/card0
+    trap "rm /dev/dri/card0" EXIT
+  fi
+  graphics-test-tools.eglinfo | grep -oPz 'GBM platform:\nEGL API version:.*'
+---
+id: graphics/eglinfo-x11
+imports:
+- from com.canonical.certification import connections
+requires:
+- connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug == "graphics-test-tools:opengl"
+- connections.plug == "graphics-test-tools:x11"
+- connections.plug != "checkbox-mir:x11"
+summary: Run eglinfo to verify EGL setup with a X server
+plugin: shell
+user: root
+command: run_with_x.sh graphics-test-tools.eglinfo | grep -oPz 'X11 platform:\nEGL API version:.*'
+---
+id: graphics/eglinfo-wayland
+imports:
+- from com.canonical.certification import connections
+requires:
+- connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug == "graphics-test-tools:opengl"
+- connections.plug == "graphics-test-tools:wayland"
+summary: Run eglinfo to verify EGL setup with a Wayland server
+plugin: shell
+user: root
+command: run_with_wayland.sh graphics-test-tools.eglinfo | grep -oPz 'Wayland platform:\nEGL API version:.*'
+---
+id: graphics/nvidia-userspace-match
+requires:
+- graphics_card.driver == "nvidia"
+plugin: shell
+user: root
+command: |
+  NVRM="$( dmesg | grep NVRM )"
+  echo "$NVRM" >&2
+  if [[ "$NVRM" == *mismatch* ]]; then
+      exit 1
+  fi
+---
+id: graphics/vulkaninfo-wayland
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from com.canonical.certification import kernel_package
+requires:
+- executable.name == "graphics-test-tools.vulkaninfo"
+- connections.plug in ["graphics-test-tools:graphics-core20", "graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug in ["graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"] or graphics_card.driver in ["i915", "iris", "radeonsi", "nvidia"]
+- kernel_package.release > 22 or connections.plug in ["graphics-test-tools:graphics-core22"] or graphics_card.driver in ["i915", "iris", "radeonsi", "nvidia"]
+- connections.plug == "graphics-test-tools:opengl"
+- connections.plug == "graphics-test-tools:wayland"
+summary: Run vulkaninfo to verify Vulkan setup on Wayland
+plugin: shell
+user: root
+command: run_with_wayland.sh graphics-test-tools.vulkaninfo
+---
+id: graphics/vulkaninfo-x11
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from com.canonical.certification import kernel_package
+requires:
+- executable.name == "graphics-test-tools.vulkaninfo"
+- connections.plug in ["graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- kernel_package.release > 22 or connections.plug in ["graphics-test-tools:graphics-core22"] or graphics_card.driver in ["i915", "iris", "radeonsi", "nvidia"]
+- kernel_package.release != 24 or connections.plug in ["graphics-test-tools:graphics-core24"]
+- connections.plug == "graphics-test-tools:opengl"
+- connections.plug == "graphics-test-tools:x11"
+- connections.plug != "checkbox-mir:x11"
+summary: Run vulkaninfo to verify Vulkan setup on X11
+plugin: shell
+user: root
+command: run_with_x.sh graphics-test-tools.vulkaninfo
+---
+id: graphics/vkcube-x11
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from com.canonical.certification import kernel_package
+requires:
+- executable.name == "graphics-test-tools.vkcube"
+- connections.plug in ["graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- kernel_package.release > 22 or connections.plug in ["graphics-test-tools:graphics-core22"] or graphics_card.driver in ["i915", "iris", "radeonsi", "nvidia"]
+- connections.plug == "graphics-test-tools:opengl"
+- connections.plug == "graphics-test-tools:x11"
+- connections.plug != "checkbox-mir:x11"
+summary: Run vkcube to verify Vulkan setup
+plugin: shell
+user: root
+command: run_with_x.sh graphics-test-tools.vkcube --c 60
+---
+id: graphics/vainfo-x11
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from io.mir-server import graphics_card
+requires:
+- executable.name == "graphics-test-tools.vainfo"
+- connections.plug in ["graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug == "graphics-test-tools:opengl"
+- connections.plug == "graphics-test-tools:x11"
+- connections.plug != "checkbox-mir:x11"
+- graphics_card.driver in ["i915", "iris", "radeon", "radeonsi"]
+summary: Run vainfo to verify libVA setup
+plugin: shell
+user: root
+command: run_with_x.sh graphics-test-tools.vainfo
+---
+id: graphics/vdpauinfo-x11
+imports:
+- from com.canonical.certification import connections
+- from com.canonical.certification import executable
+- from io.mir-server import graphics_card
+requires:
+- executable.name == "graphics-test-tools.vdpauinfo"
+- connections.plug in ["graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
+- connections.plug == "graphics-test-tools:opengl"
+- connections.plug == "graphics-test-tools:x11"
+- connections.plug != "checkbox-mir:x11"
+- graphics_card.driver == "nvidia"
+summary: Run vdpauinfo to verify VDPAU setup
+plugin: shell
+user: root
+command: run_with_x.sh graphics-test-tools.vdpauinfo

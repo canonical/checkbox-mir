@@ -1,0 +1,27 @@
+unit: category
+id: performance
+name: Performance tests
+---
+unit: category
+id: smoke
+name: Smoke tests
+---
+unit: category
+id: junit
+name: JUnit collection jobs
+---
+unit: category
+id: client
+name: Client and ancillary snaps (require Ubuntu Frame and frame-it)
+---
+unit: category
+id: server
+name: Server snaps
+---
+unit: category
+id: session
+name: Session snaps (will ask you to log into the session)
+---
+unit: category
+id: utility
+name: Utility snaps - verified through Jenkins

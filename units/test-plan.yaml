@@ -1,0 +1,46 @@
+# Copyright Canonical Ltd.
+# All rights reserved.
+
+# Test plans unique to graphics-coreXX and Mir testing
+id: graphics-core
+unit: test plan
+name: graphics-core- Verification of graphics-core enablement
+description: |
+  This test plan verifies that the graphics-core environment
+  is working correctly on this device.
+bootstrap_include:
+- graphics_card
+include:
+- graphics/.*
+nested_part:
+- com.canonical.certification::submission-cert-automated
+---
+id: mir
+unit: test plan
+name: Mir - smoke and performance testing of Mir itself
+description: This test plan runs the Mir smoke and performance tests.
+bootstrap_include:
+- graphics_card
+- mir_test_tools_performance_cases
+- mir_ci_cases
+include:
+- mir/.*
+- mir-ci/.*
+nested_part:
+- com.canonical.certification::submission-cert-automated
+- com.canonical.certification::mir-tests
+---
+id: snaps
+unit: test plan
+name: Snap - verify that the snaps work fine
+description: |
+  This test installs updated snaps and guides the user
+  through verification that they work correctly.
+bootstrap_include:
+- client-snaps
+- server-snaps
+- session-snaps
+- ancillary-snaps
+- jenkins-snaps
+include:
+- snaps/.*

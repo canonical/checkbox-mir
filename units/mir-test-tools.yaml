@@ -1,11 +1,12 @@
 plugin: resource
 id: mir_test_tools_performance_cases
-_summary: Enumerate the cases for the mir-test-tools performance suite
-estimated_duration: 0.1
-imports: from com.canonical.certification import connections
+summary: Enumerate the cases for the mir-test-tools performance suite
+estimated_duration: '0.1'
+imports:
+- from com.canonical.certification import connections
 requires:
-  connections.plug == "mir-test-tools:login-session-control"
-command:
+- connections.plug == "mir-test-tools:login-session-control"
+command: |
   set -euo pipefail
   while read line; do
     if [[ "$line" =~ ^([A-Za-z0-9_/]*)\.$ ]]; then
@@ -32,37 +33,38 @@ command:
       echo
     fi
   done < <( mir-test-tools.performance-test --gtest_list_tests --gtest_filter=* || kill $$ )
-
+---
 id: mir/nvidia-userspace-match
-requires: graphics_card.driver == "nvidia"
+requires:
+- graphics_card.driver == "nvidia"
 plugin: shell
 user: root
-command:
+command: |
   NVRM="$( dmesg | grep NVRM )"
   echo "$NVRM" >&2
   if [[ "$NVRM" == *mismatch* ]]; then
       exit 1
   fi
-
+---
 unit: template
 template-resource: mir_test_tools_performance_cases
 id: mir/performance_{case}
 category_id: performance
 imports:
-  from com.canonical.plainbox import manifest
-  from com.canonical.certification import connections
-  from com.canonical.certification import snap
+- from com.canonical.plainbox import manifest
+- from com.canonical.certification import connections
+- from com.canonical.certification import snap
 requires:
-  [manifest.run_wayland_tests, "{wayland}"] == ["True", "True"] or [manifest.run_xwayland_tests, "{xwayland}"] == ["True", "True"] or [manifest.run_hosted_tests, "{hosted}"] == ["True", "True"]
-  normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
-  connections.plug == mir_context.host_logind_plug
-  connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
-  connections.plug == mir_context.host_opengl_plug
-  connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404", "mir-test-tools:gpu-2604"]
-  connections.plug == "mir-test-tools:opengl"
-_summary: Run Mir performance test case: {case}
+- '[manifest.run_wayland_tests, "{wayland}"] == ["True", "True"] or [manifest.run_xwayland_tests, "{xwayland}"] == ["True", "True"] or [manifest.run_hosted_tests, "{hosted}"] == ["True", "True"]'
+- normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
+- connections.plug == mir_context.host_logind_plug
+- connections.plug in [mir_context.host_20_plug, mir_context.host_22_plug, mir_context.host_24_plug, mir_context.host_26_plug]
+- connections.plug == mir_context.host_opengl_plug
+- connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404", "mir-test-tools:gpu-2604"]
+- connections.plug == "mir-test-tools:opengl"
+summary: 'Run Mir performance test case: {case}'
 plugin: shell
-command:
+command: |
   set -euo pipefail
   unset MIR_SERVER_DISPLAY_CONFIG
   if [ -n "${{MIR_HOST_SERVER:-}}" ]; then
@@ -83,12 +85,13 @@ command:
     echo "=== $LOGNAME$log.log >8 ==="
   done
   exit $STATUS
-
+---
 unit: template
 template-resource: mir_test_tools_performance_cases
 id: mir/performance_{case}.xml
 category_id: junit
-depends: mir/performance_{case}
-_summary: Collect the test report from mir/performance_{case}
+depends:
+- mir/performance_{case}
+summary: Collect the test report from mir/performance_{case}
 plugin: attachment
 command: snap run --shell mir-test-tools.performance-test -c "cat /tmp/{case}.xml"
