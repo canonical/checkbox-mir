@@ -32,7 +32,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
-        fetch-depth: 0  # needed for version determination
+        fetch-depth: 0 # needed for version determination
         persist-credentials: false
 
     - name: Patch PPA and version, disable LFS

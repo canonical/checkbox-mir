@@ -52,9 +52,7 @@ apps:
   checkbox-cli:
     command-chain: &wrappers [bin/graphics-core22-wrapper, bin/wrapper_local]
     command: bin/checkbox-cli-wrapper
-    plugs: &plugs [home, network-bind, hardware-observe,
-      mount-observe, network-manager, pulseaudio, serial-port,
-      system-observe, login-session-control, opengl]
+    plugs: &plugs [home, network-bind, hardware-observe, mount-observe, network-manager, pulseaudio, serial-port, system-observe, login-session-control, opengl]
     slots: &slots [wayslot, x11slot]
   graphics:
     command-chain: *wrappers
@@ -99,8 +97,8 @@ slots:
     interface: x11
 
 package-repositories:
-  - type: apt
-    ppa: mir-team/release
+- type: apt
+  ppa: mir-team/release
 
 parts:
   checkbox-provider-mir:
@@ -108,8 +106,8 @@ parts:
     source: ./
     source-type: local
     build-snaps:
-      - checkbox-provider-tools
-      - checkbox22
+    - checkbox-provider-tools
+    - checkbox22
     override-build: |
       export PYTHONPATH=${CRAFT_STAGE}/lib/python3.10/site-packages:${CRAFT_STAGE}/usr/lib/python3/dist-packages
       for path in $(find "/snap/checkbox22/current/providers/" -mindepth 1 -maxdepth 1 -type d); do export PROVIDERPATH=$path${PROVIDERPATH:+:$PROVIDERPATH}; done
@@ -117,17 +115,17 @@ parts:
       checkbox-provider-tools build
       checkbox-provider-tools install --layout=relocatable --prefix=/providers/checkbox-provider-mir --root="${CRAFT_PART_INSTALL}"
     stage-packages:
-      - gawk
-      - lsof
+    - gawk
+    - lsof
     organize:
       providers/checkbox-provider-mir/bin/mir_demo_server: usr/bin/mir_demo_server
 
   mir-demo-server:
     plugin: nil
     stage-packages:
-      - mir-test-tools
-      - mir-graphics-drivers-desktop
-      - mir-graphics-drivers-nvidia
+    - mir-test-tools
+    - mir-graphics-drivers-desktop
+    - mir-graphics-drivers-nvidia
     override-pull: |
       craftctl default
       mir_version=`LANG=C apt-cache policy mir-test-tools | sed -rne 's/^\s+Candidate:\s+([^-]*)-.+$/\1/p'`
@@ -139,8 +137,8 @@ parts:
   xorg:
     plugin: nil
     stage-packages:
-      - xserver-xorg
-      - x11-xkb-utils
+    - xserver-xorg
+    - x11-xkb-utils
 
   launchers:
     plugin: dump
@@ -151,9 +149,9 @@ parts:
   bits:
     plugin: nil
     stage-packages:
-      - dpkg-dev
+    - dpkg-dev
     prime:
-      - usr/bin/dpkg-architecture
+    - usr/bin/dpkg-architecture
 
   anon-shm-preload:
     source: https://github.com/canonical/anon-shm-preload.git
