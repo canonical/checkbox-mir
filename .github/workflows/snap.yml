@@ -6,6 +6,8 @@ on:
   merge_group:
     types: [checks_requested]
 
+permissions: {}
+
 concurrency:
   group: ${{ github.workflow }}-pr${{ github.event.number }}
   cancel-in-progress: true
@@ -13,6 +15,8 @@ concurrency:
 jobs:
   Snap:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     timeout-minutes: 60
 
@@ -26,9 +30,10 @@ jobs:
 
     steps:
     - name: Check out code
-      uses: actions/checkout@v7
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         fetch-depth: 0  # needed for version determination
+        persist-credentials: false
 
     - name: Patch PPA and version, disable LFS
       run: |
@@ -36,7 +41,7 @@ jobs:
         git lfs uninstall
 
     - name: Build and publish the snap
-      uses: canonical/actions/build-snap@release
+      uses: canonical/actions/build-snap@369aa83db4b62bdf1cb4240f651f11f0eb9fac11 # release @ 2026.08.26
       with:
         architecture: ${{ matrix.architecture }}
         snapcraft-token: ${{ secrets.SNAPCRAFT_TOKEN }}
@@ -47,6 +52,6 @@ jobs:
 
     - if: ${{ failure() && runner.debug  }}
       name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      uses: mxschmitt/action-tmate@35b54afac29c97fb54faba5b513f8fbd1882f113 # v3.24
       with:
         limit-access-to-actor: true
