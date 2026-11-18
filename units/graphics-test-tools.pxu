@@ -125,6 +125,7 @@ requires:
   executable.name == "graphics-test-tools.vulkaninfo"
   connections.plug in ["graphics-test-tools:graphics-core22", "graphics-test-tools:gpu-2404", "graphics-test-tools:gpu-2604"]
   kernel_package.release > 22 or connections.plug in ["graphics-test-tools:graphics-core22"] or graphics_card.driver in ["i915", "iris", "radeonsi", "nvidia"]
+  kernel_package.release != 24 or connections.plug in ["graphics-test-tools:graphics-core24"]
   connections.plug == "graphics-test-tools:opengl"
   connections.plug == "graphics-test-tools:x11"
   connections.plug != "checkbox-mir:x11"
