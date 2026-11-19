@@ -30,6 +30,16 @@ command: |
           echo hosted: False
           ;;
       esac
+
+      # Skip performance tests on NVIDIA with Ubuntu 24
+      # https://github.com/canonical/checkbox-mir/issues/39
+      if [[ "$( awk -F'"' '/VERSION_ID=/ { print $2 }' /etc/os-release )" == 24* ]] && \
+         readlink -f /sys/class/drm/*/device/driver | grep -q nvidia; then
+        echo skip: True
+      else
+        echo skip: False
+      fi
+
       echo
     fi
   done < <( mir-test-tools.performance-test --gtest_list_tests --gtest_filter=* || kill $$ )
@@ -53,8 +63,10 @@ category_id: performance
 imports:
 - from com.canonical.plainbox import manifest
 - from com.canonical.certification import connections
+- from com.canonical.certification import executable
 - from com.canonical.certification import snap
 requires:
+- (executable.name == mir_context.host_executable and "{skip}" == "false")
 - '[manifest.run_wayland_tests, "{wayland}"] == ["True", "True"] or [manifest.run_xwayland_tests, "{xwayland}"] == ["True", "True"] or [manifest.run_hosted_tests, "{hosted}"] == ["True", "True"]'
 - normal_user.uid == logind_sessions.user and logind_sessions.active == "yes" and logind_sessions.remote == "no"
 - connections.plug == mir_context.host_logind_plug
