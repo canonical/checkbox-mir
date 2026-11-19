@@ -1,0 +1,19 @@
+set -eu
+
+uv venv --seed $UV_PROJECT_ENVIRONMENT
+uv pip install \
+  git+https://github.com/canonical/checkbox.git#subdirectory=checkbox-ng \
+  git+https://github.com/canonical/checkbox.git#subdirectory=checkbox-support \
+  git+https://github.com/canonical/mir-ci.git#subdirectory=mir-ci
+
+git clone https://github.com/canonical/checkbox.git ~/checkbox
+~/checkbox/providers/resource/manage.py develop
+
+uv run ./manage.py develop
+
+cat <<EOF > ~/.local/bin/mir-ci
+#!/bin/sh
+cd $( python -c 'import mir_ci, pathlib; print(pathlib.Path(mir_ci.__file__).parent)' )
+exec pytest "$@"
+EOF
+chmod +x ~/.local/bin/mir-ci

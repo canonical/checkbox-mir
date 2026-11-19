@@ -7,8 +7,14 @@ imports:
 command: |
   set -euo pipefail
 
+  if [ -n "${SNAP:-}" ]; then
+    MIR_CI="${SNAP_INSTANCE_NAME}.mir-ci"
+  else
+    MIR_CI="run_mir_ci.sh"
+  fi
+
   if [ -n "${MIR_CI_SKIP_EXPRESSION:-}" ]; then
-    mapfile -t SKIP_LIST < <( checkbox-mir.mir-ci --collect-only --quiet -k "${MIR_CI_SKIP_EXPRESSION:-}" | head -n -2 )
+    mapfile -t SKIP_LIST < <( ${MIR_CI} --collect-only --quiet -k "${MIR_CI_SKIP_EXPRESSION:-}" | head -n -2 )
   fi
 
   while read case; do
@@ -24,7 +30,7 @@ command: |
       echo "mir_minor_version: 0"
     fi
     echo
-  done < <( checkbox-mir.mir-ci --collect-only --quiet -m "not self" -k "(${MIR_CI_EXPRESSION:-}) and not flutter" || kill $$ )
+  done < <( ${MIR_CI} --collect-only --quiet -m "not self" -k "${MIR_CI_EXPRESSION:+($MIR_CI_EXPRESSION and)} not flutter" || kill $$ )
 ---
 unit: template
 template-resource: mir_ci_cases

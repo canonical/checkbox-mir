@@ -1,0 +1,9 @@
+apt-get update
+apt-get install -y --no-install-recommends \
+  pre-commit
+
+cat <<'EOF' > /etc/profile.d/99_workshop.sh
+export UV_PROJECT_ENVIRONMENT="$HOME/.venv"
+export VIRTUAL_ENV="$UV_PROJECT_ENVIRONMENT"
+export PATH="$UV_PROJECT_ENVIRONMENT/bin:$PATH"
+EOF
