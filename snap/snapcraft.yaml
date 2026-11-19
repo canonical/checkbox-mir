@@ -196,6 +196,9 @@ parts:
     - wayvnc
     stage:
     - -lib/python3.10/site-packages/mir_ci/tests/robot/suites/scale/variants/noble/22
+    organize:
+      usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/blas/*: usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/
+      usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/lapack/*: usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/
 
   robot:
     plugin: dump

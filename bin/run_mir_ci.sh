@@ -7,7 +7,6 @@ cd $MIR_CI_ROOT
 
 unset XKB_CONFIG_ROOT
 export XDG_RUNTIME_DIR=/run/user/$UID
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${SNAP}/usr/lib/${SNAP_LAUNCHER_ARCH_TRIPLET}/blas:${SNAP}/usr/lib/${SNAP_LAUNCHER_ARCH_TRIPLET}/lapack
 
 exec python3 \
     -m pytest \
