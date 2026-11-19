@@ -32,7 +32,11 @@ while true; do
     esac
 done
 
-
+# Hunt for kernel GPU components
+# https://github.com/canonical/checkbox-mir/issues/40
+for COMPONENT_PATH in $( ls -d /var/snap/mesa-*/current/kernel-gpu-* ); do
+    source ${COMPONENT_PATH}/*-mangler
+done
 
 OUTPUT=$( mktemp )
 export WAYLAND_DISPLAY=wayland-${RANDOM}
