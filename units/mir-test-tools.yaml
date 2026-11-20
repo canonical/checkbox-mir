@@ -65,6 +65,7 @@ imports:
 - from com.canonical.certification import connections
 - from com.canonical.certification import executable
 - from com.canonical.certification import snap
+- from com.canonical.certification import kernel_package
 requires:
 - (executable.name == mir_context.host_executable and "{skip}" == "false")
 - '[manifest.run_wayland_tests, "{wayland}"] == ["True", "True"] or [manifest.run_xwayland_tests, "{xwayland}"] == ["True", "True"] or [manifest.run_hosted_tests, "{hosted}"] == ["True", "True"]'
@@ -74,6 +75,7 @@ requires:
 - connections.plug == mir_context.host_opengl_plug
 - connections.plug in ["mir-test-tools:graphics-core20", "mir-test-tools:graphics-core22", "mir-test-tools:gpu-2404", "mir-test-tools:gpu-2604"]
 - connections.plug == "mir-test-tools:opengl"
+- kernel_package.release > 20 or graphics_card.driver in ["i915", "iris", "radeonsi", "nvidia"] # https://github.com/canonical/checkbox-mir/issues/41
 summary: 'Run Mir performance test case: {case}'
 plugin: shell
 command: |
