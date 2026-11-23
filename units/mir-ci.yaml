@@ -30,7 +30,7 @@ command: |
       echo "mir_minor_version: 0"
     fi
     echo
-  done < <( ${MIR_CI} --collect-only --quiet -m "not self" -k "${MIR_CI_EXPRESSION:+($MIR_CI_EXPRESSION and)} not flutter" || kill $$ )
+  done < <( ${MIR_CI} --collect-only --quiet -m "not self" -k "${MIR_CI_EXPRESSION:+($MIR_CI_EXPRESSION) and} not flutter" || kill $$ )
 ---
 unit: template
 template-resource: mir_ci_cases
