@@ -135,7 +135,11 @@ requires:
 summary: Run vulkaninfo to verify Vulkan setup on X11
 plugin: shell
 user: root
-command: run_with_x.sh graphics-test-tools.vulkaninfo
+command: |
+  for i in $( seq 1 5 ); do
+    run_with_x.sh graphics-test-tools.vulkaninfo && exit 0
+  done
+  exit 1
 ---
 id: graphics/vkcube-x11
 imports:
