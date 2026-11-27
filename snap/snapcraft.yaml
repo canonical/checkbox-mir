@@ -200,6 +200,16 @@ parts:
       usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/blas/*: usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/
       usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/lapack/*: usr/lib/${CRAFT_ARCH_TRIPLET_BUILD_FOR}/
 
+  # For escaping the snap environment, mir-ci uses `systemd-run`, and it needs to be available in the snap,
+  # otherwise Nvidia support fails with eglstream errors.
+  # https://github.com/canonical/checkbox-mir/issues/44
+  systemd:
+    plugin: nil
+    stage-packages:
+    - systemd
+    prime:
+    - usr/bin/systemd-run
+
   robot:
     plugin: dump
     source: robot
